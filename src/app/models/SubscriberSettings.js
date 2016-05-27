@@ -7,7 +7,6 @@ class SubscriberSettings {
         this.qos = 0;
         this.addedOn = +(new Date());
         this.updatedOn = +(new Date());
-        this.isSubscribed = false;
         this.subscribedMessages = [];
     }
 }

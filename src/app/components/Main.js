@@ -2,8 +2,8 @@ import React from 'react';
 import {deepOrange500} from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import {Tabs, Tab} from 'material-ui/Tabs';
-import BrokersView from './BrokersView';
+import AppDrawer from './AppDrawer';
+import BrokerView from './BrokerView';
 
 const styles = {
     tabItemContainerStyle:{
@@ -26,11 +26,10 @@ class Main extends React.Component {
   render() {
     return (
         <MuiThemeProvider muiTheme={muiTheme}>
-            <Tabs tabItemContainerStyle={styles.tabItemContainerStyle}>
-                <Tab label="Brokers" value="mqttBrokers" >
-                    <BrokersView/>
-                </Tab>
-            </Tabs>
+            <div>
+                <AppDrawer open={false}/>
+                <BrokerView/>
+            </div>
         </MuiThemeProvider>
     );
   }

@@ -25,8 +25,8 @@ class BrokerSettings {
 
         this.bsId = UUID.v4();
         this.brokerName = '';
-        this.publishSettings = [new PublisherSettings()];
-        this.subscribeSettings= [new SubscriberSettings()];
+        this.publishSettings = [];
+        this.subscribeSettings= [];
 
         this.createdOn = +(new Date());
         this.updatedOn = +(new Date());
