@@ -1,47 +1,48 @@
 import React from 'react';
 import Drawer from 'material-ui/Drawer';
 import {List, ListItem} from 'material-ui/List';
-import ContentInbox from 'material-ui/svg-icons/content/inbox';
+import DevicesIcon from 'material-ui/svg-icons/device/devices';
+import CommonActions from '../actions/CommonActions';
 
 class AppDrawer extends React.Component {
 
-  constructor(props) {
-    super(props);
-  }
+    constructor(props) {
+        super(props);
+        this.onRequestChange = this.onRequestChange.bind(this);
+    }
 
-  render() {
-    return (
-        <div>
-            <Drawer
-              docked={false}
-              open={this.props.open}
-            >
-                <List>
-                    <ListItem
-                      primaryText="Brokers"
-                      leftIcon={<ContentInbox />}
-                      initiallyOpen={true}
-                      primaryTogglesNestedList={true}
-                      nestedItems={[
+    onRequestChange(open,reason) { 
+        CommonActions.showHideMenu(open);
+    }
+
+    render() {
+        console.log('render AppDrawer');
+        return (
+            <div>
+                <Drawer
+                  docked={false}
+                  open={this.props.open}
+                  onRequestChange={this.onRequestChange}
+                >
+                    <List>
                         <ListItem
-                          key={1}
-                          primaryText="Starred"
-                        />,
-                        <ListItem
-                          key={2}
-                          primaryText="Sent Mail"
-                          disabled={true}
+                          primaryText="Brokers"
+                          leftIcon={<DevicesIcon/>}
+                          initiallyOpen={true}
+                          primaryTogglesNestedList={true}
                           nestedItems={[
-                            <ListItem key={1} primaryText="Drafts"/>,
+                            <ListItem
+                              key={1}
+                              primaryText="Starred"
+                              leftIcon={<DevicesIcon/>}
+                            />
                           ]}
-                        />,
-                      ]}
-                    />
-                </List>
-            </Drawer>
-        </div>
-    );
-  }
+                        />
+                    </List>
+                </Drawer>
+            </div>
+        );
+    }
 }
 
 export default AppDrawer;

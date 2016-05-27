@@ -4,6 +4,8 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppDrawer from './AppDrawer';
 import BrokerView from './BrokerView';
+import CommonRegister from '../dispatcher/registers/CommonRegister';
+import AppConstants from '../utils/AppConstants';
 
 const styles = {
     tabItemContainerStyle:{
@@ -12,27 +14,47 @@ const styles = {
 };
 
 const muiTheme = getMuiTheme({
-  palette: {
-    accent1Color: deepOrange500,
-  },
+    palette: {
+        accent1Color: deepOrange500,
+    }
 });
 
 class Main extends React.Component {
 
-  constructor(props, context) {
-    super(props, context);
-  }
+    constructor(props) {
+        super(props);
+        this.componentDidMount = this.componentDidMount.bind(this);
+        this.componentWillUnmount = this.componentWillUnmount.bind(this);
+        this.showHideMenu = this.showHideMenu.bind(this);
 
-  render() {
-    return (
-        <MuiThemeProvider muiTheme={muiTheme}>
-            <div>
-                <AppDrawer open={false}/>
-                <BrokerView/>
-            </div>
-        </MuiThemeProvider>
-    );
-  }
+        this.state = {
+            open:false
+        }
+    }
+
+    showHideMenu(open) { 
+        this.setState({open:open});
+    }
+
+    componentDidMount() {
+        CommonRegister.addChangeListener(AppConstants.EVENT_OPEN_CLOSE_MENU,this.showHideMenu);
+    }
+
+    componentWillUnmount() {
+        CommonRegister.removeChangeListener(AppConstants.EVENT_OPEN_CLOSE_MENU,this.showHideMenu);
+    }
+
+    render() {
+        console.log('render Main');
+        return (
+            <MuiThemeProvider muiTheme={muiTheme}>
+                <div>
+                    <AppDrawer open={this.state.open}/>
+                    <BrokerView/>
+                </div>
+            </MuiThemeProvider>
+        );
+    }
 }
 
 export default Main;
