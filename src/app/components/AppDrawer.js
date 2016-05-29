@@ -35,7 +35,11 @@ class AppDrawer extends React.Component {
     }
 
     onMenuItemClick(menuId,data) {
-        CommonActions.onMenuItemClick(menuId,data);
+        var eventData = {"menuId":menuId};
+        if(menuId == AppConstants.MENU_BROKER_DETAILS) {
+            eventData["bsId"] = data;
+        }
+        CommonActions.onMenuItemClick(eventData);
     }
 
     render() {
@@ -45,12 +49,10 @@ class AppDrawer extends React.Component {
                 <ListItem
                   key={brokerSetting.bsId}
                   primaryText={brokerSetting.brokerName}
-                  onTouchTap={this.onMenuItemClick.bind(this,brokerSetting.bsId)}
+                  onTouchTap={this.onMenuItemClick.bind(this,AppConstants.MENU_BROKER_DETAILS,brokerSetting.bsId)}
                 />
             );
         }.bind(this));
-
-        console.log('brokerList=',brokerList,this.props.bsList);
         brokerList.push(<ListItem
                           key="addNewBroker"
                           primaryText="Add New Broker"

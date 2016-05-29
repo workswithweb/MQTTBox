@@ -10,10 +10,9 @@ class CommonActions {  
         }); 
     }
 
-    static onMenuItemClick(menuId,data) { 
+    static onMenuItemClick(data) { 
         AppDispatcher.dispatch({ 
             actionType: AppConstants.ACTION_SELECT_MENU_ITEM, 
-            menuId: menuId ,
             data: data 
         }); 
     }

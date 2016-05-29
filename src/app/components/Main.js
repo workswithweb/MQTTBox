@@ -32,14 +32,16 @@ class Main extends React.Component {
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
 
         this.showHideMenu = this.showHideMenu.bind(this);
-        this.onMenuItemClick = this.onMenuItemClick.bind(this);
+        this.selectMenuItem = this.selectMenuItem.bind(this);
         this.onAddBrokerMenuClick = this.onAddBrokerMenuClick.bind(this);
+        this.onBrokerSelected = this.onBrokerSelected.bind(this);
         this.initView = this.initView.bind(this);
 
         this.state = {
             open:false,
             selectedMenu:null,
-            bsList:[]
+            bsList:[],
+            pageData: {}
         }
         this.initView();
     }
@@ -48,16 +50,33 @@ class Main extends React.Component {
         this.setState({open:open});
     }
 
-    onMenuItemClick(menuId,data) { 
-        switch(menuId) {
+    selectMenuItem(data) { 
+        switch(data.menuId) {
             case AppConstants.MENU_ADD_BROKER:
                 this.onAddBrokerMenuClick();
+                break;
+            case AppConstants.MENU_BROKER_DETAILS:
+                this.onBrokerSelected(data);
                 break;
         }
     }
 
     onAddBrokerMenuClick() { 
-        this.setState({open:false,selectedMenu:AppConstants.MENU_ADD_BROKER});
+        this.setState({open:false,selectedMenu:AppConstants.MENU_ADD_BROKER,pageData:{}});
+    }
+
+    onBrokerSelected(data) { 
+        var pageData = {};
+        Q.fcall(BrokerSettingsStore.getAllBrokerSettings)
+        .then(function(list) {
+            var bsIndex = _.findIndex(list,{'bsId':data.bsId});
+            if(bsIndex!=-1) {
+                pageData['broker'] = list[bsIndex];
+                this.setState({bsList:list,open:false,selectedMenu:AppConstants.MENU_BROKER_DETAILS,pageData:pageData});
+            } 
+        }.bind(this)).done();
+
+
     }
 
     initView() { 
@@ -69,16 +88,12 @@ class Main extends React.Component {
 
     componentDidMount() {
         CommonRegister.addChangeListener(AppConstants.EVENT_OPEN_CLOSE_MENU,this.showHideMenu);
-        CommonRegister.addChangeListener(AppConstants.EVENT_SELECT_MENU_ITEM,this.onMenuItemClick);
-        //CHANGE THIS TO CONNECTION EVENTS
-        CommonRegister.addChangeListener(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,this.initView);
+        CommonRegister.addChangeListener(AppConstants.EVENT_SELECT_MENU_ITEM,this.selectMenuItem);
     }
 
     componentWillUnmount() {
         CommonRegister.removeChangeListener(AppConstants.EVENT_OPEN_CLOSE_MENU,this.showHideMenu);
-        CommonRegister.removeChangeListener(AppConstants.EVENT_SELECT_MENU_ITEM,this.onMenuItemClick);
-        //CHANGE THIS TO CONNECTION EVENTS
-        CommonRegister.removeChangeListener(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,this.initView);
+        CommonRegister.removeChangeListener(AppConstants.EVENT_SELECT_MENU_ITEM,this.selectMenuItem);
     }
 
     render() {
@@ -86,9 +101,12 @@ class Main extends React.Component {
         var displayComponent = '';
         if(this.state.selectedMenu == AppConstants.MENU_ADD_BROKER) {
             displayComponent = <AddEditBrokerForm/>;
+        } else if(this.state.selectedMenu == AppConstants.MENU_BROKER_DETAILS) {
+            displayComponent = <BrokerView broker={this.state.pageData.broker}/>;
         } else {
             displayComponent = <BrokerView/>;
         }
+
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
                 <div>

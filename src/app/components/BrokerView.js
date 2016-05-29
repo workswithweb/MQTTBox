@@ -1,5 +1,5 @@
 import React from 'react';
-import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
+import {Toolbar, ToolbarGroup,ToolbarTitle} from 'material-ui/Toolbar';
 import IconButton from 'material-ui/IconButton';
 import ActionDehaze from 'material-ui/svg-icons/image/dehaze';
 import CommonActions from '../actions/CommonActions';
@@ -24,6 +24,9 @@ class BrokerView extends React.Component {
                         <IconButton onTouchTap={this.onShowHideMenuClick}>
                             <ActionDehaze/>
                         </IconButton>
+                    </ToolbarGroup>
+                    <ToolbarGroup>
+                        <ToolbarTitle text={this.props.broker.brokerName}/>
                     </ToolbarGroup>
                 </Toolbar>
             </div>
