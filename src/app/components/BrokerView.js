@@ -8,10 +8,10 @@ class BrokerView extends React.Component {
 
     constructor(props) {
         super(props);
-        this.onShowMenuClick = this.onShowMenuClick.bind(this);
+        this.onShowHideMenuClick = this.onShowHideMenuClick.bind(this);
     }
 
-    onShowMenuClick() {
+    onShowHideMenuClick() {
         CommonActions.showHideMenu(true);
     }
 
@@ -21,7 +21,7 @@ class BrokerView extends React.Component {
             <div>
                 <Toolbar>
                     <ToolbarGroup>
-                        <IconButton onTouchTap={this.onShowMenuClick} tooltip="Menu">
+                        <IconButton onTouchTap={this.onShowHideMenuClick}>
                             <ActionDehaze/>
                         </IconButton>
                     </ToolbarGroup>

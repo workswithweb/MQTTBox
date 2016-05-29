@@ -17,8 +17,11 @@ class CommonRegister extends Events.EventEmitter {  
         AppDispatcher.register(function(action) {
             switch(action.actionType) {
                 case AppConstants.ACTION_OPEN_CLOSE_MENU:
-                  this.emitChange(AppConstants.EVENT_OPEN_CLOSE_MENU,action.open);
-                  break;
+                    this.emitChange(AppConstants.EVENT_OPEN_CLOSE_MENU,action.open);
+                    break;
+                case AppConstants.ACTION_SELECT_MENU_ITEM:
+                    this.emitChange(AppConstants.EVENT_SELECT_MENU_ITEM,action.menuId,action.data);
+                    break;
                 default:
             }
         }.bind(this));

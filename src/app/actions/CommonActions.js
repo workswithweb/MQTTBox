@@ -10,6 +10,13 @@ class CommonActions {  
         }); 
     }
 
+    static onMenuItemClick(menuId,data) { 
+        AppDispatcher.dispatch({ 
+            actionType: AppConstants.ACTION_SELECT_MENU_ITEM, 
+            menuId: menuId ,
+            data: data 
+        }); 
+    }
 }
 
 export default CommonActions;

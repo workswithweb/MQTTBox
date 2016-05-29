@@ -35,6 +35,10 @@
     "react-dom": "^15.0.1",
     "react-tap-event-plugin": "^1.0.0",
     "node-uuid":"^1.4.7",
-    "flux":"^2.1.1"
+    "flux":"^2.1.1",
+    "q":"^1.4.1",
+    "localforage":"^1.4.0",
+    "lodash":"*",
+    "react-grid-layout":"0.12.2"
   }
 }
