@@ -52,11 +52,8 @@ class AddEditBrokerForm extends React.Component {
         this.initBrokerObj();
     }
 
-    initBrokerObj(bs) {
-        if(bs==null) {
-            bs = new BrokerSettings();
-        }
-        this.state = bs;
+    initBrokerObj() {
+        this.state = (this.props.broker==null?new BrokerSettings():this.props.broker);
     }
 
     onShowHideMenuClick() {

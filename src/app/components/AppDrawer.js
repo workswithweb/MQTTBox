@@ -3,11 +3,12 @@ import Drawer from 'material-ui/Drawer';
 import {List, ListItem} from 'material-ui/List';
 import DevicesIcon from 'material-ui/svg-icons/hardware/developer-board';
 import AddIcon from 'material-ui/svg-icons/content/add-circle-outline';
-import CommonActions from '../actions/CommonActions';
 import IconButton from 'material-ui/IconButton';
 import ActionClear from 'material-ui/svg-icons/content/clear';
 import Divider from 'material-ui/Divider';
 import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
+
+import CommonActions from '../actions/CommonActions';
 import AppConstants from '../utils/AppConstants';
 
 const styles = {
@@ -56,7 +57,7 @@ class AppDrawer extends React.Component {
         brokerList.push(<ListItem
                           key="addNewBroker"
                           primaryText="Add New Broker"
-                          onTouchTap={this.onMenuItemClick.bind(this,AppConstants.MENU_ADD_BROKER)}
+                          onTouchTap={this.onMenuItemClick.bind(this,AppConstants.MENU_ADD_EDIT_BROKER)}
                           leftIcon={<AddIcon/>}
                         />);
         return (

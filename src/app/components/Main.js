@@ -1,9 +1,11 @@
 import React from 'react';
 import Q from 'q';
+import _ from 'lodash';
 
 import {deepOrange500} from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import CircularProgress from 'material-ui/CircularProgress';
 
 import AppDrawer from './AppDrawer';
 import BrokerView from './BrokerView';
@@ -33,17 +35,10 @@ class Main extends React.Component {
 
         this.showHideMenu = this.showHideMenu.bind(this);
         this.selectMenuItem = this.selectMenuItem.bind(this);
-        this.onAddBrokerMenuClick = this.onAddBrokerMenuClick.bind(this);
+        this.onAddEditBrokerMenuClick = this.onAddEditBrokerMenuClick.bind(this);
         this.onBrokerSelected = this.onBrokerSelected.bind(this);
-        this.initView = this.initView.bind(this);
-
-        this.state = {
-            open:false,
-            selectedMenu:null,
-            bsList:[],
-            pageData: {}
-        }
-        this.initView();
+        this.state = {bsList:[],open:false,selectedMenu:null,pageData:{}}
+        this.onBrokerSelected();
     }
 
     showHideMenu(open) { 
@@ -52,8 +47,8 @@ class Main extends React.Component {
 
     selectMenuItem(data) { 
         switch(data.menuId) {
-            case AppConstants.MENU_ADD_BROKER:
-                this.onAddBrokerMenuClick();
+            case AppConstants.MENU_ADD_EDIT_BROKER:
+                this.onAddEditBrokerMenuClick(data);
                 break;
             case AppConstants.MENU_BROKER_DETAILS:
                 this.onBrokerSelected(data);
@@ -61,28 +56,24 @@ class Main extends React.Component {
         }
     }
 
-    onAddBrokerMenuClick() { 
-        this.setState({open:false,selectedMenu:AppConstants.MENU_ADD_BROKER,pageData:{}});
+    onAddEditBrokerMenuClick() { 
+        this.setState({open:false,selectedMenu:AppConstants.MENU_ADD_EDIT_BROKER,pageData:{}});
     }
 
     onBrokerSelected(data) { 
-        var pageData = {};
         Q.fcall(BrokerSettingsStore.getAllBrokerSettings)
         .then(function(list) {
-            var bsIndex = _.findIndex(list,{'bsId':data.bsId});
-            if(bsIndex!=-1) {
-                pageData['broker'] = list[bsIndex];
-                this.setState({bsList:list,open:false,selectedMenu:AppConstants.MENU_BROKER_DETAILS,pageData:pageData});
-            } 
-        }.bind(this)).done();
-
-
-    }
-
-    initView() { 
-        Q.fcall(BrokerSettingsStore.getAllBrokerSettings)
-        .then(function(list) {
-            this.setState({bsList:list});
+            if(list!=null && list.length>0) {
+                var bsIndex = _.findIndex(list,{'bsId':data!=null?data.bsId:0});
+                bsIndex = bsIndex!=-1?bsIndex:0;
+                this.setState({ bsList:list,
+                                open:false,
+                                selectedMenu:AppConstants.MENU_BROKER_DETAILS,
+                                pageData:{broker:list[bsIndex]}
+                             });
+            } else {
+                this.onAddEditBrokerMenuClick();
+            }
         }.bind(this)).done();
     }
 
@@ -99,18 +90,24 @@ class Main extends React.Component {
     render() {
         console.log('render Main');
         var displayComponent = '';
-        if(this.state.selectedMenu == AppConstants.MENU_ADD_BROKER) {
-            displayComponent = <AddEditBrokerForm/>;
-        } else if(this.state.selectedMenu == AppConstants.MENU_BROKER_DETAILS) {
-            displayComponent = <BrokerView broker={this.state.pageData.broker}/>;
+        var appDrawer = '';
+
+        if(this.state!=null && this.state.selectedMenu!=null) {
+            if(this.state.selectedMenu == AppConstants.MENU_ADD_EDIT_BROKER) {
+                displayComponent = <AddEditBrokerForm/>;
+            } else if(this.state.selectedMenu == AppConstants.MENU_BROKER_DETAILS) {
+                displayComponent = <BrokerView broker={this.state.pageData.broker}/>;
+            }
+            appDrawer = <AppDrawer open={this.state.open} bsList={this.state.bsList}/>;
         } else {
-            displayComponent = <BrokerView/>;
+            displayComponent = <CircularProgress size={2}/>;
         }
+
 
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
                 <div>
-                    <AppDrawer open={this.state.open} bsList={this.state.bsList}/>
+                    {appDrawer}
                     {displayComponent}
                 </div>
             </MuiThemeProvider>
