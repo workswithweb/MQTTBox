@@ -115,7 +115,7 @@ class AddEditBrokerForm extends React.Component {
     }
 
     deleteBrokerSettings() {
-        BrokerSettingsAction.deleteBrokerSettingsById(this.state.mqttObj.bsId);
+        BrokerSettingsAction.deleteBrokerSettingsById(this.state.bsId);
     }
 
     render() {

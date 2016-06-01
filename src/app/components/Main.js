@@ -56,8 +56,15 @@ class Main extends React.Component {
         }
     }
 
-    onAddEditBrokerMenuClick() { 
-        this.setState({open:false,selectedMenu:AppConstants.MENU_ADD_EDIT_BROKER,pageData:{}});
+    onAddEditBrokerMenuClick(data) { 
+        var broker = null;
+        if(data!=null && data.bsId!=null) {
+            var bsIndex = _.findIndex(this.state.bsList,{'bsId':data.bsId});
+            if(bsIndex>=0) {
+                broker = this.state.bsList[bsIndex];
+            }
+        }
+        this.setState({open:false,selectedMenu:AppConstants.MENU_ADD_EDIT_BROKER,pageData:{broker:broker}});
     }
 
     onBrokerSelected(data) { 
@@ -72,7 +79,11 @@ class Main extends React.Component {
                                 pageData:{broker:list[bsIndex]}
                              });
             } else {
-                this.onAddEditBrokerMenuClick();
+                this.setState({ bsList:list,
+                                open:false,
+                                selectedMenu:AppConstants.MENU_ADD_EDIT_BROKER,
+                                pageData:{broker:null}
+                             });
             }
         }.bind(this)).done();
     }
@@ -94,7 +105,7 @@ class Main extends React.Component {
 
         if(this.state!=null && this.state.selectedMenu!=null) {
             if(this.state.selectedMenu == AppConstants.MENU_ADD_EDIT_BROKER) {
-                displayComponent = <AddEditBrokerForm/>;
+                displayComponent = <AddEditBrokerForm broker={this.state.pageData.broker}/>;
             } else if(this.state.selectedMenu == AppConstants.MENU_BROKER_DETAILS) {
                 displayComponent = <BrokerView broker={this.state.pageData.broker}/>;
             }

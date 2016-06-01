@@ -10,6 +10,44 @@ class BrokerSettingsAction {  
         }); 
     }
 
+    static deleteBrokerSettingsById(bsId) { 
+        AppDispatcher.dispatch({ 
+            actionType: AppConstants.ACTION_DELETE_BROKER_SETTINGS, 
+            bsId: bsId 
+        }); 
+    }
+
+    static onAddPublisherButtonClick(bsId,publisher) { 
+        AppDispatcher.dispatch({ 
+            actionType: AppConstants.ACTION_ADD_PUBLISHER_BUTTON_CLICK, 
+            bsId: bsId ,
+            publisher:publisher
+        }); 
+    }
+
+    static onRemovePublisherButtonClick(bsId,pubId) { 
+        AppDispatcher.dispatch({ 
+            actionType: AppConstants.ACTION_REMOVE_PUBLISHER_BUTTON_CLICK, 
+            bsId: bsId ,
+            pubId:pubId
+        }); 
+    }
+
+    static onAddSubscriberButtonClick(bsId,subscriber) { 
+        AppDispatcher.dispatch({ 
+            actionType: AppConstants.ACTION_ADD_SUBSCRIBER_BUTTON_CLICK, 
+            bsId: bsId ,
+            subscriber:subscriber
+        }); 
+    }
+
+    static onRemoveSubscriberButtonClick(bsId,subId) { 
+        AppDispatcher.dispatch({ 
+            actionType: AppConstants.ACTION_REMOVE_SUBSCRIBER_BUTTON_CLICK, 
+            bsId: bsId ,
+            subId:subId
+        }); 
+    }
 }
 
 export default BrokerSettingsAction;

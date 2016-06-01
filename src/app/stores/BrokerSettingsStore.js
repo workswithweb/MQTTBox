@@ -19,11 +19,11 @@ class BrokerSettingsStore extends Events.EventEmitter {  
         this.addChangeListener = this.addChangeListener.bind(this);
         this.removeChangeListener = this.removeChangeListener.bind(this);
 
-        this.saveBrokerSettings = this.saveBrokerSettings.bind(this);
         this.getAllBrokerSettings = this.getAllBrokerSettings.bind(this);
+        this.saveBrokerSettings = this.saveBrokerSettings.bind(this);
+        this.deleteBrokerSettingsById = this.deleteBrokerSettingsById.bind(this);
 
         this.getBrokerSettingsById = this.getBrokerSettingsById.bind(this);
-        this.deleteBrokerSettingsById = this.deleteBrokerSettingsById.bind(this);
         this.savePublisherSettings = this.savePublisherSettings.bind(this);
         this.removePublisherSettings = this.removePublisherSettings.bind(this);
         this.saveSubscriberSettings = this.saveSubscriberSettings.bind(this);
@@ -75,6 +75,19 @@ class BrokerSettingsStore extends Events.EventEmitter {  
         }.bind(this));
     }
 
+    getAllBrokerSettings() { 
+        var me =this;
+        var brokerSettingsList = [];
+        return Q.invoke(this.db,'iterate',
+            function(value, key, iterationNumber) {
+                me.setOtherSettingsData(value);
+                brokerSettingsList.push(value);
+            }
+        ).then(function() {
+            return _.sortBy(brokerSettingsList, ['createdOn']);
+        });
+    }
+
     saveBrokerSettings(brokerObj) { 
          Q.invoke(this.db,'getItem',brokerObj.bsId)
         .then(function(dbBrokerObj) {
@@ -117,31 +130,6 @@ class BrokerSettingsStore extends Events.EventEmitter {  
         }.bind(this));
     }
 
-    getAllBrokerSettings() { 
-        var me =this;
-        var brokerSettingsList = [];
-        return Q.invoke(this.db,'iterate',
-            function(value, key, iterationNumber) {
-                me.setOtherSettingsData(value);
-                brokerSettingsList.push(value);
-            }
-        ).then(function() {
-            return _.sortBy(brokerSettingsList, ['createdOn']);
-        });
-    }
-
-    setOtherSettingsData(bs) { 
-
-    }
-
-    getBrokerSettingsById(bsId) { 
-        return Q.invoke(this.db,'getItem',bsId)
-        .then(function(data) {
-            this.setOtherSettingsData(data);
-            return data;
-        }.bind(this));
-    }
-
     deleteBrokerSettingsById(bsId) {
         return Q.invoke(this.db,'removeItem',bsId)
             .then(function(){
@@ -153,15 +141,29 @@ class BrokerSettingsStore extends Events.EventEmitter {  
             .done();
     }
 
+    getBrokerSettingsById(bsId) { 
+        return Q.invoke(this.db,'getItem',bsId)
+        .then(function(data) {
+            this.setOtherSettingsData(data);
+            return data;
+        }.bind(this));
+    }
+
+    setOtherSettingsData(bs) { 
+
+    }
+
     savePublisherSettings(bsId,publisher) { 
         Q.invoke(this.db,'getItem',bsId)
         .then(function(obj) {
-            if(obj!=null) {
-                if(publisher.pubId==null || publisher.pubId.length<1) {
-                    publisher.pubId = UUID.v4();
-                }
+            if(obj!=null && publisher!=null) {
                 publisher.updatedOn = +(new Date());
-                obj.publishSettings[publisher.pubId] = publisher;
+                var pubIndex = _.findIndex(obj.publishSettings,{'pubId':publisher.pubId});
+                if(pubIndex!=-1) {
+                    obj.publishSettings[pubIndex] = publisher;
+                } else {
+                    obj.publishSettings.push(publisher);
+                }
                 Q.invoke(this.db,'setItem',bsId,obj)
                 .then(function(data) {
                     this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,bsId);
@@ -176,15 +178,18 @@ class BrokerSettingsStore extends Events.EventEmitter {  
     removePublisherSettings(bsId,pubId) {
         Q.invoke(this.db,'getItem',bsId)
         .then(function(obj) {
-            if(obj!=null && obj.publishSettings!=null && obj.publishSettings[pubId]!=null) {
-                delete obj.publishSettings[pubId];
-                Q.invoke(this.db,'setItem',bsId,obj)
-                .then(function(data) {
-                    this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,bsId);
-                }.bind(this)).catch(function (error) {
-                     alert("Error Saving Data. Try Again");
-                })
-                .done();
+            if(obj!=null && obj.publishSettings!=null && obj.publishSettings.length>0) {
+                var pubIndex = _.findIndex(obj.publishSettings,{'pubId':pubId});
+                if (pubIndex > -1) {
+                    obj.publishSettings.splice(pubIndex, 1);
+                    Q.invoke(this.db,'setItem',bsId,obj)
+                    .then(function(data) {
+                        this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,bsId);
+                    }.bind(this)).catch(function (error) {
+                         alert("Error Saving Data. Try Again");
+                    })
+                    .done();
+                }
             }
         }.bind(this));
     }
@@ -192,12 +197,15 @@ class BrokerSettingsStore extends Events.EventEmitter {  
     saveSubscriberSettings(bsId,subscriber) { 
         Q.invoke(this.db,'getItem',bsId)
         .then(function(obj) {
-            if(obj!=null) {
-                if(subscriber.subId==null || subscriber.subId.length<1) {
-                    subscriber.subId = UUID.v4();
-                }
+            if(obj!=null && subscriber!=null) {
                 subscriber.updatedOn = +(new Date());
-                obj.subscribeSettings[subscriber.subId] = subscriber;
+                var subIndex = _.findIndex(obj.subscribeSettings,{'subId':subscriber.subId});
+                if(subIndex!=-1) {
+                    obj.subscribeSettings[subIndex] = subscriber;
+                } else {
+                    obj.subscribeSettings.push(subscriber);
+                }
+
                 Q.invoke(this.db,'setItem',bsId,obj)
                 .then(function(data) {
                     this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,bsId);
@@ -212,15 +220,18 @@ class BrokerSettingsStore extends Events.EventEmitter {  
     removeSubscriberSettings(bsId,subId) {
         Q.invoke(this.db,'getItem',bsId)
         .then(function(obj) {
-            if(obj!=null && obj.subscribeSettings!=null && obj.subscribeSettings[subId]!=null) {
-                delete obj.subscribeSettings[subId];
-                Q.invoke(this.db,'setItem',bsId,obj)
-                .then(function(data) {
-                    this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,bsId);
-                }.bind(this)).catch(function (error) {
-                     alert("Error Saving Data. Try Again");
-                })
-                .done();
+            if(obj!=null && obj.subscribeSettings!=null && obj.subscribeSettings.length>0) {
+                var subIndex = _.findIndex(obj.subscribeSettings,{'subId':subId});
+                if (subIndex > -1) {
+                    obj.subscribeSettings.splice(subIndex, 1);
+                    Q.invoke(this.db,'setItem',bsId,obj)
+                    .then(function(data) {
+                        this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,bsId);
+                    }.bind(this)).catch(function (error) {
+                         alert("Error Saving Data. Try Again");
+                    })
+                    .done();
+                }
             }
         }.bind(this));
     }
