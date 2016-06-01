@@ -72,27 +72,6 @@ class Subscriber extends React.Component {
         this.setState({recievedMessages:recievedMessages});
     }
 
-    componentDidMount() {
-        var connection = null;
-        if(connection!=null) {
-            connection.addChangeListener(AppConstants.EVENT_SUBSCRIBED_MESSAGE_PREFIX+this.props.bsId+'_'+
-                this.props.subscriberSettings.subId,this.onSubscribedForMessages);
-        }
-    }
-
-    componentWillUnmount() {
-        var connection = null;
-        if(connection!=null) {
-            connection.removeChangeListener(AppConstants.BROKER_MESSAGE+this.props.bsId+'_'+
-                                                        this.props.subscriberSettings.topic,this.onSubscribedMessageReceived);
-            connection.removeChangeListener(AppConstants.EVENT_SUBSCRIBED_MESSAGE_PREFIX+this.props.bsId+'_'+
-                this.props.subscriberSettings.subId,this.onSubscribedForMessages);
-
-                BrokerSettingsAction.unSubscribeTopic(this.props.bsId,this.props.subscriberSettings.topic,this.props.subscriberSettings.subId);
-
-        }
-    }
-
     render() {
         console.log('render Subscriber');
         var component ='';

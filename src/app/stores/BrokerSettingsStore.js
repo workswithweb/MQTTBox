@@ -157,16 +157,20 @@ class BrokerSettingsStore extends Events.EventEmitter {  
         Q.invoke(this.db,'getItem',bsId)
         .then(function(obj) {
             if(obj!=null && publisher!=null) {
+                var isNew = false;
                 publisher.updatedOn = +(new Date());
                 var pubIndex = _.findIndex(obj.publishSettings,{'pubId':publisher.pubId});
                 if(pubIndex!=-1) {
                     obj.publishSettings[pubIndex] = publisher;
                 } else {
+                    isNew = true;
                     obj.publishSettings.push(publisher);
                 }
                 Q.invoke(this.db,'setItem',bsId,obj)
                 .then(function(data) {
-                    this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,bsId);
+                    if(isNew === true) {
+                        this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,bsId);
+                    }
                 }.bind(this)).catch(function (error) {
                      alert("Error Saving Data. Try Again");
                 })
@@ -198,17 +202,21 @@ class BrokerSettingsStore extends Events.EventEmitter {  
         Q.invoke(this.db,'getItem',bsId)
         .then(function(obj) {
             if(obj!=null && subscriber!=null) {
+                var isNew = false;
                 subscriber.updatedOn = +(new Date());
                 var subIndex = _.findIndex(obj.subscribeSettings,{'subId':subscriber.subId});
                 if(subIndex!=-1) {
                     obj.subscribeSettings[subIndex] = subscriber;
                 } else {
+                    isNew = true;
                     obj.subscribeSettings.push(subscriber);
                 }
 
                 Q.invoke(this.db,'setItem',bsId,obj)
                 .then(function(data) {
-                    this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,bsId);
+                    if(isNew === true) {
+                        this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,bsId);
+                    }
                 }.bind(this)).catch(function (error) {
                      alert("Error Saving Data. Try Again");
                 })

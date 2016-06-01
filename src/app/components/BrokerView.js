@@ -121,7 +121,7 @@ class BrokerView extends React.Component {
                     </Toolbar>
                 </div>
                 <div>
-                    <ResponsiveReactGridLayout isDraggable={false} autoSize={true} className="layout" breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}} cols={{lg: 4, md: 3, sm: 2, xs:1, xxs: 1}}>
+                    <ResponsiveReactGridLayout key={this.props.broker.bsId} isDraggable={false} autoSize={true} className="layout" breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}} cols={{lg: 4, md: 3, sm: 2, xs:1, xxs: 1}}>
                         {gridList}
                     </ResponsiveReactGridLayout>
                 </div>

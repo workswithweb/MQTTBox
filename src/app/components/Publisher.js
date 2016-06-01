@@ -8,11 +8,11 @@ import RaisedButton from 'material-ui/RaisedButton';
 import * as Colors from 'material-ui/styles/colors.js';
 import IconButton from 'material-ui/IconButton';
 import Clear from 'material-ui/svg-icons/content/clear';
-import BrokerSettingsAction from '../actions/BrokerSettingsAction';
 import Divider from 'material-ui/Divider';
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import Forward from 'material-ui/svg-icons/content/forward';
-//import BrokerConnectionFactory from '../stores/BrokerConnectionFactory';
+
+import BrokerSettingsAction from '../actions/BrokerSettingsAction';
 
 const style = {
     publisherPaper: {
