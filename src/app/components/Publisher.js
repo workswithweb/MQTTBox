@@ -1,4 +1,5 @@
 import React from 'react';
+
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
@@ -8,9 +9,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import * as Colors from 'material-ui/styles/colors.js';
 import IconButton from 'material-ui/IconButton';
 import Clear from 'material-ui/svg-icons/content/clear';
-import Divider from 'material-ui/Divider';
-import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
-import Forward from 'material-ui/svg-icons/content/forward';
+import {Card, CardHeader} from 'material-ui/Card';
 
 import BrokerSettingsAction from '../actions/BrokerSettingsAction';
 
@@ -28,10 +27,6 @@ const style = {
         right: '2px',
         top: 0,
         cursor: 'pointer'
-    },
-    sendButton : {
-      marginLeft: 10,
-      cursor: 'pointer'
     }
 };
 
@@ -62,6 +57,13 @@ class Publisher extends React.Component {
 
     onQosChange(event, index, value) {
         this.setState({qos:value});
+        //on blur not working for SelectField so saving here as workaround
+        var pubSettings = {pubId: this.props.publisherSettings.pubId,
+                           topic: this.state.topic,
+                           qos: value,
+                           retain: this.state.retain,
+                           payload: this.state.payload};
+        BrokerSettingsAction.onAddPublisherButtonClick(this.props.bsId,pubSettings);
     }
 
     onRetainChange(event) {
@@ -138,7 +140,7 @@ class Publisher extends React.Component {
             <Paper style={style.publisherPaper} zDepth={4}>
                 <div>
                     <TextField onChange={this.onTopicChange} onBlur={this.savePublisherSettings}  value={this.state.topic} fullWidth={true} hintText="Topic to publish" floatingLabelText="Topic to publish"/>
-                    <SelectField onBlur={this.savePublisherSettings} onChange={this.onQosChange} fullWidth={true} value={this.state.qos} floatingLabelText='QOS'>
+                    <SelectField onChange={this.onQosChange} fullWidth={true} value={this.state.qos} floatingLabelText='QOS'>
                         <MenuItem value={0} primaryText='0 - Almost Once'/>
                         <MenuItem value={1} primaryText='1 - Atleast Once'/>
                         <MenuItem value={2} primaryText='2 - Exactly Once'/>

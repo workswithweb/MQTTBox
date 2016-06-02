@@ -8,6 +8,7 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import BrokerSettings from '../models/BrokerSettings';
 import PublisherSettings from '../models/PublisherSettings';
 import SubscriberSettings from '../models/SubscriberSettings';
+import BrokerConnectionStore from './BrokerConnectionStore';
 
 class BrokerSettingsStore extends Events.EventEmitter {  
 
@@ -28,7 +29,6 @@ class BrokerSettingsStore extends Events.EventEmitter {  
         this.removePublisherSettings = this.removePublisherSettings.bind(this);
         this.saveSubscriberSettings = this.saveSubscriberSettings.bind(this);
         this.removeSubscriberSettings = this.removeSubscriberSettings.bind(this);
-        this.setOtherSettingsData = this.setOtherSettingsData.bind(this);
 
         this.registerToAppDispatcher();
     }
@@ -80,7 +80,6 @@ class BrokerSettingsStore extends Events.EventEmitter {  
         var brokerSettingsList = [];
         return Q.invoke(this.db,'iterate',
             function(value, key, iterationNumber) {
-                me.setOtherSettingsData(value);
                 brokerSettingsList.push(value);
             }
         ).then(function() {
@@ -122,6 +121,7 @@ class BrokerSettingsStore extends Events.EventEmitter {  
             Q.invoke(this.db,'setItem',dbBrokerObj.bsId,dbBrokerObj)
             .then(function(data) {
                 this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,data.bsId);
+                BrokerConnectionStore.reconnectBroker(dbBrokerObj.bsId);
             }.bind(this)).catch(function (error) {
                 console.log(error);
                 alert("Error Saving Data. Try Again");
@@ -144,13 +144,8 @@ class BrokerSettingsStore extends Events.EventEmitter {  
     getBrokerSettingsById(bsId) { 
         return Q.invoke(this.db,'getItem',bsId)
         .then(function(data) {
-            this.setOtherSettingsData(data);
             return data;
         }.bind(this));
-    }
-
-    setOtherSettingsData(bs) { 
-
     }
 
     savePublisherSettings(bsId,publisher) { 

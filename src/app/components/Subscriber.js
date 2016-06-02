@@ -1,14 +1,15 @@
 import React from 'react';
+
 import Paper from 'material-ui/Paper';
-import SubscriberForm from './SubscriberForm';
 import IconButton from 'material-ui/IconButton';
 import Clear from 'material-ui/svg-icons/content/clear';
 import * as Colors from 'material-ui/styles/colors.js';
 import RaisedButton from 'material-ui/RaisedButton';
-import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
+import {Card, CardHeader, CardText} from 'material-ui/Card';
 
 import BrokerSettingsAction from '../actions/BrokerSettingsAction';
 import AppConstants from '../utils/AppConstants';
+import SubscriberForm from './SubscriberForm';
 
 const style = {
     subscriberPaper:{
@@ -25,9 +26,6 @@ const style = {
         top: 0,
         cursor: 'pointer'
     },
-    subscribedHeader:{
-        width:'90%'
-    },
     packetMessage:{
         wordWrap: 'break-word'
     }
@@ -41,7 +39,6 @@ class Subscriber extends React.Component {
         this.onSubscribedForMessages = this.onSubscribedForMessages.bind(this);
         this.onUnsubscribedForMessages = this.onUnsubscribedForMessages.bind(this);
         this.onSubscribedMessageReceived = this.onSubscribedMessageReceived.bind(this);
-
         this.state = {isSubscribed:false,recievedMessages:[]}
     }
 

@@ -48,6 +48,13 @@ class BrokerSettingsAction {  
             subId:subId
         }); 
     }
+
+    static setCurrentSelectedBroker(bsId) { 
+        AppDispatcher.dispatch({ 
+            actionType: AppConstants.ACTION_SET_SELECTED_BROKER, 
+            bsId: bsId 
+        }); 
+    }
 }
 
 export default BrokerSettingsAction;

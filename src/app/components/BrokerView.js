@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Toolbar, ToolbarGroup,ToolbarTitle} from 'material-ui/Toolbar';
+import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import IconButton from 'material-ui/IconButton';
 import ActionDehaze from 'material-ui/svg-icons/image/dehaze';
 import * as Colors from 'material-ui/styles/colors.js';
@@ -8,7 +8,6 @@ import SettingsIcon from 'material-ui/svg-icons/action/settings';
 import SignalIcon from 'material-ui/svg-icons/device/network-wifi';
 import CloudUploadIcon from 'material-ui/svg-icons/file/cloud-upload';
 import CloudDownloadIcon from 'material-ui/svg-icons/file/cloud-download';
-import RaisedButton from 'material-ui/RaisedButton';
 import {Responsive, WidthProvider} from 'react-grid-layout';
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
@@ -19,6 +18,7 @@ import Subscriber from './Subscriber';
 import BrokerSettingsAction from '../actions/BrokerSettingsAction';
 import PublisherSettings from '../models/PublisherSettings';
 import SubscriberSettings from '../models/SubscriberSettings';
+import BrokerConnectionStore from '../stores/BrokerConnectionStore';
 
 class BrokerView extends React.Component {
 
@@ -30,6 +30,13 @@ class BrokerView extends React.Component {
         this.createSubscribersView = this.createSubscribersView.bind(this);
         this.onAddPublisherButtonClick = this.onAddPublisherButtonClick.bind(this);
         this.onAddSubscriberButtonClick = this.onAddSubscriberButtonClick.bind(this);
+        this.setConnectionState = this.setConnectionState.bind(this);
+        this.componentDidMount = this.componentDidMount.bind(this);
+        this.componentWillUnmount = this.componentWillUnmount.bind(this);
+
+        this.state = {
+            connState:AppConstants.CLOSE
+        }
     }
 
     onShowHideMenuClick() {
@@ -90,6 +97,20 @@ class BrokerView extends React.Component {
         BrokerSettingsAction.onAddSubscriberButtonClick(this.props.broker.bsId,new SubscriberSettings());
     }
 
+    setConnectionState(data) {
+        if(this.props.broker.bsId == data.bsId) {
+            this.setState({connState:data.status});
+        }
+    }
+
+    componentDidMount() {
+        BrokerConnectionStore.addChangeListener(AppConstants.EVENT_BROKER_CONNECTION_STATE_CHANGED,this.setConnectionState);
+    }
+
+    componentWillUnmount() {
+        BrokerConnectionStore.removeChangeListener(AppConstants.EVENT_BROKER_CONNECTION_STATE_CHANGED,this.setConnectionState);
+    }
+
     render() {
         console.log('render BrokerView');
         var gridList = this.createPublishersView().concat(this.createSubscribersView());
@@ -103,7 +124,7 @@ class BrokerView extends React.Component {
                                 <ActionDehaze/>
                             </IconButton>
                             <IconButton onTouchTap={this.onReconnectBrokerClick} tooltipPosition="bottom-center" tooltip="Reconnect Broker">
-                                <SignalIcon color={Colors.greenA700}/>
+                                <SignalIcon color={this.state.connState == AppConstants.ONLINE? Colors.greenA700:Colors.redA700} />
                             </IconButton>
                             <IconButton onTouchTap={this.onEditBrokerSettingsClick} tooltipPosition="bottom-center" tooltip="Edit Broker Settings">
                                 <SettingsIcon color={Colors.brown900}/>
@@ -114,9 +135,10 @@ class BrokerView extends React.Component {
                             <IconButton onTouchTap={this.onAddSubscriberButtonClick} tooltipPosition="bottom-center" tooltip="Subscribe to new topic">
                                 <CloudDownloadIcon color={Colors.blue700}/>
                             </IconButton>
+                            <h3>{this.props.broker.brokerName}</h3>
                         </ToolbarGroup>
                         <ToolbarGroup>
-                            <h3>{this.props.broker.brokerName}</h3>
+
                         </ToolbarGroup>
                     </Toolbar>
                 </div>

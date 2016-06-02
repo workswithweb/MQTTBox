@@ -1,4 +1,7 @@
 import React from 'react';
+import UUID from 'node-uuid';
+import Q from 'q';
+
 import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
 import SelectField from 'material-ui/SelectField';
@@ -16,8 +19,6 @@ import CardActions from 'material-ui/Card/CardActions';
 import CardHeader from 'material-ui/Card/CardHeader';
 import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import ActionDehaze from 'material-ui/svg-icons/image/dehaze';
-import UUID from 'node-uuid';
-import Q from 'q';
 
 import BrokerSettings from '../models/BrokerSettings';
 import AppConstants from '../utils/AppConstants';

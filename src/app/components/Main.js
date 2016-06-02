@@ -11,7 +11,9 @@ import AppDrawer from './AppDrawer';
 import BrokerView from './BrokerView';
 import AddEditBrokerForm from './AddEditBrokerForm';
 import BrokerSettingsStore from '../stores/BrokerSettingsStore';
+import BrokerConnectionStore from '../stores/BrokerConnectionStore';
 import CommonRegister from '../dispatcher/registers/CommonRegister';
+import BrokerSettingsAction from '../actions/BrokerSettingsAction';
 import AppConstants from '../utils/AppConstants';
 
 const styles = {
@@ -78,6 +80,7 @@ class Main extends React.Component {
                                 selectedMenu:AppConstants.MENU_BROKER_DETAILS,
                                 pageData:{broker:list[bsIndex]}
                              });
+                BrokerSettingsAction.setCurrentSelectedBroker(list[bsIndex].bsId);
             } else {
                 this.setState({ bsList:list,
                                 open:false,
