@@ -55,6 +55,32 @@ class BrokerSettingsAction {  
             bsId: bsId 
         }); 
     }
+
+    static reconnectBroker(bsId) { 
+        AppDispatcher.dispatch({ 
+            actionType: AppConstants.ACTION_RECONNECT_BROKER, 
+            bsId:bsId
+        }); 
+    }
+
+    static publishMessage(bsId,pubId,topic,message,options) { 
+        AppDispatcher.dispatch({ 
+            actionType: AppConstants.ACTION_PUBLISH_MESSAGE, 
+            bsId:bsId,
+            pubId:pubId,
+            topic:topic,
+            message:message,
+            options:options
+        }); 
+    }
+
+    static clearPublisherConnectionData(bsId,pubId) { 
+        AppDispatcher.dispatch({ 
+            actionType: AppConstants.ACTION_CLEAR_PUBLISHER_CONNECTION_DATA, 
+            bsId:bsId,
+            pubId:pubId
+        }); 
+    }
 }
 
 export default BrokerSettingsAction;

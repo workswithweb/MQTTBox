@@ -9,9 +9,11 @@ import RaisedButton from 'material-ui/RaisedButton';
 import * as Colors from 'material-ui/styles/colors.js';
 import IconButton from 'material-ui/IconButton';
 import Clear from 'material-ui/svg-icons/content/clear';
-import {Card, CardHeader} from 'material-ui/Card';
+import {Card, CardHeader, CardText} from 'material-ui/Card';
 
 import BrokerSettingsAction from '../actions/BrokerSettingsAction';
+import BrokerConnectionStore from '../stores/BrokerConnectionStore';
+import AppConstants from '../utils/AppConstants';
 
 const style = {
     publisherPaper: {
@@ -41,6 +43,7 @@ class Publisher extends React.Component {
         this.onRemovePublisherButtonClick = this.onRemovePublisherButtonClick.bind(this);
         this.savePublisherSettings = this.savePublisherSettings.bind(this);
         this.publishMessage = this.publishMessage.bind(this);
+        this.setPublisherData = this.setPublisherData.bind(this);
 
         this.state = {
             qos:this.props.publisherSettings.qos,
@@ -88,8 +91,8 @@ class Publisher extends React.Component {
     }
 
     publishMessage() {
-        if(BrokerConnectionFactory.isBrokerConnected(this.props.bsId)) {
-            BrokerSettingsAction.publishMessage(this.props.bsId,
+        if(BrokerConnectionStore.isBrokerConnected(this.props.bsId)) {
+            BrokerSettingsAction.publishMessage(this.props.bsId,this.props.publisherSettings.pubId,
                         this.state.topic,
                         this.state.payload,
                         {qos:this.state.qos,retain: this.state.retain});
@@ -104,8 +107,22 @@ class Publisher extends React.Component {
             }
             this.setState({publishedMessages:publishedMessages});
         } else {
-            alert('Broker is not connected. Please check broker settings.');
+            alert('Unable to connect to Broker. Please check your broker settings.');
         }
+    }
+
+    setPublisherData(data) {
+        if(data!=null && data.bsId == this.props.bsId && data.pubId == this.props.publisherSettings.pubId) {
+            this.setState({publishedMessages:data.publishedMessages});
+        }
+    }
+
+    componentDidMount() {
+        BrokerConnectionStore.addChangeListener(AppConstants.EVENT_PUBLISHER_DATA,this.setPublisherData);
+    }
+
+    componentWillUnmount() {
+        BrokerConnectionStore.removeChangeListener(AppConstants.EVENT_PUBLISHER_DATA,this.setPublisherData);
     }
 
     render() {
@@ -117,24 +134,21 @@ class Publisher extends React.Component {
             for (var i=len-1; i>=0;i--) {
               messageList.push(
                 <Card key={i}>
-                    <CardHeader subtitle={
+                    <CardText>
                         <div>
-                            <div style={{color: Colors.darkBlack}}>
-                                {this.state.publishedMessages[i].topic}
-                            </div>
                             <div>
                                 {this.state.publishedMessages[i].payload}
                             </div>
                             <div>
-                                qos:{this.state.publishedMessages[i].qos} ,
-                                retain:{this.state.publishedMessages[i].retain}
+                                <b>topic</b>:{this.state.publishedMessages[i].topic},
+                                <b> qos</b>:{this.state.publishedMessages[i].qos},
+                                <b> retain</b>:{this.state.publishedMessages[i].retain}
                              </div>
-                         </div>}
-                    />
+                         </div>
+                    </CardText>
                 </Card>);
             }
         }
-
 
         return (
             <Paper style={style.publisherPaper} zDepth={4}>

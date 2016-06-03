@@ -8,7 +8,7 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import BrokerSettings from '../models/BrokerSettings';
 import PublisherSettings from '../models/PublisherSettings';
 import SubscriberSettings from '../models/SubscriberSettings';
-import BrokerConnectionStore from './BrokerConnectionStore';
+import BrokerSettingsAction from '../actions/BrokerSettingsAction';
 
 class BrokerSettingsStore extends Events.EventEmitter {  
 
@@ -121,7 +121,7 @@ class BrokerSettingsStore extends Events.EventEmitter {  
             Q.invoke(this.db,'setItem',dbBrokerObj.bsId,dbBrokerObj)
             .then(function(data) {
                 this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,data.bsId);
-                BrokerConnectionStore.reconnectBroker(dbBrokerObj.bsId);
+                BrokerSettingsAction.reconnectBroker(dbBrokerObj.bsId);
             }.bind(this)).catch(function (error) {
                 console.log(error);
                 alert("Error Saving Data. Try Again");
@@ -184,6 +184,7 @@ class BrokerSettingsStore extends Events.EventEmitter {  
                     Q.invoke(this.db,'setItem',bsId,obj)
                     .then(function(data) {
                         this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,bsId);
+                        BrokerSettingsAction.clearPublisherConnectionData(bsId,pubId);
                     }.bind(this)).catch(function (error) {
                          alert("Error Saving Data. Try Again");
                     })

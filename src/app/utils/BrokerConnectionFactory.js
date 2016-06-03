@@ -10,6 +10,7 @@ class BrokerConnectionFactory extends Events.EventEmitter {
         this.brokerSettings = brokerSettings;
         this.client = null;
         this.connState = AppConstants.CLOSE;
+        this.publishedMessages = {};
 
         this.emitChange = this.emitChange.bind(this);
         this.addChangeListener = this.addChangeListener.bind(this);
@@ -114,9 +115,17 @@ class BrokerConnectionFactory extends Events.EventEmitter {
         return Q.invoke(this.client,'end',true);
     }
 
-    publishMessage(topic,message,options) {
-        console.log('publishMessage = ',this.brokerSettings.brokerName,topic);
+    publishMessage(pubId,topic,message,options) {
         this.client.publish(topic,message,options);
+        var pubMess = this.publishedMessages[pubId];
+        if(pubMess==null) {
+            pubMess = [];
+        }
+        pubMess.push({topic:topic,payload:message,qos:options.qos,retain:options.retain});
+        if(pubMess.length>10) {
+            pubMess.shift();
+        }
+        this.publishedMessages[pubId] = pubMess;
     }
 
     subscribeToTopic(subId,topic,options) {
