@@ -65,7 +65,7 @@ class BrokerSettingsAction {  
 
     static publishMessage(bsId,pubId,topic,message,options) { 
         AppDispatcher.dispatch({ 
-            actionType: AppConstants.ACTION_PUBLISH_MESSAGE, 
+            actionType: AppConstants.ACTION_PUBLISH_MESSAGE_TO_TOPIC, 
             bsId:bsId,
             pubId:pubId,
             topic:topic,
@@ -79,6 +79,25 @@ class BrokerSettingsAction {  
             actionType: AppConstants.ACTION_CLEAR_PUBLISHER_CONNECTION_DATA, 
             bsId:bsId,
             pubId:pubId
+        }); 
+    }
+
+    static subscribeToTopic(bsId,subId,topic,options) { 
+        AppDispatcher.dispatch({ 
+            actionType: AppConstants.ACTION_SUBSCRIBE_TO_TOPIC, 
+            bsId:bsId,
+            subId:subId,
+            topic:topic,
+            options:options
+        }); 
+    }
+
+    static unSubscribeTopic(bsId,topic,subId) { 
+        AppDispatcher.dispatch({ 
+            actionType: AppConstants.ACTION_UN_SUBSCRIBE_TO_TOPIC, 
+            bsId:bsId,
+            subId:subId,
+            topic:topic
         }); 
     }
 }

@@ -6,6 +6,7 @@ import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import BrokerSettingsAction from '../actions/BrokerSettingsAction';
+import BrokerConnectionStore from '../stores/BrokerConnectionStore';
 
 class SubscriberForm extends React.Component {
     constructor(props) {
@@ -36,24 +37,21 @@ class SubscriberForm extends React.Component {
         BrokerSettingsAction.onAddSubscriberButtonClick(this.props.bsId,subSettings);
     }
 
-    saveSubscriberSettings() {
-
-        var subSettings = {subId: this.props.subscriberSettings.subId,
-                           topic: this.state.topic,
-                           qos: this.state.qos};
-         console.log('saveSubscriberSettings=',subSettings);
-        BrokerSettingsAction.onAddSubscriberButtonClick(this.props.bsId,subSettings);
-    }
-
     subscribeToTopic() {
-        this.saveSubscriberSettings();
-        if(BrokerConnectionFactory.isBrokerConnected(this.props.bsId)) {
+        if(BrokerConnectionStore.isBrokerConnected(this.props.bsId)) {
             BrokerSettingsAction.subscribeToTopic(this.props.bsId,this.props.subscriberSettings.subId,
                 this.state.topic,
                 {qos:this.state.qos});
         } else {
             alert('Broker is not connected. Please check broker settings.');
         }
+    }
+
+    saveSubscriberSettings() {
+        var subSettings = {subId: this.props.subscriberSettings.subId,
+                           topic: this.state.topic,
+                           qos: this.state.qos};
+        BrokerSettingsAction.onAddSubscriberButtonClick(this.props.bsId,subSettings);
     }
 
     render() {

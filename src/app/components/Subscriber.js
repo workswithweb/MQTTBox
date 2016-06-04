@@ -10,6 +10,7 @@ import {Card, CardHeader, CardText} from 'material-ui/Card';
 import BrokerSettingsAction from '../actions/BrokerSettingsAction';
 import AppConstants from '../utils/AppConstants';
 import SubscriberForm from './SubscriberForm';
+import BrokerConnectionStore from '../stores/BrokerConnectionStore';
 
 const style = {
     subscriberPaper:{
@@ -28,6 +29,9 @@ const style = {
     },
     packetMessage:{
         wordWrap: 'break-word'
+    },
+    unSubscribe:{
+        width: '100%'
     }
 };
 
@@ -36,37 +40,31 @@ class Subscriber extends React.Component {
     constructor(props) {
         super(props);
         this.onRemoveSubscriberButtonClick = this.onRemoveSubscriberButtonClick.bind(this);
-        this.onSubscribedForMessages = this.onSubscribedForMessages.bind(this);
-        this.onUnsubscribedForMessages = this.onUnsubscribedForMessages.bind(this);
-        this.onSubscribedMessageReceived = this.onSubscribedMessageReceived.bind(this);
-        this.state = {isSubscribed:false,recievedMessages:[]}
+        this.onSubscribedDataReceived = this.onSubscribedDataReceived.bind(this);
+        this.unSubscribeTopic = this.unSubscribeTopic.bind(this);
+        this.state = {isSubscribed:false,receivedMessages:[]}
     }
 
     onRemoveSubscriberButtonClick() {
         BrokerSettingsAction.onRemoveSubscriberButtonClick(this.props.bsId,this.props.subscriberSettings.subId);
     }
 
-    onSubscribedForMessages(isSubscribed) {
-        this.setState({isSubscribed:isSubscribed});
-        if(isSubscribed===true) {
-            BrokerConnectionFactory.getConnection(this.props.bsId).addChangeListener(AppConstants.BROKER_MESSAGE+this.props.bsId+'_'+
-                                this.props.subscriberSettings.topic,this.onSubscribedMessageReceived);
-            this.setState({recievedMessages:[]});
-        } else {
-            BrokerConnectionFactory.getConnection(this.props.bsId).removeChangeListener(AppConstants.BROKER_MESSAGE+this.props.bsId+'_'+
-                this.props.subscriberSettings.topic,this.onSubscribedMessageReceived);
+    onSubscribedDataReceived(data) {
+        if(data!=null && this.props.bsId == data.bsId && this.props.subscriberSettings.subId == data.subId) {
+            this.setState({isSubscribed:data.isSubscribed, receivedMessages:data.receivedMessages});
         }
-
     }
 
-    onUnsubscribedForMessages() {
+    unSubscribeTopic() {
         BrokerSettingsAction.unSubscribeTopic(this.props.bsId,this.props.subscriberSettings.topic,this.props.subscriberSettings.subId);
     }
 
-    onSubscribedMessageReceived(message,packet) {
-        var recievedMessages = this.state.recievedMessages;
-        recievedMessages.push({message:message.toString(),packet:packet});
-        this.setState({recievedMessages:recievedMessages});
+    componentDidMount() {
+        BrokerConnectionStore.addChangeListener(AppConstants.EVENT_SUBSCRIBER_DATA,this.onSubscribedDataReceived);
+    }
+
+    componentWillUnmount() {
+        BrokerConnectionStore.removeChangeListener(AppConstants.EVENT_SUBSCRIBER_DATA,this.onSubscribedDataReceived);
     }
 
     render() {
@@ -76,24 +74,24 @@ class Subscriber extends React.Component {
             component = <SubscriberForm subscriberSettings = {this.props.subscriberSettings} bsId={this.props.bsId}></SubscriberForm>;
         } else {
             var messageList = [];
-            if(this.state.recievedMessages!=null && this.state.recievedMessages.length>0) {
-                var len = this.state.recievedMessages.length;
+            if(this.state.receivedMessages!=null && this.state.receivedMessages.length>0) {
+                var len = this.state.receivedMessages.length;
 
                 for (var i=len-1; i>=0;i--) {
                   messageList.push(
                     <Card key={i}>
-                        <CardHeader actAsExpander={true} showExpandableButton={true} title={this.state.recievedMessages[i].message}/>
+                        <CardHeader actAsExpander={true} showExpandableButton={true} title={this.state.receivedMessages[i].message}/>
                         <CardText expandable={true}>
                           {
                             <div>
-                                <div><b>qos</b> : {this.state.recievedMessages[i].packet.qos}</div>
-                                <div><b>retain</b> : {this.state.recievedMessages[i].packet.retain}</div>
-                                <div><b>cmd</b> : {this.state.recievedMessages[i].packet.cmd}</div>
-                                <div><b>dup</b> : {this.state.recievedMessages[i].packet.dup}</div>
-                                <div><b>topic</b> : {this.state.recievedMessages[i].packet.topic}</div>
-                                <div><b>messageId</b> : {this.state.recievedMessages[i].packet.messageId}</div>
-                                <div><b>length</b> : {this.state.recievedMessages[i].packet.length}</div>
-                                <div style={style.packetMessage}><b>payload</b>:{this.state.recievedMessages[i].packet.payload}</div>
+                                <div><b>qos</b> : {this.state.receivedMessages[i].packet.qos}</div>
+                                <div><b>retain</b> : {this.state.receivedMessages[i].packet.retain}</div>
+                                <div><b>cmd</b> : {this.state.receivedMessages[i].packet.cmd}</div>
+                                <div><b>dup</b> : {this.state.receivedMessages[i].packet.dup}</div>
+                                <div><b>topic</b> : {this.state.receivedMessages[i].packet.topic}</div>
+                                <div><b>messageId</b> : {this.state.receivedMessages[i].packet.messageId}</div>
+                                <div><b>length</b> : {this.state.receivedMessages[i].packet.length}</div>
+                                <div style={style.packetMessage}><b>payload</b>:{this.state.receivedMessages[i].packet.payload}</div>
                             </div>
                           }
                         </CardText>
@@ -102,8 +100,10 @@ class Subscriber extends React.Component {
             }
 
             component = <div>
-                            <div><RaisedButton onTouchTap={this.onUnsubscribedForMessages} fullWidth={true}
-                            label={this.props.subscriberSettings.topic} primary={true}/></div>
+                            <div>
+                                <RaisedButton style={style.unSubscribe} onTouchTap={this.unSubscribeTopic} fullWidth={true}
+                                    label={this.props.subscriberSettings.topic} primary={true}/>
+                            </div>
                             <div>
                                 {messageList}
                             </div>

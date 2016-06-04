@@ -11,6 +11,8 @@ class BrokerConnectionFactory extends Events.EventEmitter {
         this.client = null;
         this.connState = AppConstants.CLOSE;
         this.publishedMessages = {};
+        this.subscriberData = {};
+        this.subscribedMessages = {};
 
         this.emitChange = this.emitChange.bind(this);
         this.addChangeListener = this.addChangeListener.bind(this);
@@ -66,10 +68,17 @@ class BrokerConnectionFactory extends Events.EventEmitter {
             }.bind(this));
 
             this.client.on('message', function (topic, message,packet) {
-                console.log('message',this.brokerSettings.brokerName);
                 if(message!=null) {
-                    this.emitChange(AppConstants.EVENT_MESSAGE_RECEIVED,{});
+                    console.log('message',this.brokerSettings.brokerName);
+                    var mess = this.subscribedMessages[topic];
+                    if(mess == null) {
+                        mess = [];
+                    }
+                    mess.push({message:message.toString(),packet:packet});
+                    this.subscribedMessages[topic] = mess;
+                    this.emitChange(AppConstants.EVENT_MESSAGE_RECEIVED,{bsId:this.brokerSettings.bsId,topic:topic});
                 }
+
             }.bind(this));
         }
     }
@@ -116,31 +125,38 @@ class BrokerConnectionFactory extends Events.EventEmitter {
     }
 
     publishMessage(pubId,topic,message,options) {
-        this.client.publish(topic,message,options);
-        var pubMess = this.publishedMessages[pubId];
-        if(pubMess==null) {
-            pubMess = [];
+        if(topic!=null && topic.trim().length>0) {
+            this.client.publish(topic,message,options);
+
+            var pubMess = this.publishedMessages[pubId];
+            if(pubMess==null) {
+                pubMess = [];
+            }
+            pubMess.push({topic:topic,payload:message,qos:options.qos,retain:options.retain});
+            if(pubMess.length>10) {
+                pubMess.shift();
+            }
+            this.publishedMessages[pubId] = pubMess;
         }
-        pubMess.push({topic:topic,payload:message,qos:options.qos,retain:options.retain});
-        if(pubMess.length>10) {
-            pubMess.shift();
-        }
-        this.publishedMessages[pubId] = pubMess;
     }
 
     subscribeToTopic(subId,topic,options) {
-        console.log('subscribeToTopic = ',this.brokerSettings.brokerName,topic);
-        this.client.subscribe(topic,options);
-        this.emitChange(AppConstants.EVENT_SUBSCRIBED_TO_TOPIC,{});
+        if(topic!=null && topic.trim().length>0) {
+            this.client.subscribe(topic,options);
+            var subData = {};
+            subData['isSubscribed'] = true;
+            subData['subId'] = subId;
+            subData['topic'] = topic;
+            this.subscriberData[subId] = subData;
+        }
     }
 
     unSubscribeTopic(subId,topic) {
         console.log('unSubscribeTopic = ',this.brokerSettings.brokerName,topic);
         if(topic!=null && topic.trim().length>0) {
-            Q.invoke(this.client,'unsubscribe',topic)
-            .then(function() {
-                this.emitChange(AppConstants.EVENT_SUBSCRIBED_TO_TOPIC,{});
-            }.bind(this)).done();
+            this.client.unsubscribe(topic);
+            delete this.subscriberData[subId];
+            delete this.subscribedMessages[topic];
         }
     }
 }
