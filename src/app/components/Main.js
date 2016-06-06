@@ -108,9 +108,9 @@ class Main extends React.Component {
 
         if(this.state!=null && this.state.selectedMenu!=null) {
             if(this.state.selectedMenu == AppConstants.MENU_ADD_EDIT_BROKER) {
-                displayComponent = <AddEditBrokerForm broker={this.state.pageData.broker}/>;
+                displayComponent = <AddEditBrokerForm open={this.state.open} broker={this.state.pageData.broker}/>;
             } else if(this.state.selectedMenu == AppConstants.MENU_BROKER_DETAILS) {
-                displayComponent = <BrokerView broker={this.state.pageData.broker}/>;
+                displayComponent = <BrokerView open={this.state.open} broker={this.state.pageData.broker}/>;
             }
             appDrawer = <AppDrawer open={this.state.open} bsList={this.state.bsList}/>;
         } else {

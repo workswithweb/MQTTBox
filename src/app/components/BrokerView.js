@@ -98,9 +98,14 @@ class BrokerView extends React.Component {
     }
 
     setConnectionState(data) {
+        console.log('conn state changed');
         if(this.props.broker.bsId == data.bsId) {
             this.setState({connState:data.status});
         }
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return !nextProps.open;
     }
 
     componentDidMount() {

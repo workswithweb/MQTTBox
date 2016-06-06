@@ -3,7 +3,7 @@ import AppConstants from '../utils/AppConstants';
 
 class CommonActions {  
 
-    static showHideMenu(open) { 
+    static showHideMenu(open,renderUi) { 
         AppDispatcher.dispatch({ 
             actionType: AppConstants.ACTION_OPEN_CLOSE_MENU, 
             open: open 

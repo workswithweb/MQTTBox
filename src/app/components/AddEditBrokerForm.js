@@ -119,6 +119,10 @@ class AddEditBrokerForm extends React.Component {
         BrokerSettingsAction.deleteBrokerSettingsById(this.state.bsId);
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return !nextProps.open;
+    }
+
     render() {
         console.log('render AddEditBrokerForm');
         return (
