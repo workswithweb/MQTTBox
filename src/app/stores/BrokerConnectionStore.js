@@ -120,10 +120,8 @@ class BrokerConnectionStore extends Events.EventEmitter {
     }
 
     setCurrentSelectedBroker(bsId) {
-        if(bsId != this.currentSelectedBroker) {
-            this.currentSelectedBroker = bsId;
-            this.publishCurrentBrokerData();
-        }
+        this.currentSelectedBroker = bsId;
+        this.publishCurrentBrokerData();
     }
 
     publishMessageToBroker(bsId,pubId,topic,message,options) {
