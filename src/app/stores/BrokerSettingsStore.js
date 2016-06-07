@@ -210,9 +210,7 @@ class BrokerSettingsStore extends Events.EventEmitter {  
 
                 Q.invoke(this.db,'setItem',bsId,obj)
                 .then(function(data) {
-                    if(isNew === true) {
-                        this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,bsId);
-                    }
+                    this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,bsId);
                 }.bind(this)).catch(function (error) {
                      alert("Error Saving Data. Try Again");
                 })

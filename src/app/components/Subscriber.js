@@ -32,6 +32,9 @@ const style = {
     },
     unSubscribe:{
         width: '100%'
+    },
+    subscribedButton:{
+        textTransform: 'none'
     }
 };
 
@@ -78,6 +81,7 @@ class Subscriber extends React.Component {
                 var len = this.state.receivedMessages.length;
 
                 for (var i=len-1; i>=0;i--) {
+                  console.log('this.state.receivedMessages[i].packet=',this.state.receivedMessages[i].packet);
                   messageList.push(
                     <Card key={i}>
                         <CardHeader actAsExpander={true} showExpandableButton={true} title={this.state.receivedMessages[i].message}/>
@@ -85,9 +89,9 @@ class Subscriber extends React.Component {
                           {
                             <div>
                                 <div><b>qos</b> : {this.state.receivedMessages[i].packet.qos}</div>
-                                <div><b>retain</b> : {this.state.receivedMessages[i].packet.retain}</div>
+                                <div><b>retain</b> : {this.state.receivedMessages[i].packet.retain.toString()}</div>
                                 <div><b>cmd</b> : {this.state.receivedMessages[i].packet.cmd}</div>
-                                <div><b>dup</b> : {this.state.receivedMessages[i].packet.dup}</div>
+                                <div><b>dup</b> : {this.state.receivedMessages[i].packet.dup.toString()}</div>
                                 <div><b>topic</b> : {this.state.receivedMessages[i].packet.topic}</div>
                                 <div><b>messageId</b> : {this.state.receivedMessages[i].packet.messageId}</div>
                                 <div><b>length</b> : {this.state.receivedMessages[i].packet.length}</div>
@@ -102,7 +106,7 @@ class Subscriber extends React.Component {
             component = <div>
                             <div>
                                 <RaisedButton style={style.unSubscribe} onTouchTap={this.unSubscribeTopic} fullWidth={true}
-                                    label={this.props.subscriberSettings.topic} primary={true}/>
+                                  labelStyle={style.subscribedButton}  label={this.props.subscriberSettings.topic} primary={true}/>
                             </div>
                             <div>
                                 {messageList}

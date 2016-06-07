@@ -75,6 +75,9 @@ class BrokerConnectionFactory extends Events.EventEmitter {
                         mess = [];
                     }
                     mess.push({message:message.toString(),packet:packet});
+                    if(mess.length>50) {
+                        mess.shift();
+                    }
                     this.subscribedMessages[topic] = mess;
                     this.emitChange(AppConstants.EVENT_MESSAGE_RECEIVED,{bsId:this.brokerSettings.bsId,topic:topic});
                 }

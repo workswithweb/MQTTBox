@@ -32,16 +32,18 @@ class SubscriberForm extends React.Component {
         var subSettings = {subId: this.props.subscriberSettings.subId,
                            topic: this.state.topic,
                            qos: value};
-
-        console.log('saveSubscriberSettings=',subSettings);
         BrokerSettingsAction.onAddSubscriberButtonClick(this.props.bsId,subSettings);
     }
 
     subscribeToTopic() {
         if(BrokerConnectionStore.isBrokerConnected(this.props.bsId)) {
-            BrokerSettingsAction.subscribeToTopic(this.props.bsId,this.props.subscriberSettings.subId,
-                this.state.topic,
-                {qos:this.state.qos});
+            if(this.state.topic!=null && this.state.topic.trim().length>0) {
+                BrokerSettingsAction.subscribeToTopic(this.props.bsId,this.props.subscriberSettings.subId,
+                            this.state.topic,
+                            {qos:this.state.qos});
+            } else {
+                alert('Please enter valid topic to subscribe');
+            }
         } else {
             alert('Broker is not connected. Please check broker settings.');
         }

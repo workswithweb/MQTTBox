@@ -55,11 +55,12 @@ class BrokerView extends React.Component {
         if(publishersList!=null && publishersList.length>0) {
             publishersList = _.sortBy(publishersList, ['createdOn']);
 
-            for (var i=0;i<publishersList.length;i++) {
-                var publisher = publishersList[i];
+            for (var i=publishersList.length;i>0;i--) {
+                var publisher = publishersList[i-1];
                 if(publisher!=null && publisher.pubId!=null) {
-                    var publisherPos = (publishersListView.length%4);
-                    publishersListView.push(<div key={'key_'+publisher.pubId+'_'+publisherPos} _grid={{i:publisher.pubId,x:publisherPos, y: 0, w: 1, h: 3}}><Publisher bsId={this.props.broker.bsId} publisherSettings={publisher}/></div>);
+                    var publisherXPos = (publishersListView.length%4);
+                    var subscriberYPos = Math.floor(publishersListView.length/4);
+                    publishersListView.push(<div key={'key_'+publisher.pubId+'_'+publisherXPos+'_'+subscriberYPos} _grid={{i:publisher.pubId,x:publisherXPos, y:subscriberYPos, w: 1, h: 3}}><Publisher bsId={this.props.broker.bsId} publisherSettings={publisher}/></div>);
                 }
             }
         }
@@ -78,11 +79,12 @@ class BrokerView extends React.Component {
         if(subscribersList!=null && subscribersList.length>0) {
             subscribersList = _.sortBy(subscribersList, ['createdOn']);
 
-            for (var i=0;i<subscribersList.length;i++) {
-                var subscriber = subscribersList[i];
+            for (var i=subscribersList.length;i>0;i--) {
+                var subscriber = subscribersList[i-1];
                 if(subscriber!=null && subscriber.subId!=null) {
-                    var subscriberPos = ((subscribersListView.length+publisherLength)%4);
-                    subscribersListView.push(<div key={'key_'+subscriber.subId+'_'+subscriberPos} _grid={{i:subscriber.subId,x:subscriberPos, y: 0, w: 1, h: 3}}><Subscriber bsId={this.props.broker.bsId} subscriberSettings={subscriber}/></div>);
+                    var subscriberXPos = ((subscribersListView.length+publisherLength)%4);
+                    var subscriberYPos = Math.floor((subscribersListView.length+publisherLength)/4);
+                    subscribersListView.push(<div key={'key_'+subscriber.subId+'_'+subscriberXPos+'_'+subscriberYPos} _grid={{i:subscriber.subId,x:subscriberXPos, y: subscriberYPos, w: 1, h: 3}}><Subscriber bsId={this.props.broker.bsId} subscriberSettings={subscriber}/></div>);
                 }
             }
         }

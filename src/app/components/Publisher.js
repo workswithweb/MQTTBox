@@ -130,7 +130,6 @@ class Publisher extends React.Component {
         var messageList = [];
         if(this.state.publishedMessages!=null && this.state.publishedMessages.length>0) {
             var len = this.state.publishedMessages.length;
-
             for (var i=len-1; i>=0;i--) {
               messageList.push(
                 <Card key={i}>
@@ -142,7 +141,7 @@ class Publisher extends React.Component {
                             <div>
                                 <b>topic</b>:{this.state.publishedMessages[i].topic},
                                 <b> qos</b>:{this.state.publishedMessages[i].qos},
-                                <b> retain</b>:{this.state.publishedMessages[i].retain}
+                                <b> retain</b>:{this.state.publishedMessages[i].retain.toString()}
                              </div>
                          </div>
                     </CardText>

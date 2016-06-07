@@ -148,9 +148,11 @@ class BrokerConnectionStore extends Events.EventEmitter {
     }
 
     subscribeToTopic(bsId,subId,topic,options) {
+
         var conn = this.brokerConnections[bsId];
         if(conn!=null && conn.client!=null && conn.client.connected===true) {
             conn.subscribeToTopic(subId,topic,options);
+
             this.emitChange(AppConstants.EVENT_SUBSCRIBER_DATA,
                         {bsId:bsId,subId:subId,isSubscribed:true,receivedMessages:[]});
         } else {
