@@ -19,7 +19,7 @@ module.exports = {
   },
   browserify: {
     // Enable source maps
-    debug: true,
+    debug: false,
     // A separate bundle will be generated for each
     // bundle config in the list below
     bundleConfigs: [{
