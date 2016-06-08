@@ -102,7 +102,6 @@ class Main extends React.Component {
     }
 
     render() {
-        console.log('render Main');
         var displayComponent = '';
         var appDrawer = '';
 

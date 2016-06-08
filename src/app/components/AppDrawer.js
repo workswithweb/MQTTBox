@@ -45,7 +45,6 @@ class AppDrawer extends React.Component {
     }
 
     render() {
-        console.log('render AppDrawer');
         var brokerList = this.props.bsList.map(function(brokerSetting,index) {
             return (
                 <ListItem

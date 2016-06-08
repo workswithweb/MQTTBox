@@ -123,7 +123,6 @@ class BrokerSettingsStore extends Events.EventEmitter {  
                 this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,data.bsId);
                 BrokerSettingsAction.reconnectBroker(dbBrokerObj.bsId);
             }.bind(this)).catch(function (error) {
-                console.log(error);
                 alert("Error Saving Data. Try Again");
             })
             .done();

@@ -33,6 +33,7 @@ class BrokerView extends React.Component {
         this.setConnectionState = this.setConnectionState.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
+        this.onReconnectBrokerClick = this.onReconnectBrokerClick.bind(this);
 
         this.state = {
             connState:AppConstants.CLOSE
@@ -99,8 +100,11 @@ class BrokerView extends React.Component {
         BrokerSettingsAction.onAddSubscriberButtonClick(this.props.broker.bsId,new SubscriberSettings());
     }
 
+    onReconnectBrokerClick() {
+        BrokerSettingsAction.reconnectBroker(this.props.broker.bsId);
+    }
+
     setConnectionState(data) {
-        console.log('conn state changed');
         if(this.props.broker.bsId == data.bsId) {
             this.setState({connState:data.status});
         }
@@ -119,7 +123,6 @@ class BrokerView extends React.Component {
     }
 
     render() {
-        console.log('render BrokerView');
         var gridList = this.createPublishersView().concat(this.createSubscribersView());
 
         return (

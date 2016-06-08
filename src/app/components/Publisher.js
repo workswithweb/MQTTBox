@@ -126,7 +126,6 @@ class Publisher extends React.Component {
     }
 
     render() {
-        console.log('render Publisher');
         var messageList = [];
         if(this.state.publishedMessages!=null && this.state.publishedMessages.length>0) {
             var len = this.state.publishedMessages.length;

@@ -124,7 +124,6 @@ class AddEditBrokerForm extends React.Component {
     }
 
     render() {
-        console.log('render AddEditBrokerForm');
         return (
             <div>
                 <Toolbar>

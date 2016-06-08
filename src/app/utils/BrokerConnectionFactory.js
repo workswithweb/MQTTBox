@@ -44,32 +44,27 @@ class BrokerConnectionFactory extends Events.EventEmitter {
             this.client = mqtt.connect(this.brokerSettings.protocol+'://'+this.brokerSettings.host,this.getConnectOptions());
 
             this.client.on('connect', function () {
-                console.log('connect',this.brokerSettings.brokerName);
                 this.connState = AppConstants.ONLINE;
                 this.emitChange(AppConstants.EVENT_BROKER_CONNECTION_STATE_CHANGED,{bsId:this.brokerSettings.bsId,status:AppConstants.ONLINE});
             }.bind(this));
 
             this.client.on('close', function () {
-                console.log('close',this.brokerSettings.brokerName);
                 this.connState = AppConstants.CLOSE;
                 this.emitChange(AppConstants.EVENT_BROKER_CONNECTION_STATE_CHANGED,{bsId:this.brokerSettings.bsId,status:AppConstants.CLOSE});
             }.bind(this));
 
             this.client.on('offline', function () {
-                console.log('offline',this.brokerSettings.brokerName);
                 this.connState = AppConstants.OFFLINE;
                 this.emitChange(AppConstants.EVENT_BROKER_CONNECTION_STATE_CHANGED,{bsId:this.brokerSettings.bsId,status:AppConstants.OFFLINE});
             }.bind(this));
 
             this.client.on('error', function (err) {
-                console.log('error',this.brokerSettings.brokerName);
                 this.connState = AppConstants.ERROR;
                 this.emitChange(AppConstants.EVENT_BROKER_CONNECTION_STATE_CHANGED,{bsId:this.brokerSettings.bsId,status:AppConstants.ERROR});
             }.bind(this));
 
             this.client.on('message', function (topic, message,packet) {
                 if(message!=null) {
-                    console.log('message',this.brokerSettings.brokerName);
                     var mess = this.subscribedMessages[topic];
                     if(mess == null) {
                         mess = [];
@@ -115,6 +110,14 @@ class BrokerConnectionFactory extends Events.EventEmitter {
     }
 
     reconnectBroker(newBrokerSettings) {
+        _.forOwn(this.subscriberData, function(value, key) {
+            if(value!=null) {
+                value.isSubscribed=false;
+            }
+        }.bind(this));
+        this.connState = AppConstants.CLOSE;
+        this.subscribedMessages = {};
+
         Q.invoke(this.client,'end',true)
         .then(function() {
             this.brokerSettings = newBrokerSettings;
@@ -123,7 +126,6 @@ class BrokerConnectionFactory extends Events.EventEmitter {
     }
 
     endConnection() {
-        console.log('endBrokerConnection = ',this.brokerSettings.brokerName);
         return Q.invoke(this.client,'end',true);
     }
 
@@ -155,7 +157,6 @@ class BrokerConnectionFactory extends Events.EventEmitter {
     }
 
     unSubscribeTopic(subId,topic) {
-        console.log('unSubscribeTopic = ',this.brokerSettings.brokerName,topic);
         if(topic!=null && topic.trim().length>0) {
             this.client.unsubscribe(topic);
             delete this.subscriberData[subId];

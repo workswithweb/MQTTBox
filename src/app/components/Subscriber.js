@@ -71,7 +71,6 @@ class Subscriber extends React.Component {
     }
 
     render() {
-        console.log('render Subscriber');
         var component ='';
         if(this.state.isSubscribed!=true || !this.props.subscriberSettings.topic || this.props.subscriberSettings.topic.trim().length<=0) {
             component = <SubscriberForm subscriberSettings = {this.props.subscriberSettings} bsId={this.props.bsId}></SubscriberForm>;
@@ -81,7 +80,6 @@ class Subscriber extends React.Component {
                 var len = this.state.receivedMessages.length;
 
                 for (var i=len-1; i>=0;i--) {
-                  console.log('this.state.receivedMessages[i].packet=',this.state.receivedMessages[i].packet);
                   messageList.push(
                     <Card key={i}>
                         <CardHeader actAsExpander={true} showExpandableButton={true} title={this.state.receivedMessages[i].message}/>

@@ -57,7 +57,6 @@ class SubscriberForm extends React.Component {
     }
 
     render() {
-        console.log('render SubscriberForm');
         return (
             <div>
                 <TextField onBlur={this.saveSubscriberSettings} onChange={this.onTopicChange} fullWidth={true} value={this.state.topic} hintText="Topic to publish" floatingLabelText="Topic to subscribe"/>
