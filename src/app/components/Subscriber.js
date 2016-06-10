@@ -93,7 +93,7 @@ class Subscriber extends React.Component {
                                 <div><b>topic</b> : {this.state.receivedMessages[i].packet.topic}</div>
                                 <div><b>messageId</b> : {this.state.receivedMessages[i].packet.messageId}</div>
                                 <div><b>length</b> : {this.state.receivedMessages[i].packet.length}</div>
-                                <div style={style.packetMessage}><b>payload</b>:{this.state.receivedMessages[i].packet.payload}</div>
+                                <div style={style.packetMessage}><b>raw payload</b>:{this.state.receivedMessages[i].packet.payload}</div>
                             </div>
                           }
                         </CardText>

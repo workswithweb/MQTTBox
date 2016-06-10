@@ -105,7 +105,7 @@ class BrokerConnectionStore extends Events.EventEmitter {
                     } else {
                         this.createBrokerConnection(brokerSettings);
                     }
-                    this.publishSelectedBrokerSubscriberData();
+                    this.publishCurrentBrokerData();
             }
         }.bind(this)).done();
     }

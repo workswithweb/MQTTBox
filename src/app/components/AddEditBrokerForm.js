@@ -101,11 +101,11 @@ class AddEditBrokerForm extends React.Component {
                 alert('Please enter valid Client Id');
             } else if(this.state.host==null||this.state.host.trim().length<1||this.state.host.trim().length>10000) {
                 alert('Please enter valid Host');
-            } else if(this.state.reconnectPeriod==null|| Number.isNaN(this.state.reconnectPeriod)) {
+            } else if(this.state.reconnectPeriod==null|| Number.isNaN(this.state.reconnectPeriod) || this.state.reconnectPeriod<=0) {
                 alert('Please enter valid Reconnect Period');
-            } else if(this.state.connectTimeout==null|| Number.isNaN(this.state.connectTimeout)) {
+            } else if(this.state.connectTimeout==null|| Number.isNaN(this.state.connectTimeout) || this.state.connectTimeout<=0) {
                 alert('Please enter valid Connect Timeout');
-            } else if(this.state.keepalive==null|| Number.isNaN(this.state.keepalive)) {
+            } else if(this.state.keepalive==null|| Number.isNaN(this.state.keepalive) || this.state.keepalive<=0) {
                 alert('Please enter valid Keep Alive value');
             } else {
                 BrokerSettingsAction.saveBrokerSettings(this.state);
@@ -124,6 +124,11 @@ class AddEditBrokerForm extends React.Component {
     }
 
     render() {
+        var protocolSupported = [<MenuItem key={'ws'} value={'ws'} primaryText='Websocket'/>];
+        if(AppConstants.CLIENT_TYPE == AppConstants.CHROME_APP) {
+            protocolSupported.push(<MenuItem key={'tcp'} value={'tcp'} primaryText='TCP'/>);
+        }
+
         return (
             <div>
                 <Toolbar>
@@ -154,11 +159,7 @@ class AddEditBrokerForm extends React.Component {
                             <TableRow displayBorder={false}>
                                 <TableRowColumn>
                                     <SelectField name="protocol" onChange={this.onProtocolValueChange} fullWidth={true} value={this.state.protocol} floatingLabelText='Protocol'>
-                                        <MenuItem value={'tcp'} primaryText='tcp'/>
-                                        <MenuItem value={'ws'} primaryText='ws'/>
-                                        <MenuItem value={'wss'} primaryText='wss'/>
-                                        <MenuItem value={'mqtt'} primaryText='mqtt'/>
-                                        <MenuItem value={'mqtts'} primaryText='mqtts'/>
+                                        {protocolSupported}
                                     </SelectField>
                                 </TableRowColumn>
                                 <TableRowColumn>

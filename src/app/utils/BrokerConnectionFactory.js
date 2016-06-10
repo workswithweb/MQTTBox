@@ -40,25 +40,30 @@ class BrokerConnectionFactory extends Events.EventEmitter {
     }
 
     connect() {
+        console.log('connect brokerSettings = ',this.brokerSettings);
         if(this.brokerSettings!=null && this.brokerSettings.bsId!=null) {
             this.client = mqtt.connect(this.brokerSettings.protocol+'://'+this.brokerSettings.host,this.getConnectOptions());
 
             this.client.on('connect', function () {
+                console.log('connect=');
                 this.connState = AppConstants.ONLINE;
                 this.emitChange(AppConstants.EVENT_BROKER_CONNECTION_STATE_CHANGED,{bsId:this.brokerSettings.bsId,status:AppConstants.ONLINE});
             }.bind(this));
 
             this.client.on('close', function () {
+                console.log('close=');
                 this.connState = AppConstants.CLOSE;
                 this.emitChange(AppConstants.EVENT_BROKER_CONNECTION_STATE_CHANGED,{bsId:this.brokerSettings.bsId,status:AppConstants.CLOSE});
             }.bind(this));
 
             this.client.on('offline', function () {
+                console.log('offline=');
                 this.connState = AppConstants.OFFLINE;
                 this.emitChange(AppConstants.EVENT_BROKER_CONNECTION_STATE_CHANGED,{bsId:this.brokerSettings.bsId,status:AppConstants.OFFLINE});
             }.bind(this));
 
             this.client.on('error', function (err) {
+                console.log('error=',error);
                 this.connState = AppConstants.ERROR;
                 this.emitChange(AppConstants.EVENT_BROKER_CONNECTION_STATE_CHANGED,{bsId:this.brokerSettings.bsId,status:AppConstants.ERROR});
             }.bind(this));
@@ -83,14 +88,14 @@ class BrokerConnectionFactory extends Events.EventEmitter {
 
     getConnectOptions() {
         var options = {
-            keepalive:this.brokerSettings.keepalive,
+            keepalive:Number(this.brokerSettings.keepalive),
             reschedulePings:this.brokerSettings.reschedulePings,
             clientId:this.brokerSettings.clientId,
             protocolId:this.brokerSettings.protocolId,
             protocolVersion:this.brokerSettings.protocolVersion,
             clean:this.brokerSettings.clean,
-            reconnectPeriod:this.brokerSettings.reconnectPeriod,
-            connectTimeout:this.brokerSettings.connectTimeout
+            reconnectPeriod:Number(this.brokerSettings.reconnectPeriod),
+            connectTimeout:Number(this.brokerSettings.connectTimeout)
         };
         if(this.brokerSettings.username!=null && this.brokerSettings.username.trim().length>0) {
             options['username']=this.brokerSettings.username;
