@@ -6,6 +6,7 @@ import BrokerConnectionFactory from '../utils/BrokerConnectionFactory';
 import BrokerSettingsStore from './BrokerSettingsStore';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import AppConstants from '../utils/AppConstants';
+import CommonActions from '../actions/CommonActions';
 
 class BrokerConnectionStore extends Events.EventEmitter {
 
@@ -130,7 +131,7 @@ class BrokerConnectionStore extends Events.EventEmitter {
         if(conn!=null && conn.client!=null && conn.client.connected===true) {
             conn.publishMessage(pubId,topic,message,options);
         } else {
-            alert('Unable to connect to Broker. Please check your broker settings.');
+            CommonActions.showUserMessage({message:'Unable to connect to Broker. Please check your broker settings.'});
         }
     }
 
@@ -157,7 +158,7 @@ class BrokerConnectionStore extends Events.EventEmitter {
             this.emitChange(AppConstants.EVENT_SUBSCRIBER_DATA,
                         {bsId:bsId,subId:subId,isSubscribed:true,receivedMessages:[]});
         } else {
-            alert('Unable to connect to Broker. Please check your broker settings.');
+            CommonActions.showUserMessage({message:'Unable to connect to Broker. Please check your broker settings.'});
         }
     }
 
@@ -226,7 +227,11 @@ class BrokerConnectionStore extends Events.EventEmitter {
     //listners
     brokerConnectionStateChangedListener(data) { 
         if(data!=null && data.bsId == this.currentSelectedBroker) {
-            this.publishSelectedBrokerConnectionState();
+            if(data.publishAllData === true) {
+                this.publishCurrentBrokerData();
+            } else {
+                this.publishSelectedBrokerConnectionState();
+            }
         }
     }
 }

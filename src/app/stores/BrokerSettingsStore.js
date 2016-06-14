@@ -9,6 +9,7 @@ import BrokerSettings from '../models/BrokerSettings';
 import PublisherSettings from '../models/PublisherSettings';
 import SubscriberSettings from '../models/SubscriberSettings';
 import BrokerSettingsAction from '../actions/BrokerSettingsAction';
+import CommonActions from '../actions/CommonActions';
 
 class BrokerSettingsStore extends Events.EventEmitter {  
 
@@ -123,7 +124,7 @@ class BrokerSettingsStore extends Events.EventEmitter {  
                 this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,data.bsId);
                 BrokerSettingsAction.reconnectBroker(dbBrokerObj.bsId);
             }.bind(this)).catch(function (error) {
-                alert("Error Saving Data. Try Again");
+                CommonActions.showUserMessage({message:'Error Saving Data. Try Again'});
             })
             .done();
         }.bind(this));
@@ -135,7 +136,7 @@ class BrokerSettingsStore extends Events.EventEmitter {  
                 this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,bsId);
             }.bind(this))
             .catch(function (error) {
-                alert("Error deleting. Try Again");
+                CommonActions.showUserMessage({message:'Error Saving Data. Try Again'});
             })
             .done();
     }
@@ -166,7 +167,7 @@ class BrokerSettingsStore extends Events.EventEmitter {  
                         this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,bsId);
                     }
                 }.bind(this)).catch(function (error) {
-                     alert("Error Saving Data. Try Again");
+                        CommonActions.showUserMessage({message:'Error Saving Data. Try Again'});
                 })
                 .done();
             }
@@ -185,7 +186,7 @@ class BrokerSettingsStore extends Events.EventEmitter {  
                         this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,bsId);
                         BrokerSettingsAction.clearPublisherConnectionData(bsId,pubId);
                     }.bind(this)).catch(function (error) {
-                         alert("Error Saving Data. Try Again");
+                        CommonActions.showUserMessage({message:'Error Saving Data. Try Again'});
                     })
                     .done();
                 }
@@ -211,7 +212,7 @@ class BrokerSettingsStore extends Events.EventEmitter {  
                 .then(function(data) {
                     this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,bsId);
                 }.bind(this)).catch(function (error) {
-                     alert("Error Saving Data. Try Again");
+                    CommonActions.showUserMessage({message:'Error Saving Data. Try Again'});
                 })
                 .done();
             }
@@ -229,7 +230,7 @@ class BrokerSettingsStore extends Events.EventEmitter {  
                     .then(function(data) {
                         this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,bsId);
                     }.bind(this)).catch(function (error) {
-                         alert("Error Saving Data. Try Again");
+                        CommonActions.showUserMessage({message:'Error Saving Data. Try Again'});
                     })
                     .done();
                 }

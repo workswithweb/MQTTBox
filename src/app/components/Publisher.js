@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
@@ -14,6 +15,7 @@ import {Card, CardHeader, CardText} from 'material-ui/Card';
 import BrokerSettingsAction from '../actions/BrokerSettingsAction';
 import BrokerConnectionStore from '../stores/BrokerConnectionStore';
 import AppConstants from '../utils/AppConstants';
+import CommonActions from '../actions/CommonActions';
 
 const style = {
     publisherPaper: {
@@ -96,24 +98,25 @@ class Publisher extends React.Component {
                         this.state.topic,
                         this.state.payload,
                         {qos:this.state.qos,retain: this.state.retain});
-
             var publishedMessages = this.state.publishedMessages;
             publishedMessages.push({topic:this.state.topic,
                                     payload:this.state.payload,
                                     qos:this.state.qos,
                                     retain: this.state.retain});
+
             if(publishedMessages.length>10) {
                 publishedMessages.shift();
             }
+
             this.setState({publishedMessages:publishedMessages});
         } else {
-            alert('Unable to connect to Broker. Please check your broker settings.');
+            CommonActions.showUserMessage({message:'Unable to connect to Broker. Please check your broker settings'});
         }
     }
 
     setPublisherData(data) {
         if(data!=null && data.bsId == this.props.bsId && data.pubId == this.props.publisherSettings.pubId) {
-            this.setState({publishedMessages:data.publishedMessages});
+            this.setState({publishedMessages:_.clone(data.publishedMessages)});
         }
     }
 

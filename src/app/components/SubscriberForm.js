@@ -7,6 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 import BrokerSettingsAction from '../actions/BrokerSettingsAction';
 import BrokerConnectionStore from '../stores/BrokerConnectionStore';
+import CommonActions from '../actions/CommonActions';
 
 class SubscriberForm extends React.Component {
     constructor(props) {
@@ -42,10 +43,10 @@ class SubscriberForm extends React.Component {
                             this.state.topic,
                             {qos:this.state.qos});
             } else {
-                alert('Please enter valid topic to subscribe');
+                CommonActions.showUserMessage({message:'Please enter valid topic to subscribe'});
             }
         } else {
-            alert('Broker is not connected. Please check broker settings.');
+            CommonActions.showUserMessage({message:'Broker is not connected. Please check broker settings.'});
         }
     }
 

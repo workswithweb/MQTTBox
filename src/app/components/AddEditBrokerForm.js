@@ -96,22 +96,22 @@ class AddEditBrokerForm extends React.Component {
     saveBrokerSettings() {
         if(this.state!=null) {
             if(this.state.brokerName==null||this.state.brokerName.trim().length<1||this.state.brokerName.trim().length>500) {
-                alert('Please enter valid Broker Name');
+                CommonActions.showUserMessage({message:'Please Enter Valid Broker Name'});
             } else if(this.state.clientId==null||this.state.clientId.trim().length<1||this.state.clientId.trim().length>500) {
-                alert('Please enter valid Client Id');
+                CommonActions.showUserMessage({message:'Please Enter Valid Client Id'});
             } else if(this.state.host==null||this.state.host.trim().length<1||this.state.host.trim().length>10000) {
-                alert('Please enter valid Host');
+                CommonActions.showUserMessage({message:'Please Enter Valid Host'});
             } else if(this.state.reconnectPeriod==null|| Number.isNaN(this.state.reconnectPeriod) || this.state.reconnectPeriod<=0) {
-                alert('Please enter valid Reconnect Period');
+                CommonActions.showUserMessage({message:'Please Enter Valid Reconnect Period'});
             } else if(this.state.connectTimeout==null|| Number.isNaN(this.state.connectTimeout) || this.state.connectTimeout<=0) {
-                alert('Please enter valid Connect Timeout');
+                CommonActions.showUserMessage({message:'Please Enter Valid Connect Timeout'});
             } else if(this.state.keepalive==null|| Number.isNaN(this.state.keepalive) || this.state.keepalive<=0) {
-                alert('Please enter valid Keep Alive value');
+                CommonActions.showUserMessage({message:'Please Enter Valid Keep Alive Value'});
             } else {
                 BrokerSettingsAction.saveBrokerSettings(this.state);
             }
         } else {
-            alert('Please enter valid broker settings.');
+            CommonActions.showUserMessage({message:'Please Enter Valid Broker Settings'});
         }
     }
 

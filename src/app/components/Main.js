@@ -10,6 +10,7 @@ import CircularProgress from 'material-ui/CircularProgress';
 import AppDrawer from './AppDrawer';
 import BrokerView from './BrokerView';
 import AddEditBrokerForm from './AddEditBrokerForm';
+import UserMessage from './UserMessage';
 import BrokerSettingsStore from '../stores/BrokerSettingsStore';
 import BrokerConnectionStore from '../stores/BrokerConnectionStore';
 import CommonRegister from '../dispatcher/registers/CommonRegister';
@@ -122,6 +123,7 @@ class Main extends React.Component {
                 <div>
                     {appDrawer}
                     {displayComponent}
+                    <UserMessage/>
                 </div>
             </MuiThemeProvider>
         );

@@ -12,6 +12,7 @@ class CommonRegister extends Events.EventEmitter {  
         this.removeChangeListener = this.removeChangeListener.bind(this);
         this.registerToAppDispatcher = this.registerToAppDispatcher.bind(this);
         this.onBrokerSettingsChangedEvent = this.onBrokerSettingsChangedEvent.bind(this);
+        this.showUserMessage = this.showUserMessage.bind(this);
         this.registerToAppDispatcher();
         BrokerSettingsStore.addChangeListener(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,this.onBrokerSettingsChangedEvent);
     }
@@ -25,9 +26,16 @@ class CommonRegister extends Events.EventEmitter {  
                 case AppConstants.ACTION_SELECT_MENU_ITEM:
                     this.emitChange(AppConstants.EVENT_SELECT_MENU_ITEM,action.data);
                     break;
+                case AppConstants.ACTION_USER_MESSAGE:
+                    this.showUserMessage(action.data);
+                    break;
                 default:
             }
         }.bind(this));
+    }
+
+    showUserMessage(data) { 
+        this.emitChange(AppConstants.EVENT_USER_MESSAGE,data);
     }
 
     onBrokerSettingsChangedEvent(bsId) { 
@@ -45,6 +53,9 @@ class CommonRegister extends Events.EventEmitter {  
     removeChangeListener(event,callback) { 
         this.removeListener(event,callback);
     }
+
+
+
 }
 
 export default new CommonRegister();

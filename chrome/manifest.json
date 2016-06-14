@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+  "name": "Mqtt Client",
+  "short_name": "Mqtt Client",
+  "description": "Mqtt Client",
+  "version": "0.0.4",
+  "minimum_chrome_version": "38",
+
+  "icons": {
+    "16": "img/icon-16.png",
+    "128": "img/icon-128.png"
+  },
+  "app": {
+    "background": {
+      "scripts": ["./js/background_chrome.js"]
+    }
+  },
+  "sockets": {
+    "tcp" : {
+      "connect": ["*"]
+    }
+  },
+  "permissions": [
+    "storage",
+    "unlimitedStorage"
+  ]
+}
