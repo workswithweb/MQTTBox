@@ -7,3 +7,8 @@ body {
   line-height: 20px;
   margin:0px;
 }
+
+html, body {
+    overflow-y: visible;
+    -webkit-user-select: text;
+}
