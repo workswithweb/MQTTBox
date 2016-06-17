@@ -94,21 +94,25 @@ class Publisher extends React.Component {
 
     publishMessage() {
         if(BrokerConnectionStore.isBrokerConnected(this.props.bsId)) {
-            BrokerSettingsAction.publishMessage(this.props.bsId,this.props.publisherSettings.pubId,
-                        this.state.topic,
-                        this.state.payload,
-                        {qos:this.state.qos,retain: this.state.retain});
-            var publishedMessages = this.state.publishedMessages;
-            publishedMessages.push({topic:this.state.topic,
-                                    payload:this.state.payload,
-                                    qos:this.state.qos,
-                                    retain: this.state.retain});
+            if(this.state.topic!=null && this.state.topic.length>0) {
+                BrokerSettingsAction.publishMessage(this.props.bsId,this.props.publisherSettings.pubId,
+                            this.state.topic,
+                            this.state.payload,
+                            {qos:this.state.qos,retain: this.state.retain});
+                var publishedMessages = this.state.publishedMessages;
+                publishedMessages.push({topic:this.state.topic,
+                                        payload:this.state.payload,
+                                        qos:this.state.qos,
+                                        retain: this.state.retain});
 
-            if(publishedMessages.length>10) {
-                publishedMessages.shift();
+                if(publishedMessages.length>10) {
+                    publishedMessages.shift();
+                }
+
+                this.setState({publishedMessages:publishedMessages});
+            } else {
+                CommonActions.showUserMessage({message:'Please enter topic name to publish message'});
             }
-
-            this.setState({publishedMessages:publishedMessages});
         } else {
             CommonActions.showUserMessage({message:'Unable to connect to Broker. Please check your broker settings'});
         }
