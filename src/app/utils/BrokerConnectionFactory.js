@@ -1,5 +1,6 @@
 import Events from 'events';
 import Q from 'q';
+import {Qlobber} from 'qlobber';
 
 import AppConstants from './AppConstants';
 
@@ -26,6 +27,8 @@ class BrokerConnectionFactory extends Events.EventEmitter {
         this.publishMessage = this.publishMessage.bind(this);
         this.subscribeToTopic = this.subscribeToTopic.bind(this);
         this.unSubscribeTopic = this.unSubscribeTopic.bind(this);
+
+        this._matcher = new Qlobber({separator:'/',wildcard_one:'+',wildcard_some:'#'});
     }
 
     emitChange(event,data) { 
@@ -62,17 +65,20 @@ class BrokerConnectionFactory extends Events.EventEmitter {
             }.bind(this));
 
             this.client.on('message', function (topic, message,packet) {
-                if(message!=null) {
-                    var mess = this.subscribedMessages[topic];
-                    if(mess == null) {
-                        mess = [];
+                var topics = this._matcher.match(topic);
+                if(message!=null && topics!=null && topics.length>0) {
+                    for(var i=0;i<topics.length;i++) {
+                        var mess = this.subscribedMessages[topics[i]];
+                        if(mess == null) {
+                            mess = [];
+                        }
+                        mess.push({message:message.toString(),packet:packet});
+                        if(mess.length>50) {
+                            mess.shift();
+                        }
+                        this.subscribedMessages[topics[i]] = mess;
+                        this.emitChange(AppConstants.EVENT_MESSAGE_RECEIVED,{bsId:this.brokerSettings.bsId,topic:topics[i]});
                     }
-                    mess.push({message:message.toString(),packet:packet});
-                    if(mess.length>50) {
-                        mess.shift();
-                    }
-                    this.subscribedMessages[topic] = mess;
-                    this.emitChange(AppConstants.EVENT_MESSAGE_RECEIVED,{bsId:this.brokerSettings.bsId,topic:topic});
                 }
 
             }.bind(this));
@@ -116,6 +122,7 @@ class BrokerConnectionFactory extends Events.EventEmitter {
                 this.client.unsubscribe(value.topic);
                 value.isSubscribed=false;
                 publishAllData = true;
+                this._matcher.remove(value.topic);
             }
         }.bind(this));
         this.emitChange(AppConstants.EVENT_BROKER_CONNECTION_STATE_CHANGED,{bsId:this.brokerSettings.bsId,status:status,publishAllData:publishAllData});
@@ -158,6 +165,7 @@ class BrokerConnectionFactory extends Events.EventEmitter {
             subData['subId'] = subId;
             subData['topic'] = topic;
             this.subscriberData[subId] = subData;
+            this._matcher.add(topic,topic);
         }
     }
 
@@ -166,6 +174,7 @@ class BrokerConnectionFactory extends Events.EventEmitter {
             this.client.unsubscribe(topic);
             delete this.subscriberData[subId];
             delete this.subscribedMessages[topic];
+            this._matcher.remove(topic);
         }
     }
 }

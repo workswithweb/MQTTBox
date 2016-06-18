@@ -38,7 +38,9 @@
     "flux":"^2.1.1",
     "q":"^1.4.1",
     "localforage":"^1.4.0",
-    "lodash":"*",
-    "react-grid-layout":"0.12.2"
+    "lodash":"^4.13.1",
+    "react-grid-layout":"^0.12.2",
+    "qlobber":"^0.7.0",
+    "react-copy-to-clipboard":"*"
   }
 }

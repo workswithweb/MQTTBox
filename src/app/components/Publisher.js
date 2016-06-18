@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import CopyToClipboard from 'react-copy-to-clipboard';
 
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
@@ -10,6 +11,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import * as Colors from 'material-ui/styles/colors.js';
 import IconButton from 'material-ui/IconButton';
 import Clear from 'material-ui/svg-icons/content/clear';
+import ContentCopy from 'material-ui/svg-icons/content/content-copy';
+import Reply from 'material-ui/svg-icons/content/reply-all';
 import {Card, CardHeader, CardText} from 'material-ui/Card';
 
 import BrokerSettingsAction from '../actions/BrokerSettingsAction';
@@ -31,6 +34,16 @@ const style = {
         right: '2px',
         top: 0,
         cursor: 'pointer'
+    },
+    smallIcon: {
+        width: 15,
+        height: 15,
+    },
+    small: {
+        width: 15,
+        height:15,
+        padding: 5,
+        marginRight: 10,
     }
 };
 
@@ -46,6 +59,8 @@ class Publisher extends React.Component {
         this.savePublisherSettings = this.savePublisherSettings.bind(this);
         this.publishMessage = this.publishMessage.bind(this);
         this.setPublisherData = this.setPublisherData.bind(this);
+        this.rePublishMessage = this.rePublishMessage.bind(this);
+        this.publishMessageToBroker = this.publishMessageToBroker.bind(this);
 
         this.state = {
             qos:this.props.publisherSettings.qos,
@@ -92,29 +107,36 @@ class Publisher extends React.Component {
         BrokerSettingsAction.onAddPublisherButtonClick(this.props.bsId,pubSettings);
     }
 
-    publishMessage() {
+    publishMessageToBroker(topic,payload,qos,retain) {
         if(BrokerConnectionStore.isBrokerConnected(this.props.bsId)) {
-            if(this.state.topic!=null && this.state.topic.length>0) {
-                BrokerSettingsAction.publishMessage(this.props.bsId,this.props.publisherSettings.pubId,
-                            this.state.topic,
-                            this.state.payload,
-                            {qos:this.state.qos,retain: this.state.retain});
-                var publishedMessages = this.state.publishedMessages;
-                publishedMessages.push({topic:this.state.topic,
-                                        payload:this.state.payload,
-                                        qos:this.state.qos,
-                                        retain: this.state.retain});
+            BrokerSettingsAction.publishMessage(this.props.bsId,this.props.publisherSettings.pubId,
+            topic,payload,{qos:qos,retain:retain});
 
-                if(publishedMessages.length>10) {
-                    publishedMessages.shift();
-                }
+            var publishedMessages = this.state.publishedMessages;
+            publishedMessages.push({topic:topic,
+                                    payload:payload,
+                                    qos:qos,
+                                    retain:retain});
 
-                this.setState({publishedMessages:publishedMessages});
-            } else {
-                CommonActions.showUserMessage({message:'Please enter topic name to publish message'});
+            if(publishedMessages.length>10) {
+                publishedMessages.shift();
             }
+            this.setState({publishedMessages:publishedMessages});
         } else {
             CommonActions.showUserMessage({message:'Unable to connect to Broker. Please check your broker settings'});
+        }
+    }
+
+    rePublishMessage(topic,payload,qos,retain) {
+        this.publishMessageToBroker(topic,payload,qos,retain);
+        CommonActions.showUserMessage({message:'Re-published successfully',autoHideDuration:1000});
+    }
+
+    publishMessage() {
+        if(this.state.topic!=null && this.state.topic.length>0) {
+            this.publishMessageToBroker(this.state.topic,this.state.payload,this.state.qos,this.state.retain);
+        } else {
+            CommonActions.showUserMessage({message:'Please enter topic name to publish message'});
         }
     }
 
@@ -122,6 +144,10 @@ class Publisher extends React.Component {
         if(data!=null && data.bsId == this.props.bsId && data.pubId == this.props.publisherSettings.pubId) {
             this.setState({publishedMessages:_.clone(data.publishedMessages)});
         }
+    }
+
+    onPayloadCopy() {
+        CommonActions.showUserMessage({message:'Copied',autoHideDuration:2000});
     }
 
     componentDidMount() {
@@ -148,6 +174,23 @@ class Publisher extends React.Component {
                                 <b>topic</b>:{this.state.publishedMessages[i].topic},
                                 <b> qos</b>:{this.state.publishedMessages[i].qos},
                                 <b> retain</b>:{this.state.publishedMessages[i].retain.toString()}
+                             </div>
+                             <div>
+                                <CopyToClipboard onCopy={this.onPayloadCopy} text={this.state.publishedMessages[i].payload}>
+                                    <IconButton iconStyle={style.smallIcon} style={style.small}
+                                        tooltipPosition="top-center" tooltip="Copy payload">
+                                        <ContentCopy/>
+                                    </IconButton>
+                                </CopyToClipboard>
+
+                                <IconButton iconStyle={style.smallIcon} style={style.small}
+                                    onTouchTap={this.rePublishMessage.bind(this,this.state.publishedMessages[i].topic,
+                                                                                this.state.publishedMessages[i].payload,
+                                                                                this.state.publishedMessages[i].qos,
+                                                                                this.state.publishedMessages[i].retain)}
+                                    tooltipPosition="top-center" tooltip="Re publish">
+                                    <Reply/>
+                                </IconButton>
                              </div>
                          </div>
                     </CardText>

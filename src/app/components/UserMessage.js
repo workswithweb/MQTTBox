@@ -13,12 +13,17 @@ class UserMessage extends React.Component {
 
         this.state = {
               open: false,
-              message:''
+              message:'',
+              autoHideDuration:10000
         };
     }
 
     showUserMessage(data) { 
-        this.setState({open:true,message:data.message});
+        var autoHideDuration = 10000;
+        if(data.autoHideDuration && data.autoHideDuration>0) {
+            autoHideDuration = data.autoHideDuration;
+        }
+        this.setState({open:true,message:data.message,autoHideDuration:autoHideDuration});
     }
 
     handleRequestClose() { 
@@ -39,7 +44,7 @@ class UserMessage extends React.Component {
                 <Snackbar
                     open={this.state.open}
                     message={this.state.message}
-                    autoHideDuration={10000}
+                    autoHideDuration={this.state.autoHideDuration}
                     onRequestClose={this.handleRequestClose}
                     onActionTouchTap={this.handleRequestClose}
                     action="OK"
