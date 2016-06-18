@@ -130,6 +130,14 @@ class AddEditBrokerForm extends React.Component {
             protocolSupported.push(<MenuItem key={'mqtt'} value={'mqtt'} primaryText='mqtt'/>);
         }
 
+        var showWillSettings = false;
+        if((this.state.willTopic!=null && this.state.willTopic.trim().length>0) ||
+            (this.state.willRetain!=null && this.state.willRetain==true) ||
+            (this.state.willPayload!=null && this.state.willPayload.trim().length>0) ||
+            (this.state.willQos!=null && this.state.willQos>0)) {
+            showWillSettings = true;
+        }
+
         return (
             <div>
                 <Toolbar>
@@ -195,7 +203,7 @@ class AddEditBrokerForm extends React.Component {
                         </TableBody>
                     </Table>
 
-                    <Card>
+                    <Card initiallyExpanded ={showWillSettings}>
                         <CardHeader
                           title="Will Settings"
                           actAsExpander={true}

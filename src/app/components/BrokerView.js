@@ -8,6 +8,8 @@ import SettingsIcon from 'material-ui/svg-icons/action/settings';
 import SignalIcon from 'material-ui/svg-icons/device/network-wifi';
 import CloudUploadIcon from 'material-ui/svg-icons/file/cloud-upload';
 import CloudDownloadIcon from 'material-ui/svg-icons/file/cloud-download';
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import FlatButton from 'material-ui/FlatButton';
 import {Responsive, WidthProvider} from 'react-grid-layout';
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
@@ -133,16 +135,16 @@ class BrokerView extends React.Component {
                             <IconButton onTouchTap={this.onShowHideMenuClick}>
                                 <ActionDehaze/>
                             </IconButton>
-                            <IconButton onTouchTap={this.onReconnectBrokerClick} tooltipPosition="bottom-center" tooltip="Reconnect Broker">
+                            <IconButton onTouchTap={this.onReconnectBrokerClick} tooltipPosition="bottom-center" tooltip="Reconnect broker">
                                 <SignalIcon color={this.state.connState == AppConstants.ONLINE? Colors.greenA700:Colors.redA700} />
                             </IconButton>
-                            <IconButton onTouchTap={this.onEditBrokerSettingsClick} tooltipPosition="bottom-center" tooltip="Edit Broker Settings">
+                            <IconButton onTouchTap={this.onEditBrokerSettingsClick} tooltipPosition="bottom-center" tooltip="Edit broker settings">
                                 <SettingsIcon color={Colors.brown900}/>
                             </IconButton>
-                            <IconButton onTouchTap={this.onAddPublisherButtonClick} tooltipPosition="bottom-center" tooltip="Add New Publisher">
+                            <IconButton onTouchTap={this.onAddPublisherButtonClick} tooltipPosition="bottom-center" tooltip="Add new publisher">
                                 <CloudUploadIcon color={Colors.yellow900}/>
                             </IconButton>
-                            <IconButton onTouchTap={this.onAddSubscriberButtonClick} tooltipPosition="bottom-center" tooltip="Subscribe to new topic">
+                            <IconButton onTouchTap={this.onAddSubscriberButtonClick} tooltipPosition="bottom-center" tooltip="Subscribe new topic">
                                 <CloudDownloadIcon color={Colors.blue700}/>
                             </IconButton>
                             <h3>{this.props.broker.brokerName}</h3>
@@ -156,6 +158,19 @@ class BrokerView extends React.Component {
                     <ResponsiveReactGridLayout key={this.props.broker.bsId} isDraggable={false} autoSize={true} className="layout" breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}} cols={{lg: 4, md: 3, sm: 2, xs:1, xxs: 1}}>
                         {gridList}
                     </ResponsiveReactGridLayout>
+                </div>
+                <div>
+                    {gridList.length<=0 ?(<Card>
+                        <CardTitle subtitle="Click below icons to add new Publisher or Subscriber" />
+                        <CardActions>
+                          <IconButton onTouchTap={this.onAddPublisherButtonClick} tooltipPosition="bottom-right" tooltip="Add new publisher">
+                              <CloudUploadIcon color={Colors.yellow900}/>
+                          </IconButton>
+                          <IconButton onTouchTap={this.onAddSubscriberButtonClick} tooltipPosition="bottom-right" tooltip="Subscribe new topic">
+                              <CloudDownloadIcon color={Colors.blue700}/>
+                          </IconButton>
+                        </CardActions>
+                      </Card>):null}
                 </div>
             </div>
         );

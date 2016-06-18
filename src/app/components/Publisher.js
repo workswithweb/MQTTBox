@@ -131,7 +131,7 @@ class Publisher extends React.Component {
 
     rePublishMessage(topic,payload,qos,retain) {
         if(this.publishMessageToBroker(topic,payload,qos,retain)) {
-            CommonActions.showUserMessage({message:'Re-published successfully',autoHideDuration:1000});
+            CommonActions.showUserMessage({message:'Republished successfully',autoHideDuration:1000});
         }
     }
 
@@ -191,7 +191,7 @@ class Publisher extends React.Component {
                                                                                 this.state.publishedMessages[i].payload,
                                                                                 this.state.publishedMessages[i].qos,
                                                                                 this.state.publishedMessages[i].retain)}
-                                    tooltipPosition="top-center" tooltip="Re publish">
+                                    tooltipPosition="top-center" tooltip="Republish">
                                     <Reply/>
                                 </IconButton>
                              </div>

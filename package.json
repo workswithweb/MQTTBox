@@ -1,10 +1,10 @@
 {
-  "name": "mqtt-chrome-app",
-  "version": "0.0.2",
-  "description": "MQTT Chrome App",
+  "name": "MQTTBox",
+  "version": "0.0.10",
+  "description": "MQTTBox - Developers helper program to create and test MQTT connectivity protocol.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/workswithweb/mqtt-chrome-app.git"
+    "url": "git@github.com:workswithweb/MQTTBox.git"
   },
   "scripts": {
     "start": "gulp",
@@ -41,6 +41,6 @@
     "lodash":"^4.13.1",
     "react-grid-layout":"^0.12.2",
     "qlobber":"^0.7.0",
-    "react-copy-to-clipboard":"*"
+    "react-copy-to-clipboard":"^4.1.0"
   }
 }

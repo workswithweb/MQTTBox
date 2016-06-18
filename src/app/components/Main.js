@@ -1,6 +1,7 @@
 import React from 'react';
 import Q from 'q';
 import _ from 'lodash';
+import UUID from 'node-uuid';
 
 import {deepOrange500} from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -108,7 +109,13 @@ class Main extends React.Component {
 
         if(this.state!=null && this.state.selectedMenu!=null) {
             if(this.state.selectedMenu == AppConstants.MENU_ADD_EDIT_BROKER) {
-                displayComponent = <AddEditBrokerForm open={this.state.open} broker={this.state.pageData.broker}/>;
+                var selectedMenuKey = '';
+                if(this.state.pageData!=null && this.state.pageData.broker!=null && this.state.pageData.broker.bsId!=null) {
+                    selectedMenuKey = this.state.pageData.broker.bsId
+                } else {
+                    selectedMenuKey = UUID.v4();
+                }
+                displayComponent = <AddEditBrokerForm key={selectedMenuKey} open={this.state.open} broker={this.state.pageData.broker}/>;
             } else if(this.state.selectedMenu == AppConstants.MENU_BROKER_DETAILS) {
                 displayComponent = <BrokerView open={this.state.open} broker={this.state.pageData.broker}/>;
             }
