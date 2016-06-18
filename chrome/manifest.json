@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
-  "name": "Mqtt Client",
-  "short_name": "Mqtt Client",
+  "name": "MQTTBox",
+  "short_name": "MQTTBox",
   "description": "Developers helper program to create and test MQTT connectivity protocol.",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "minimum_chrome_version": "38",
 
   "icons": {

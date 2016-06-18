@@ -122,14 +122,17 @@ class Publisher extends React.Component {
                 publishedMessages.shift();
             }
             this.setState({publishedMessages:publishedMessages});
+            return true;
         } else {
             CommonActions.showUserMessage({message:'Unable to connect to Broker. Please check your broker settings'});
+            return false;
         }
     }
 
     rePublishMessage(topic,payload,qos,retain) {
-        this.publishMessageToBroker(topic,payload,qos,retain);
-        CommonActions.showUserMessage({message:'Re-published successfully',autoHideDuration:1000});
+        if(this.publishMessageToBroker(topic,payload,qos,retain)) {
+            CommonActions.showUserMessage({message:'Re-published successfully',autoHideDuration:1000});
+        }
     }
 
     publishMessage() {
