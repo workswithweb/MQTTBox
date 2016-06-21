@@ -163,10 +163,10 @@ class BrokerView extends React.Component {
                     {gridList.length<=0 ?(<Card>
                         <CardTitle subtitle="Click below icons to add new Publisher or Subscriber" />
                         <CardActions>
-                          <IconButton onTouchTap={this.onAddPublisherButtonClick} tooltipPosition="bottom-right" tooltip="Add new publisher">
+                          <IconButton onTouchTap={this.onAddPublisherButtonClick} tooltipPosition="top-right" tooltip="Add new publisher">
                               <CloudUploadIcon color={Colors.yellow900}/>
                           </IconButton>
-                          <IconButton onTouchTap={this.onAddSubscriberButtonClick} tooltipPosition="bottom-right" tooltip="Subscribe new topic">
+                          <IconButton onTouchTap={this.onAddSubscriberButtonClick} tooltipPosition="top-right" tooltip="Subscribe new topic">
                               <CloudDownloadIcon color={Colors.blue700}/>
                           </IconButton>
                         </CardActions>
