@@ -44,4 +44,9 @@ AppConstants.OFFLINE = 'OFFLINE';
 AppConstants.CLOSE = 'CLOSE';
 AppConstants.ERROR = 'ERROR';
 
+//SUPPORTED CLIENTS
+AppConstants.WEB_APP = 'WEB_APP';
+AppConstants.CHROME_APP = 'CHROME_APP';
+AppConstants.CLIENT_TYPE = AppConstants.WEB_APP; //WEB,CHROME_APP
+
 export default AppConstants;
