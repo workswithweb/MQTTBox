@@ -15,10 +15,9 @@ import ContentCopy from 'material-ui/svg-icons/content/content-copy';
 import Reply from 'material-ui/svg-icons/content/reply-all';
 import {Card, CardHeader, CardText} from 'material-ui/Card';
 
-import BrokerSettingsAction from '../actions/BrokerSettingsAction';
-import BrokerConnectionStore from '../stores/BrokerConnectionStore';
+import AppActions from '../actions/AppActions';
+import BrokerConnectionService from '../services/BrokerConnectionService';
 import AppConstants from '../utils/AppConstants';
-import CommonActions from '../actions/CommonActions';
 
 const style = {
     publisherPaper: {
@@ -57,8 +56,8 @@ class Publisher extends React.Component {
         this.onPayloadChange = this.onPayloadChange.bind(this);
         this.onRemovePublisherButtonClick = this.onRemovePublisherButtonClick.bind(this);
         this.savePublisherSettings = this.savePublisherSettings.bind(this);
+
         this.publishMessage = this.publishMessage.bind(this);
-        this.setPublisherData = this.setPublisherData.bind(this);
         this.rePublishMessage = this.rePublishMessage.bind(this);
         this.publishMessageToBroker = this.publishMessageToBroker.bind(this);
 
@@ -67,7 +66,7 @@ class Publisher extends React.Component {
             topic:this.props.publisherSettings.topic,
             retain:this.props.publisherSettings.retain,
             payload:this.props.publisherSettings.payload,
-            publishedMessages: []
+            publishedMessages: _.clone(BrokerConnectionService.getPublishedMessages(this.props.bsId,this.props.publisherSettings.pubId))
         }
     }
 
@@ -83,7 +82,7 @@ class Publisher extends React.Component {
                            qos: value,
                            retain: this.state.retain,
                            payload: this.state.payload};
-        BrokerSettingsAction.onAddPublisherButtonClick(this.props.bsId,pubSettings);
+        AppActions.onAddPublisherButtonClick({bsId:this.props.bsId,publisher:pubSettings});
     }
 
     onRetainChange(event) {
@@ -95,7 +94,7 @@ class Publisher extends React.Component {
     }
 
     onRemovePublisherButtonClick() {
-        BrokerSettingsAction.onRemovePublisherButtonClick(this.props.bsId,this.props.publisherSettings.pubId);
+        AppActions.onRemovePublisherButtonClick({bsId:this.props.bsId,pubId:this.props.publisherSettings.pubId});
     }
 
     savePublisherSettings() {
@@ -104,13 +103,13 @@ class Publisher extends React.Component {
                            qos: this.state.qos,
                            retain: this.state.retain,
                            payload: this.state.payload};
-        BrokerSettingsAction.onAddPublisherButtonClick(this.props.bsId,pubSettings);
+        AppActions.onAddPublisherButtonClick({bsId:this.props.bsId,publisher:pubSettings});
     }
 
     publishMessageToBroker(topic,payload,qos,retain) {
-        if(BrokerConnectionStore.isBrokerConnected(this.props.bsId)) {
-            BrokerSettingsAction.publishMessage(this.props.bsId,this.props.publisherSettings.pubId,
-            topic,payload,{qos:qos,retain:retain});
+        if(BrokerConnectionService.getBrokerState(this.props.bsId)==AppConstants.ONLINE) {
+            AppActions.publishMessage({bsId:this.props.bsId,pubId:this.props.publisherSettings.pubId,
+            topic:topic,payload:payload,options:{qos:qos,retain:retain}});
 
             var publishedMessages = this.state.publishedMessages;
             publishedMessages.push({topic:topic,
@@ -124,14 +123,14 @@ class Publisher extends React.Component {
             this.setState({publishedMessages:publishedMessages});
             return true;
         } else {
-            CommonActions.showUserMessage({message:'Unable to connect to Broker. Please check your broker settings'});
+            AppActions.showUserMessage({message:'Client is not connected to broker. Please check your broker settings'});
             return false;
         }
     }
 
     rePublishMessage(topic,payload,qos,retain) {
         if(this.publishMessageToBroker(topic,payload,qos,retain)) {
-            CommonActions.showUserMessage({message:'Republished successfully',autoHideDuration:1000});
+            AppActions.showUserMessage({message:'Message republished successfully',autoHideDuration:1000});
         }
     }
 
@@ -139,26 +138,12 @@ class Publisher extends React.Component {
         if(this.state.topic!=null && this.state.topic.length>0) {
             this.publishMessageToBroker(this.state.topic,this.state.payload,this.state.qos,this.state.retain);
         } else {
-            CommonActions.showUserMessage({message:'Please enter topic name to publish message'});
-        }
-    }
-
-    setPublisherData(data) {
-        if(data!=null && data.bsId == this.props.bsId && data.pubId == this.props.publisherSettings.pubId) {
-            this.setState({publishedMessages:_.clone(data.publishedMessages)});
+            AppActions.showUserMessage({message:'Please enter topic name to publish message'});
         }
     }
 
     onPayloadCopy() {
-        CommonActions.showUserMessage({message:'Copied',autoHideDuration:2000});
-    }
-
-    componentDidMount() {
-        BrokerConnectionStore.addChangeListener(AppConstants.EVENT_PUBLISHER_DATA,this.setPublisherData);
-    }
-
-    componentWillUnmount() {
-        BrokerConnectionStore.removeChangeListener(AppConstants.EVENT_PUBLISHER_DATA,this.setPublisherData);
+        AppActions.showUserMessage({message:'Copied',autoHideDuration:2000});
     }
 
     render() {
@@ -167,7 +152,7 @@ class Publisher extends React.Component {
             var len = this.state.publishedMessages.length;
             for (var i=len-1; i>=0;i--) {
               messageList.push(
-                <Card key={i}>
+                <Card key={this.props.publisherSettings.pubId+i}>
                     <CardText>
                         <div>
                             <div>

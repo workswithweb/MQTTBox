@@ -1,6 +1,5 @@
 import React from 'react';
 import UUID from 'node-uuid';
-import Q from 'q';
 
 import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
@@ -22,8 +21,8 @@ import ActionDehaze from 'material-ui/svg-icons/image/dehaze';
 
 import BrokerSettings from '../models/BrokerSettings';
 import AppConstants from '../utils/AppConstants';
-import CommonActions from '../actions/CommonActions';
-import BrokerSettingsAction from '../actions/BrokerSettingsAction';
+import AppActions from '../actions/AppActions';
+import BrokerSettingsService from '../services/BrokerSettingsService';
 
 const style = {
     paper: {
@@ -38,6 +37,7 @@ class AddEditBrokerForm extends React.Component {
 
     constructor(props) {
         super(props);
+        
         this.initBrokerObj = this.initBrokerObj.bind(this);
         this.onShowHideMenuClick = this.onShowHideMenuClick.bind(this);
         this.onTargetValueChange = this.onTargetValueChange.bind(this);
@@ -48,17 +48,22 @@ class AddEditBrokerForm extends React.Component {
         this.onWillQosValueChange = this.onWillQosValueChange.bind(this);
 
         this.saveBrokerSettings = this.saveBrokerSettings.bind(this);
+        this.onBrokerSettingsSaved = this.onBrokerSettingsSaved.bind(this);
         this.deleteBrokerSettings = this.deleteBrokerSettings.bind(this);
 
         this.initBrokerObj();
     }
 
     initBrokerObj() {
-        this.state = (this.props.broker==null?new BrokerSettings():this.props.broker);
+        if(this.props.params.bsId!=null && this.props.params.bsId.trim().length>0) {
+            this.state = BrokerSettingsService.getBrokerSettingDataByBsId(this.props.params.bsId);
+        } else {
+            this.state = new BrokerSettings();
+        }
     }
 
     onShowHideMenuClick() {
-        CommonActions.showHideMenu(true);
+        AppActions.showHideMenu(true);
     }
 
     onTargetValueChange(event) {
@@ -96,31 +101,51 @@ class AddEditBrokerForm extends React.Component {
     saveBrokerSettings() {
         if(this.state!=null) {
             if(this.state.brokerName==null||this.state.brokerName.trim().length<1||this.state.brokerName.trim().length>500) {
-                CommonActions.showUserMessage({message:'Please Enter Valid Broker Name'});
+                AppActions.showUserMessage({message:'Please Enter Valid Broker Name'});
             } else if(this.state.clientId==null||this.state.clientId.trim().length<1||this.state.clientId.trim().length>500) {
-                CommonActions.showUserMessage({message:'Please Enter Valid Client Id'});
+                AppActions.showUserMessage({message:'Please Enter Valid Client Id'});
             } else if(this.state.host==null||this.state.host.trim().length<1||this.state.host.trim().length>10000) {
-                CommonActions.showUserMessage({message:'Please Enter Valid Host'});
+                AppActions.showUserMessage({message:'Please Enter Valid Host'});
             } else if(this.state.reconnectPeriod==null|| Number.isNaN(this.state.reconnectPeriod) || this.state.reconnectPeriod<=0) {
-                CommonActions.showUserMessage({message:'Please Enter Valid Reconnect Period'});
+                AppActions.showUserMessage({message:'Please Enter Valid Reconnect Period'});
             } else if(this.state.connectTimeout==null|| Number.isNaN(this.state.connectTimeout) || this.state.connectTimeout<=0) {
-                CommonActions.showUserMessage({message:'Please Enter Valid Connect Timeout'});
+                AppActions.showUserMessage({message:'Please Enter Valid Connect Timeout'});
             } else if(this.state.keepalive==null|| Number.isNaN(this.state.keepalive) || this.state.keepalive<=0) {
-                CommonActions.showUserMessage({message:'Please Enter Valid Keep Alive Value'});
+                AppActions.showUserMessage({message:'Please Enter Valid Keep Alive Value'});
             } else {
-                BrokerSettingsAction.saveBrokerSettings(this.state);
+                AppActions.saveBrokerSettings(this.state);
             }
         } else {
-            CommonActions.showUserMessage({message:'Please Enter Valid Broker Settings'});
+            AppActions.showUserMessage({message:'Please Enter Valid Broker Settings'});
+        }
+    }
+
+    onBrokerSettingsSaved(bsId) {
+        var bsObj = BrokerSettingsService.getBrokerSettingDataByBsId(bsId);
+        if(bsObj!=null && bsObj.bsId!=null) {
+            window.location.hash = AppConstants.PAGE_URL_CLIENT_CONNECTION_DETAILS+bsId;
+        } else {
+            var list = BrokerSettingsService.getAllBrokerSettingData();
+            if(list!=null && list.length>0) {
+                window.location.hash = AppConstants.PAGE_URL_CLIENT_CONNECTION_DETAILS+list[0].bsId;
+            } else {
+                window.location.hash = AppConstants.PAGE_URL_ADD_EDIT_CLIENT_BROKER_SETTINGS;
+            }
         }
     }
 
     deleteBrokerSettings() {
-        BrokerSettingsAction.deleteBrokerSettingsById(this.state.bsId);
+        AppActions.deleteBrokerSettings(this.props.params.bsId);
+        AppActions.showUserMessage({message:'Client '+this.state.brokerName+' Deleted.'});
+        this.setState(new BrokerSettings());
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
-        return !nextProps.open;
+    componentDidMount() {
+        BrokerSettingsService.addChangeListener(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,this.onBrokerSettingsSaved);
+    }
+
+    componentWillUnmount() {
+        BrokerSettingsService.removeChangeListener(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,this.onBrokerSettingsSaved);
     }
 
     render() {
@@ -136,6 +161,13 @@ class AddEditBrokerForm extends React.Component {
             (this.state.willPayload!=null && this.state.willPayload.trim().length>0) ||
             (this.state.willQos!=null && this.state.willQos>0)) {
             showWillSettings = true;
+        }
+
+        var removeButton = '';
+        if(this.props.params.bsId!=null) {
+            removeButton = <TableRowColumn>
+                               <RaisedButton onTouchTap={this.deleteBrokerSettings} secondary={true} label='Remove'/>
+                           </TableRowColumn>;
         }
 
         return (
@@ -245,9 +277,7 @@ class AddEditBrokerForm extends React.Component {
                                 <TableRowColumn>
                                     <RaisedButton onTouchTap={this.saveBrokerSettings} label='Save' primary={true}/>
                                 </TableRowColumn>
-                                <TableRowColumn>
-                                    <RaisedButton onTouchTap={this.deleteBrokerSettings} secondary={true} label='Remove'/>
-                                </TableRowColumn>
+                                {removeButton}
                             </TableRow>
                         </TableBody>
                     </Table>

@@ -26,6 +26,14 @@ module.exports = {
       entries: src + '/app/app.js',
       dest: dest,
       outputName: 'app.js'
+    },{
+        entries: src + '/app/workers/DbWorker.js',
+        dest: dest,
+        outputName: 'DbWorker.js'
+    },{
+        entries: src + '/app/workers/BrokerConnWorker.js',
+        dest: dest,
+        outputName: 'BrokerConnWorker.js'
     }],
     extensions: ['.js'],
   }

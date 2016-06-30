@@ -1,7 +1,7 @@
 import React from 'react';
 import Snackbar from 'material-ui/Snackbar';
 
-import CommonRegister from '../dispatcher/registers/CommonRegister';
+import CommonAppService from '../services/CommonAppService';
 import AppConstants from '../utils/AppConstants';
 
 class UserMessage extends React.Component {
@@ -31,11 +31,11 @@ class UserMessage extends React.Component {
     }
 
     componentDidMount() {
-        CommonRegister.addChangeListener(AppConstants.EVENT_USER_MESSAGE,this.showUserMessage);
+        CommonAppService.addChangeListener(AppConstants.EVENT_SHOW_MESSAGE,this.showUserMessage);
     }
 
     componentWillUnmount() {
-        CommonRegister.removeChangeListener(AppConstants.EVENT_USER_MESSAGE,this.showUserMessage);
+        CommonAppService.removeChangeListener(AppConstants.EVENT_SHOW_MESSAGE,this.showUserMessage);
     }
 
     render() {

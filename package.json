@@ -41,6 +41,8 @@
     "lodash":"^4.13.1",
     "react-grid-layout":"^0.12.2",
     "qlobber":"^0.7.0",
-    "react-copy-to-clipboard":"^4.1.0"
+    "react-copy-to-clipboard":"^4.1.0",
+    "react-router":"^2.5.1",
+    "mqtt":"*"
   }
 }

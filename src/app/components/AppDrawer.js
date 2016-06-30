@@ -9,77 +9,84 @@ import ActionClear from 'material-ui/svg-icons/content/clear';
 import Divider from 'material-ui/Divider';
 import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 
-import CommonActions from '../actions/CommonActions';
+import CommonAppService from '../services/CommonAppService';
 import AppConstants from '../utils/AppConstants';
-
-const styles = {
-    closeMenu:{
-        float:'right',
-        width: '100%'
-    }
-};
+import NavLink from './NavLink';
+import BrokerSettingsService from '../services/BrokerSettingsService';
 
 class AppDrawer extends React.Component {
 
     constructor(props) {
         super(props);
-        this.onRequestChange = this.onRequestChange.bind(this);
-        this.onShowHideMenuClick = this.onShowHideMenuClick.bind(this);
-        this.onMenuItemClick = this.onMenuItemClick.bind(this);
+
+        this.onShowHideAppDrawer = this.onShowHideAppDrawer.bind(this);
+        this.navigateToAddEditBrokerPage = this.navigateToAddEditBrokerPage.bind(this);
+        this.navigateToBrokerPage = this.navigateToBrokerPage.bind(this);
+        this.onBrokerSettingsChanged = this.onBrokerSettingsChanged.bind(this);
+
+        var bsList = BrokerSettingsService.getAllBrokerSettingData();
+        this.state = {open:true,bsList:bsList}
     }
 
-    onRequestChange(open,reason) { 
-        CommonActions.showHideMenu(open);
+    onShowHideAppDrawer(open) {
+        this.setState({open:open});
     }
 
-    onShowHideMenuClick() {
-        CommonActions.showHideMenu(false);
+    navigateToAddEditBrokerPage() {
+        this.onShowHideAppDrawer(false);
+        window.location.hash = AppConstants.PAGE_URL_ADD_EDIT_CLIENT_BROKER_SETTINGS;
     }
 
-    onMenuItemClick(menuId,data) {
-        var eventData = {"menuId":menuId};
-        if(menuId == AppConstants.MENU_BROKER_DETAILS) {
-            eventData["bsId"] = data;
+    navigateToBrokerPage(bsId) {
+        this.onShowHideAppDrawer(false);
+        window.location.hash = AppConstants.PAGE_URL_CLIENT_CONNECTION_DETAILS+bsId;
+    }
+
+    onBrokerSettingsChanged(bsId) {
+        var bsList = BrokerSettingsService.getAllBrokerSettingData();
+        this.setState({bsList:bsList});
+    }
+
+    componentDidMount() {
+        CommonAppService.addChangeListener(AppConstants.EVENT_OPEN_CLOSE_APP_DRAWER,this.onShowHideAppDrawer);
+        BrokerSettingsService.addChangeListener(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,this.onBrokerSettingsChanged);
+        if(this.state.bsList==null || this.state.bsList.length<=0) {
+           this.navigateToAddEditBrokerPage();
         }
-        CommonActions.onMenuItemClick(eventData);
+    }
+
+    componentWillUnmount() {
+        CommonAppService.removeChangeListener(AppConstants.EVENT_OPEN_CLOSE_APP_DRAWER,this.onShowHideAppDrawer);
+        BrokerSettingsService.removeChangeListener(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,this.onBrokerSettingsChanged);
     }
 
     render() {
-        var brokerList = this.props.bsList.map(function(brokerSetting,index) {
-            return (
-                <ListItem
-                  key={brokerSetting.bsId}
-                  primaryText={brokerSetting.brokerName}
-                  onTouchTap={this.onMenuItemClick.bind(this,AppConstants.MENU_BROKER_DETAILS,brokerSetting.bsId)}
-                />
-            );
+        var brokerList = this.state.bsList.map(function(brokerSetting,index) {
+            return (<ListItem onClick={this.onShowHideAppDrawer.bind(this,false)} key={brokerSetting.bsId} primaryText={brokerSetting.brokerName} containerElement={<NavLink key={brokerSetting.bsId} to={"/broker/"+brokerSetting.bsId}/>}></ListItem>);
         }.bind(this));
-        brokerList.push(<ListItem
-                          key="addNewBroker"
-                          primaryText="Add New Broker"
-                          onTouchTap={this.onMenuItemClick.bind(this,AppConstants.MENU_ADD_EDIT_BROKER)}
-                          leftIcon={<AddIcon/>}
-                        />);
+
+        brokerList.push(<ListItem primaryText="Add New Broker" onClick={this.onShowHideAppDrawer.bind(this,false)} key="addEditNewBroker" leftIcon={<AddIcon/>}
+            containerElement={<NavLink key="addEditNewBroker" to="/addedit"/>}></ListItem>);
+
         return (
             <div>
                 <Drawer
                   docked={true}
-                  open={this.props.open}
-                  onRequestChange={this.onRequestChange}
+                  open={this.state.open}
+                  onRequestChange={this.onShowHideAppDrawer}
                 >
                     <Toolbar>
-                        <ToolbarGroup float='left'>
-                        </ToolbarGroup>
+                        <ToolbarGroup float='left'/>
                         <ToolbarGroup float='right'>
-                            <IconButton onTouchTap={this.onShowHideMenuClick}>
+                            <IconButton onTouchTap={this.onShowHideAppDrawer.bind(this,false)}>
                                 <ActionClear/>
                             </IconButton>
                         </ToolbarGroup>
                     </Toolbar>
-                    <Divider />
+                    <Divider/>
                     <List>
                         <ListItem
-                          primaryText="Brokers"
+                          primaryText="Client Brokers"
                           leftIcon={<DevicesIcon/>}
                           initiallyOpen={true}
                           primaryTogglesNestedList={true}

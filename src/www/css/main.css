@@ -12,3 +12,12 @@ html, body {
     overflow-y: visible;
     -webkit-user-select: text;
 }
+
+.nonActiveLink {
+    text-decoration:none;
+}
+
+.activeLink {
+    color: green;
+    text-decoration:none;
+}
