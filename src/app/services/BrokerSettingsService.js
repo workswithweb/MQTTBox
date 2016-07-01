@@ -203,7 +203,7 @@ class BrokerSettingsService extends Events.EventEmitter {
                 obj.subscribeSettings.splice(subIndex, 1);
                 this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,bsId);
                 this.dbWorker.postMessage({cmd:AppConstants.WORKER_CMD_SAVE_BROKER_SETTINGS,payload:obj});
-                BrokerConnectionService.clearSubscriberData(bsId,subId);
+                BrokerConnectionService.unSubscribeToTopic({bsId:bsId,subId:subId},false);
             }
         }
     }

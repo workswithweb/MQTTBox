@@ -37,7 +37,7 @@ class AddEditBrokerForm extends React.Component {
 
     constructor(props) {
         super(props);
-        
+
         this.initBrokerObj = this.initBrokerObj.bind(this);
         this.onShowHideMenuClick = this.onShowHideMenuClick.bind(this);
         this.onTargetValueChange = this.onTargetValueChange.bind(this);
@@ -101,17 +101,17 @@ class AddEditBrokerForm extends React.Component {
     saveBrokerSettings() {
         if(this.state!=null) {
             if(this.state.brokerName==null||this.state.brokerName.trim().length<1||this.state.brokerName.trim().length>500) {
-                AppActions.showUserMessage({message:'Please Enter Valid Broker Name'});
+                AppActions.showUserMessage({message:'Please enter broker name'});
             } else if(this.state.clientId==null||this.state.clientId.trim().length<1||this.state.clientId.trim().length>500) {
-                AppActions.showUserMessage({message:'Please Enter Valid Client Id'});
+                AppActions.showUserMessage({message:'Please enter client id'});
             } else if(this.state.host==null||this.state.host.trim().length<1||this.state.host.trim().length>10000) {
-                AppActions.showUserMessage({message:'Please Enter Valid Host'});
+                AppActions.showUserMessage({message:'Please enter host'});
             } else if(this.state.reconnectPeriod==null|| Number.isNaN(this.state.reconnectPeriod) || this.state.reconnectPeriod<=0) {
-                AppActions.showUserMessage({message:'Please Enter Valid Reconnect Period'});
+                AppActions.showUserMessage({message:'Please enter valid reconnect period'});
             } else if(this.state.connectTimeout==null|| Number.isNaN(this.state.connectTimeout) || this.state.connectTimeout<=0) {
-                AppActions.showUserMessage({message:'Please Enter Valid Connect Timeout'});
+                AppActions.showUserMessage({message:'Please enter valid connect timeout'});
             } else if(this.state.keepalive==null|| Number.isNaN(this.state.keepalive) || this.state.keepalive<=0) {
-                AppActions.showUserMessage({message:'Please Enter Valid Keep Alive Value'});
+                AppActions.showUserMessage({message:'Please enter valid keep alive'});
             } else {
                 AppActions.saveBrokerSettings(this.state);
             }

@@ -80,6 +80,7 @@ class BrokerConnectionService extends Events.EventEmitter {
             metaData.connState = data.connState;
             this.brokerMetaData[data.bsId] = metaData;
             this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,data.bsId);
+            this.clearSubscriberDataByBsId(data.bsId,true);
         }
     }
 
@@ -147,11 +148,11 @@ class BrokerConnectionService extends Events.EventEmitter {
         delete this.publishedMessages[bsId+pubId];
     }
 
-    clearSubscriberDataByBsId(bsId) {
+    clearSubscriberDataByBsId(bsId,unsubFromBroker) {
        for (var key in this.subscribedData) {
            if(key.startsWith(bsId)) {
                var d = this.subscribedData[key];
-               this.unSubscribeToTopic({bsId:bsId,subId:d.subId,topic:d.topic},false);
+               this.unSubscribeToTopic({bsId:bsId,subId:d.subId,topic:d.topic},unsubFromBroker);
            }
        }
     }
@@ -193,6 +194,9 @@ class BrokerConnectionService extends Events.EventEmitter {
                     subData.receivedMessages = [];
                 }
                 subData.receivedMessages.push({message:data.message,packet:data.packet});
+                if(subData.receivedMessages.length>20) {
+                    subData.receivedMessages.shift();
+                }
                 this.emitChange(AppConstants.EVENT_SUBSCRIBER_DATA,{bsId:subData.bsId,subId:subData.subId});
             }
         }.bind(this));

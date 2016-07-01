@@ -1,6 +1,7 @@
 import {Qlobber} from 'qlobber';
 import mqtt from 'mqtt';
 import Q from 'q';
+import _ from 'lodash';
 
 import AppConstants from '../utils/AppConstants';
 
@@ -66,7 +67,7 @@ class BrokerConnWorker {  
             }.bind(this));
 
             this.client.on('message', function (topic, message,packet) {
-                var topics = this._matcher.match(topic);
+                var topics = _.uniq(this._matcher.match(topic));
                 if(message!=null && topics!=null && topics.length>0) {
                     for(var i=0;i<topics.length;i++) {
                         postMessage({event:AppConstants.WORKER_EVENT_MESSAGE_RECEIVED_FOR_TOPIC,

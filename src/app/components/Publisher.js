@@ -108,20 +108,24 @@ class Publisher extends React.Component {
 
     publishMessageToBroker(topic,payload,qos,retain) {
         if(BrokerConnectionService.getBrokerState(this.props.bsId)==AppConstants.ONLINE) {
-            AppActions.publishMessage({bsId:this.props.bsId,pubId:this.props.publisherSettings.pubId,
-            topic:topic,payload:payload,options:{qos:qos,retain:retain}});
+            if(topic.indexOf('#') > -1 || topic.indexOf('+') > -1) {
+               AppActions.showUserMessage({message:'You cannot publish message to topic having + or #'});
+            } else {
+                AppActions.publishMessage({bsId:this.props.bsId,pubId:this.props.publisherSettings.pubId,
+                topic:topic,payload:payload,options:{qos:qos,retain:retain}});
 
-            var publishedMessages = this.state.publishedMessages;
-            publishedMessages.push({topic:topic,
-                                    payload:payload,
-                                    qos:qos,
-                                    retain:retain});
+                var publishedMessages = this.state.publishedMessages;
+                publishedMessages.push({topic:topic,
+                                        payload:payload,
+                                        qos:qos,
+                                        retain:retain});
 
-            if(publishedMessages.length>10) {
-                publishedMessages.shift();
+                if(publishedMessages.length>10) {
+                    publishedMessages.shift();
+                }
+                this.setState({publishedMessages:publishedMessages});
+                return true;
             }
-            this.setState({publishedMessages:publishedMessages});
-            return true;
         } else {
             AppActions.showUserMessage({message:'Client is not connected to broker. Please check your broker settings'});
             return false;
