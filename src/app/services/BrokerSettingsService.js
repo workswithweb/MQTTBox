@@ -134,10 +134,10 @@ class BrokerSettingsService extends Events.EventEmitter {
     }
 
     deleteBrokerSettingsById(bsId) {
-        delete this.brokerSettingObjs[bsId];
-        this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,bsId);
         this.dbWorker.postMessage({cmd:AppConstants.WORKER_CMD_DELETE_BROKER_SETTINGS,payload:{bsId:bsId}});
         BrokerConnectionService.stopConnectionWorker(bsId);
+        delete this.brokerSettingObjs[bsId];
+        this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,bsId);
     }
 
     savePublisherSettings(bsId,publisher) { 

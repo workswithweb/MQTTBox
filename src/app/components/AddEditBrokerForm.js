@@ -185,7 +185,7 @@ class AddEditBrokerForm extends React.Component {
                         <TableBody displayRowCheckbox={false}>
                             <TableRow displayBorder={false}>
                                 <TableRowColumn>
-                                    <TextField name="brokerName" onChange={this.onTargetValueChange} value={this.state.brokerName} fullWidth={true} hintText='MQTT Broker Name' floatingLabelText='MQTT Broker Name'/>
+                                    <TextField name="brokerName" onChange={this.onTargetValueChange} value={this.state.brokerName} hintText='MQTT Broker Name' floatingLabelText='MQTT Broker Name'/>
                                 </TableRowColumn>
                                 <TableRowColumn>
                                     <TextField name="clientId" onChange={this.onTargetValueChange} value={this.state.clientId}  hintText='Client Id' floatingLabelText='Client Id'/>
@@ -199,12 +199,12 @@ class AddEditBrokerForm extends React.Component {
                             </TableRow>
                             <TableRow displayBorder={false}>
                                 <TableRowColumn>
-                                    <SelectField name="protocol" onChange={this.onProtocolValueChange} fullWidth={true} value={this.state.protocol} floatingLabelText='Protocol'>
+                                    <SelectField name="protocol" onChange={this.onProtocolValueChange} value={this.state.protocol} floatingLabelText='Protocol'>
                                         {protocolSupported}
                                     </SelectField>
                                 </TableRowColumn>
                                 <TableRowColumn>
-                                    <TextField name="host" onChange={this.onTargetValueChange} value={this.state.host} fullWidth={true} hintText='Host' floatingLabelText='Host'/>
+                                    <TextField name="host" onChange={this.onTargetValueChange} value={this.state.host} hintText='Host' floatingLabelText='Host'/>
                                 </TableRowColumn>
                                 <TableRowColumn>
                                     <Checkbox name="clean" defaultChecked={this.state.clean} onCheck={this.onCheckBoxValueChange} label='Clean Session'/>
@@ -212,10 +212,10 @@ class AddEditBrokerForm extends React.Component {
                             </TableRow>
                             <TableRow displayBorder={false}>
                                 <TableRowColumn>
-                                    <TextField name="username" onChange={this.onTargetValueChange} value={this.state.username} fullWidth={true} hintText='Username' floatingLabelText='Username'/>
+                                    <TextField name="username" onChange={this.onTargetValueChange} value={this.state.username} hintText='Username' floatingLabelText='Username'/>
                                 </TableRowColumn>
                                 <TableRowColumn>
-                                    <TextField name="password" type='password' onChange={this.onTargetValueChange} value={this.state.password} fullWidth={true} hintText='Password' floatingLabelText='Password'/>
+                                    <TextField name="password" type='password' onChange={this.onTargetValueChange} value={this.state.password} hintText='Password' floatingLabelText='Password'/>
                                 </TableRowColumn>
                                 <TableRowColumn>
                                     <Checkbox name="queueQoSZero" defaultChecked={this.state.queueQoSZero} onCheck={this.onCheckBoxValueChange} label='Queue outgoing QoS zero messages'/>
@@ -246,10 +246,10 @@ class AddEditBrokerForm extends React.Component {
                               <TableBody displayRowCheckbox={false}>
                                   <TableRow displayBorder={false}>
                                       <TableRowColumn>
-                                          <TextField name="willTopic" onChange={this.onTargetValueChange} fullWidth={true} value={this.state.willTopic} hintText='Topic' floatingLabelText='Topic'/>
+                                          <TextField name="willTopic" onChange={this.onTargetValueChange}  value={this.state.willTopic} hintText='Topic' floatingLabelText='Topic'/>
                                       </TableRowColumn>
                                       <TableRowColumn>
-                                          <SelectField name="willQos" onChange={this.onWillQosValueChange} fullWidth={true} value={this.state.willQos} floatingLabelText='QOS'>
+                                          <SelectField name="willQos" onChange={this.onWillQosValueChange}  value={this.state.willQos} floatingLabelText='QOS'>
                                               <MenuItem value={0} primaryText='0 - Almost Once'/>
                                               <MenuItem value={1} primaryText='1 - Atleast Once'/>
                                               <MenuItem value={2} primaryText='2 - Exactly Once'/>
@@ -261,7 +261,7 @@ class AddEditBrokerForm extends React.Component {
                                   </TableRow>
                                   <TableRow displayBorder={false}>
                                       <TableRowColumn>
-                                          <TextField name="willPayload" onChange={this.onTargetValueChange} value={this.state.willPayload} multiLine={true} rows={2} fullWidth={true} hintText='Payload' floatingLabelText='Payload'/>
+                                          <TextField name="willPayload" onChange={this.onTargetValueChange} value={this.state.willPayload} multiLine={true} rows={2}  hintText='Payload' floatingLabelText='Payload'/>
                                       </TableRowColumn>
                                   </TableRow>
                               </TableBody>

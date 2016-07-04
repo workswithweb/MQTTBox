@@ -12,7 +12,7 @@
   },
   "app": {
     "background": {
-      "scripts": ["./js/background_chrome.js"]
+      "scripts": ["./js/background_chrome.js","./js/chromeConnectionWorker.js"]
     }
   },
   "sockets": {

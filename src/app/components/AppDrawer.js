@@ -69,32 +69,30 @@ class AppDrawer extends React.Component {
             containerElement={<NavLink key="addEditNewBroker" to="/addedit"/>}></ListItem>);
 
         return (
-            <div>
-                <Drawer
-                  docked={true}
-                  open={this.state.open}
-                  onRequestChange={this.onShowHideAppDrawer}
-                >
-                    <Toolbar>
-                        <ToolbarGroup float='left'/>
-                        <ToolbarGroup float='right'>
-                            <IconButton onTouchTap={this.onShowHideAppDrawer.bind(this,false)}>
-                                <ActionClear/>
-                            </IconButton>
-                        </ToolbarGroup>
-                    </Toolbar>
-                    <Divider/>
-                    <List>
-                        <ListItem
-                          primaryText="Client Brokers"
-                          leftIcon={<DevicesIcon/>}
-                          initiallyOpen={true}
-                          primaryTogglesNestedList={true}
-                          nestedItems={brokerList}
-                        />
-                    </List>
-                </Drawer>
-            </div>
+            <Drawer
+              docked={true}
+              open={this.state.open}
+              onRequestChange={this.onShowHideAppDrawer}
+            >
+                <Toolbar>
+                    <ToolbarGroup float='left'/>
+                    <ToolbarGroup float='right'>
+                        <IconButton onTouchTap={this.onShowHideAppDrawer.bind(this,false)}>
+                            <ActionClear/>
+                        </IconButton>
+                    </ToolbarGroup>
+                </Toolbar>
+                <Divider/>
+                <List>
+                    <ListItem
+                      primaryText="Client Brokers"
+                      leftIcon={<DevicesIcon/>}
+                      initiallyOpen={true}
+                      primaryTogglesNestedList={true}
+                      nestedItems={brokerList}
+                    />
+                </List>
+            </Drawer>
         );
     }
 }

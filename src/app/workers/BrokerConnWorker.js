@@ -2,16 +2,22 @@ import {Qlobber} from 'qlobber';
 import mqtt from 'mqtt';
 import Q from 'q';
 import _ from 'lodash';
+import Events from 'events';
 
 import AppConstants from '../utils/AppConstants';
 
-class BrokerConnWorker {  
+class BrokerConnWorker extends Events.EventEmitter {  
 
     constructor() {
+        super();
+        this.emitChange = this.emitChange.bind(this);
+        this.addChangeListener = this.addChangeListener.bind(this);
+        this.removeChangeListener = this.removeChangeListener.bind(this);
+
         this._matcher = new Qlobber({separator:'/',wildcard_one:'+',wildcard_some:'#'});
         this.brokerSettings = null;
         this.client = null;
-        this.workerMessageListener = this.workerMessageListener.bind(this);
+        this.workerCmdListener = this.workerCmdListener.bind(this);
         this.connect = this.connect.bind(this);
         this.getConnectOptions = this.getConnectOptions.bind(this);
         this.reconnectBroker = this.reconnectBroker.bind(this);
@@ -20,11 +26,21 @@ class BrokerConnWorker {  
         this.subscribeToTopic = this.subscribeToTopic.bind(this);
         this.unSubscribeTopic = this.unSubscribeTopic.bind(this);
         this.publishBrokerStatus = this.publishBrokerStatus.bind(this);
-        self.addEventListener('message',this.workerMessageListener,false);
     }
 
-    workerMessageListener(event) {
-        var data = event.data;
+    emitChange(event,data) { 
+        this.emit(event,data);
+    }
+
+    addChangeListener(event,callback) { 
+        this.on(event,callback);
+    }
+
+    removeChangeListener(event,callback) { 
+        this.removeListener(event,callback);
+    }
+
+    workerCmdListener(data) {
         switch(data.cmd) {
             case AppConstants.WORKER_CMD_BROKER_RECONNECT:
                 this.reconnectBroker(data.payload.bsObj);
@@ -70,7 +86,7 @@ class BrokerConnWorker {  
                 var topics = _.uniq(this._matcher.match(topic));
                 if(message!=null && topics!=null && topics.length>0) {
                     for(var i=0;i<topics.length;i++) {
-                        postMessage({event:AppConstants.WORKER_EVENT_MESSAGE_RECEIVED_FOR_TOPIC,
+                        this.emitChange(AppConstants.WORKER_EVENT_DATA,{event:AppConstants.WORKER_EVENT_MESSAGE_RECEIVED_FOR_TOPIC,
                         payload:{bsId:this.brokerSettings.bsId,topic:topics[i],message:message.toString(),packet:packet}});
                     }
                 }
@@ -79,7 +95,7 @@ class BrokerConnWorker {  
     }
 
     publishBrokerStatus(connState) {
-        postMessage({event:AppConstants.WORKER_EVENT_BROKER_CONNECTION_STATE,
+        this.emitChange(AppConstants.WORKER_EVENT_DATA,{event:AppConstants.WORKER_EVENT_BROKER_CONNECTION_STATE,
             payload:{connState:connState,bsId:this.brokerSettings.bsId}});
     }
 
@@ -125,11 +141,11 @@ class BrokerConnWorker {  
 
     endConnection() {
         return this.client.end(true);
-        self.close();
+        this.emitChange(AppConstants.WORKER_EVENT_DATA,{event:AppConstants.WORKER_EVENT_BROKER_CONNECTION_ENDED,
+                    payload:{bsId:this.brokerSettings.bsId}});
     }
 
     publishMessage(topic,payload,options) {
-        //add validation for invalid topics with # and + etc
         if(topic!=null && topic.trim().length>0) {
             this.client.publish(topic,payload,options);
         }
@@ -150,4 +166,4 @@ class BrokerConnWorker {  
     }
 
 }
-export default new BrokerConnWorker();
+export default BrokerConnWorker;

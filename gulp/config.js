@@ -31,9 +31,9 @@ module.exports = {
         dest: dest,
         outputName: 'DbWorker.js'
     },{
-        entries: src + '/app/workers/BrokerConnWorker.js',
+        entries: src + '/app/workers/ChromeConnectionWorker.js',
         dest: dest,
-        outputName: 'BrokerConnWorker.js'
+        outputName: './js/chromeConnectionWorker.js'
     }],
     extensions: ['.js'],
   }

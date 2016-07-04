@@ -2,12 +2,12 @@ import Events from 'events';
 
 import AppConstants from '../utils/AppConstants';
 import AppDispatcher from '../dispatcher/AppDispatcher';
+import WorkerAdapter from '../utils/ChromeWorkerAdapter';
 
 class BrokerConnectionService extends Events.EventEmitter {
 
     constructor() {
         super();
-        this.brokerConnWorkers = {};
         this.publishedMessages = {};
         this.subscribedData = {};
         this.brokerMetaData = {};
@@ -57,8 +57,7 @@ class BrokerConnectionService extends Events.EventEmitter {
         }.bind(this));
     }
 
-    workerMessageListener(event) { 
-        var data = event.data;
+    workerMessageListener(data) { 
         switch(data.event) {
             case AppConstants.WORKER_EVENT_BROKER_CONNECTION_STATE:
                 this.syncBrokerStatus(data.payload);
@@ -102,46 +101,33 @@ class BrokerConnectionService extends Events.EventEmitter {
     }
 
     connectBroker(bsObj) {
-        this.stopConnectionWorker(bsObj.bsId);
-        var connWorker = new Worker('BrokerConnWorker.js');
-        this.brokerConnWorkers[bsObj.bsId] = connWorker;
-        connWorker.addEventListener('message',this.workerMessageListener);
-
-        this.brokerConnWorkers[bsObj.bsId].postMessage({cmd:AppConstants.WORKER_CMD_BROKER_RECONNECT,payload:{bsObj:bsObj}});
+        this.clearSubscriberDataByBsId(bsObj.bsId);
+        delete this.brokerMetaData[bsObj.bsId];
+        WorkerAdapter.postMessage({cmd:AppConstants.WORKER_CMD_BROKER_RECONNECT,payload:{bsObj:bsObj}});
     }
 
     publishMessage(data) {
-        var brokerWorker = this.brokerConnWorkers[data.bsId];
-        if(brokerWorker!=null) {
-            brokerWorker.postMessage({cmd:AppConstants.WORKER_CMD_BROKER_PUBLISH_MESSAGE,payload:{topic:data.topic,payload:data.payload,options:data.options}});
-            var publishedMess = this.publishedMessages[data.bsId+data.pubId];
-            if(publishedMess==null) {
-                publishedMess = [];
-            }
-            publishedMess.push({topic:data.topic,payload:data.payload,qos:data.options.qos,retain:data.options.retain});
-            if(publishedMess.length>10) {
-                publishedMess.shift();
-            }
-            this.publishedMessages[data.bsId+data.pubId] = publishedMess;
+        WorkerAdapter.postMessage({cmd:AppConstants.WORKER_CMD_BROKER_PUBLISH_MESSAGE,payload:data});
+        var publishedMess = this.publishedMessages[data.bsId+data.pubId];
+        if(publishedMess==null) {
+            publishedMess = [];
         }
+        publishedMess.push({topic:data.topic,payload:data.payload,qos:data.options.qos,retain:data.options.retain});
+        if(publishedMess.length>10) {
+            publishedMess.shift();
+        }
+        this.publishedMessages[data.bsId+data.pubId] = publishedMess;
     }
 
     stopConnectionWorker(bsId) {
-        delete this.brokerMetaData[bsId];
-
-        var brokerWorker = this.brokerConnWorkers[bsId];
-        if(brokerWorker!=null) {
-            brokerWorker.postMessage({cmd:AppConstants.WORKER_CMD_BROKER_END_CONNECTION});
-            brokerWorker.terminate();
-            delete this.brokerConnWorkers[bsId];
-        }
-
+        WorkerAdapter.postMessage({cmd:AppConstants.WORKER_CMD_BROKER_END_CONNECTION,payload:{bsId:bsId}});
         for (var key in this.publishedMessages) {
             if(key.startsWith(bsId)) {
                 delete this.publishedMessages[key];
             }
         }
         this.clearSubscriberDataByBsId(bsId);
+        delete this.brokerMetaData[bsId];
     }
 
     clearPublishedMessages(bsId,pubId) {
@@ -166,23 +152,19 @@ class BrokerConnectionService extends Events.EventEmitter {
     }
 
     subscribeToTopic(data) {
-        var brokerWorker = this.brokerConnWorkers[data.bsId];
-        if(brokerWorker!=null) {
-            brokerWorker.postMessage({cmd:AppConstants.WORKER_CMD_SUBSCRIBE_TO_TOPIC,payload:{topic:data.topic,options:data.options}});
-            var subData = this.subscribedData[data.bsId+data.subId];
-            if(subData==null) {
-                subData = {bsId:data.bsId,subId:data.subId,isSubscribed:true,topic:data.topic,receivedMessages:[]};
-            }
-            this.subscribedData[data.bsId+data.subId] = subData;
-            this.emitChange(AppConstants.EVENT_SUBSCRIBER_DATA,{bsId:data.bsId,subId:data.subId});
+        WorkerAdapter.postMessage({cmd:AppConstants.WORKER_CMD_SUBSCRIBE_TO_TOPIC,payload:data});
+        var subData = this.subscribedData[data.bsId+data.subId];
+        if(subData==null) {
+            subData = {bsId:data.bsId,subId:data.subId,isSubscribed:true,topic:data.topic,receivedMessages:[]};
         }
+        this.subscribedData[data.bsId+data.subId] = subData;
+        this.emitChange(AppConstants.EVENT_SUBSCRIBER_DATA,{bsId:data.bsId,subId:data.subId});
     }
 
     unSubscribeToTopic(data,unsubFromBroker) {
         delete this.subscribedData[data.bsId+data.subId];
         if(unsubFromBroker) {
-            var brokerWorker = this.brokerConnWorkers[data.bsId];
-            brokerWorker.postMessage({cmd:AppConstants.WORKER_CMD_UN_SUBSCRIBE_TO_TOPIC,payload:{topic:data.topic}});
+            WorkerAdapter.postMessage({cmd:AppConstants.WORKER_CMD_UN_SUBSCRIBE_TO_TOPIC,payload:data});
             this.emitChange(AppConstants.EVENT_SUBSCRIBER_DATA,{bsId:data.bsId,subId:data.subId});
         }
     }
