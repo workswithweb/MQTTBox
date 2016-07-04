@@ -1,4 +1,4 @@
-var dest = './mqttbox',
+var dest = './build',
   src = './src',
   mui = './node_modules/material-ui/src';
 
