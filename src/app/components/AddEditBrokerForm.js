@@ -150,7 +150,7 @@ class AddEditBrokerForm extends React.Component {
 
     render() {
         var protocolSupported = [<MenuItem key={'ws'} value={'ws'} primaryText='ws'/>];
-        if(AppConstants.CLIENT_TYPE == AppConstants.CHROME_APP) {
+        if(AppConstants.isChromeApp()) {
             protocolSupported.push(<MenuItem key={'tcp'} value={'tcp'} primaryText='tcp'/>);
             protocolSupported.push(<MenuItem key={'mqtt'} value={'mqtt'} primaryText='mqtt'/>);
         }

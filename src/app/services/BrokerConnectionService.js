@@ -2,7 +2,7 @@ import Events from 'events';
 
 import AppConstants from '../utils/AppConstants';
 import AppDispatcher from '../dispatcher/AppDispatcher';
-import WorkerAdapter from '../utils/ChromeWorkerAdapter';
+import WorkerAdapter from '../utils/WorkerAdapter';
 
 class BrokerConnectionService extends Events.EventEmitter {
 

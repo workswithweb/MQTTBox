@@ -1,7 +1,7 @@
 import AppConstants from '../utils/AppConstants';
-import BrokerConnWorker from './BrokerConnWorker';
+import ClientConnection from './ClientConnection';
 
-class ChromeConnectionWorker {
+class ConnectionWorker {
 
     constructor() {
         this.brokerList = {};
@@ -9,7 +9,14 @@ class ChromeConnectionWorker {
         this.workerEventListener = this.workerEventListener.bind(this);
         this.reconnectBroker = this.reconnectBroker.bind(this);
         this.sendWorkerCommand = this.sendWorkerCommand.bind(this);
-        chrome.runtime.onMessage.addListener(this.cmdListener);
+        //depends on app type
+        if(AppConstants.isChromeApp()) {
+            chrome.runtime.onMessage.addListener(this.cmdListener);
+        } else {
+            self.addEventListener('message',function(event){
+                this.cmdListener(event.data);
+            }.bind(this),false);
+        }
     }
 
     cmdListener(request, sender, sendResponse) {
@@ -40,29 +47,34 @@ class ChromeConnectionWorker {
             if(data.event==AppConstants.WORKER_EVENT_BROKER_CONNECTION_ENDED) {
                 delete this.brokerList[data.payload.bsId];
             } else {
-                chrome.runtime.sendMessage(data);
+                //depends on app type
+                if(AppConstants.isChromeApp()) {
+                    chrome.runtime.sendMessage(data);
+                } else {
+                    postMessage(data);
+                }
             }
         }
     }
 
     reconnectBroker(data) {
         var bsObj = data.payload.bsObj;
-        var connWorker = this.brokerList[bsObj.bsId];
+        var clientConnection = this.brokerList[bsObj.bsId];
 
-        if(connWorker==null) {
-            connWorker = new BrokerConnWorker();
-            connWorker.addChangeListener(AppConstants.WORKER_EVENT_DATA,this.workerEventListener);
-            this.brokerList[bsObj.bsId] = connWorker;
+        if(clientConnection==null) {
+            clientConnection = new ClientConnection();
+            clientConnection.addChangeListener(AppConstants.WORKER_EVENT_DATA,this.workerEventListener);
+            this.brokerList[bsObj.bsId] = clientConnection;
         }
         this.sendWorkerCommand(bsObj.bsId,data);
     }
 
     sendWorkerCommand(bsId,data) {
-        var connWorker = this.brokerList[bsId];
-        if(connWorker!=null) {
-            connWorker.workerCmdListener(data);
+        var clientConnection = this.brokerList[bsId];
+        if(clientConnection!=null) {
+            clientConnection.workerCmdListener(data);
         }
     }
 }
 
-export default new ChromeConnectionWorker();
+export default new ConnectionWorker();

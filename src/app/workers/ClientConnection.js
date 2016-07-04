@@ -6,7 +6,7 @@ import Events from 'events';
 
 import AppConstants from '../utils/AppConstants';
 
-class BrokerConnWorker extends Events.EventEmitter {  
+class ClientConnection extends Events.EventEmitter {  
 
     constructor() {
         super();
@@ -166,4 +166,4 @@ class BrokerConnWorker extends Events.EventEmitter {  
     }
 
 }
-export default BrokerConnWorker;
+export default ClientConnection;

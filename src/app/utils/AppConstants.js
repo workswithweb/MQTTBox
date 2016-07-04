@@ -1,4 +1,8 @@
-class AppConstants {}
+class AppConstants {
+    static isChromeApp() { 
+        return (AppConstants.CLIENT_TYPE == AppConstants.CHROME_APP);
+    }
+}
 
 //ACTIONS
 AppConstants.ACTION_OPEN_CLOSE_APP_DRAWER = 'ACTION_OPEN_CLOSE_APP_DRAWER';
@@ -49,6 +53,7 @@ AppConstants.ERROR = 'ERROR';
 //SUPPORTED CLIENTS
 AppConstants.WEB_APP = 'WEB_APP';
 AppConstants.CHROME_APP = 'CHROME_APP';
-AppConstants.CLIENT_TYPE = AppConstants.CHROME_APP; //WEB,CHROME_APP
+AppConstants.CLIENT_TYPE = AppConstants.WEB_APP; //WEB,CHROME_APP
+
 
 export default AppConstants;
