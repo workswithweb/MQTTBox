@@ -162,11 +162,19 @@ class BrokerConnectionService extends Events.EventEmitter {
     }
 
     unSubscribeToTopic(data,unsubFromBroker) {
-        delete this.subscribedData[data.bsId+data.subId];
         if(unsubFromBroker) {
             WorkerAdapter.postMessage({cmd:AppConstants.WORKER_CMD_UN_SUBSCRIBE_TO_TOPIC,payload:data});
-            this.emitChange(AppConstants.EVENT_SUBSCRIBER_DATA,{bsId:data.bsId,subId:data.subId});
         }
+
+        var unSubData = this.subscribedData[data.bsId+data.subId];
+        _.forOwn(this.subscribedData, function(subData, key) {
+            if(subData!=null && subData.topic == unSubData.topic && subData.bsId == unSubData.bsId) {
+                delete this.subscribedData[subData.bsId+subData.subId];
+                if(unsubFromBroker) {
+                    this.emitChange(AppConstants.EVENT_SUBSCRIBER_DATA,{bsId:subData.bsId,subId:subData.subId});
+                }
+            }
+        }.bind(this));
     }
 
     updateSubscribedMessagesFromWorker(data) {

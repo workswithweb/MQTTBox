@@ -112,6 +112,9 @@ class AddEditBrokerForm extends React.Component {
                 AppActions.showUserMessage({message:'Please enter valid connect timeout'});
             } else if(this.state.keepalive==null|| Number.isNaN(this.state.keepalive) || this.state.keepalive<=0) {
                 AppActions.showUserMessage({message:'Please enter valid keep alive'});
+            } else if(this.state.willTopic!=null && this.state.willTopic.trim().length>0 &&
+            (this.state.willTopic.indexOf('#') > -1 || this.state.willTopic.indexOf('+') > -1)) {
+                AppActions.showUserMessage({message:'Please enter valid "will topic". Should not contain + or #'});
             } else {
                 AppActions.saveBrokerSettings(this.state);
             }
@@ -185,7 +188,7 @@ class AddEditBrokerForm extends React.Component {
                         <TableBody displayRowCheckbox={false}>
                             <TableRow displayBorder={false}>
                                 <TableRowColumn>
-                                    <TextField name="brokerName" onChange={this.onTargetValueChange} value={this.state.brokerName} hintText='MQTT Broker Name' floatingLabelText='MQTT Broker Name'/>
+                                    <TextField name="brokerName" onChange={this.onTargetValueChange} value={this.state.brokerName} hintText='Name' floatingLabelText='Name'/>
                                 </TableRowColumn>
                                 <TableRowColumn>
                                     <TextField name="clientId" onChange={this.onTargetValueChange} value={this.state.clientId}  hintText='Client Id' floatingLabelText='Client Id'/>

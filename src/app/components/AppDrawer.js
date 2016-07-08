@@ -6,13 +6,17 @@ import DevicesIcon from 'material-ui/svg-icons/hardware/developer-board';
 import AddIcon from 'material-ui/svg-icons/content/add-circle-outline';
 import IconButton from 'material-ui/IconButton';
 import ActionClear from 'material-ui/svg-icons/content/clear';
+import SignalIcon from 'material-ui/svg-icons/device/network-wifi';
+import InfoIcon from 'material-ui/svg-icons/action/info';
 import Divider from 'material-ui/Divider';
 import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
+import {blue500, red500, green500} from 'material-ui/styles/colors';
 
 import CommonAppService from '../services/CommonAppService';
 import AppConstants from '../utils/AppConstants';
 import NavLink from './NavLink';
 import BrokerSettingsService from '../services/BrokerSettingsService';
+import BrokerConnectionService from '../services/BrokerConnectionService';
 
 class AppDrawer extends React.Component {
 
@@ -50,6 +54,7 @@ class AppDrawer extends React.Component {
     componentDidMount() {
         CommonAppService.addChangeListener(AppConstants.EVENT_OPEN_CLOSE_APP_DRAWER,this.onShowHideAppDrawer);
         BrokerSettingsService.addChangeListener(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,this.onBrokerSettingsChanged);
+        BrokerConnectionService.addChangeListener(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,this.onBrokerSettingsChanged);
         if(this.state.bsList==null || this.state.bsList.length<=0) {
            this.navigateToAddEditBrokerPage();
         }
@@ -58,14 +63,20 @@ class AppDrawer extends React.Component {
     componentWillUnmount() {
         CommonAppService.removeChangeListener(AppConstants.EVENT_OPEN_CLOSE_APP_DRAWER,this.onShowHideAppDrawer);
         BrokerSettingsService.removeChangeListener(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,this.onBrokerSettingsChanged);
+        BrokerConnectionService.removeChangeListener(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,this.onBrokerSettingsChanged);
     }
 
     render() {
         var brokerList = this.state.bsList.map(function(brokerSetting,index) {
-            return (<ListItem onClick={this.onShowHideAppDrawer.bind(this,false)} key={brokerSetting.bsId} primaryText={brokerSetting.brokerName} containerElement={<NavLink key={brokerSetting.bsId} to={"/broker/"+brokerSetting.bsId}/>}></ListItem>);
+            var connState = red500;
+            if(BrokerConnectionService.getBrokerState(brokerSetting.bsId) == AppConstants.ONLINE) {
+                connState = green500;
+            }
+
+            return (<ListItem leftIcon={<SignalIcon color={connState}/>} onClick={this.onShowHideAppDrawer.bind(this,false)} key={brokerSetting.bsId} primaryText={brokerSetting.brokerName} containerElement={<NavLink key={brokerSetting.bsId} to={"/broker/"+brokerSetting.bsId}/>}></ListItem>);
         }.bind(this));
 
-        brokerList.push(<ListItem primaryText="Add New Broker" onClick={this.onShowHideAppDrawer.bind(this,false)} key="addEditNewBroker" leftIcon={<AddIcon/>}
+        brokerList.push(<ListItem primaryText="Add New Client" onClick={this.onShowHideAppDrawer.bind(this,false)} key="addEditNewBroker" leftIcon={<AddIcon/>}
             containerElement={<NavLink key="addEditNewBroker" to="/addedit"/>}></ListItem>);
 
         return (
@@ -85,11 +96,19 @@ class AppDrawer extends React.Component {
                 <Divider/>
                 <List>
                     <ListItem
-                      primaryText="Client Brokers"
+                      primaryText="MQTT Clients"
                       leftIcon={<DevicesIcon/>}
                       initiallyOpen={true}
                       primaryTogglesNestedList={true}
                       nestedItems={brokerList}
+                    />
+                    <ListItem
+                      primaryText="About"
+                      leftIcon={<InfoIcon/>}
+                      initiallyOpen={true}
+                      primaryTogglesNestedList={true}
+                      onClick={this.onShowHideAppDrawer.bind(this,false)}
+                      containerElement={<NavLink key="aboutapp" to="/aboutapp"/>}
                     />
                 </List>
             </Drawer>
