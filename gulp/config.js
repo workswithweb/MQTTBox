@@ -27,13 +27,25 @@ module.exports = {
       dest: dest,
       outputName: 'app.js'
     },{
-        entries: src + '/app/workers/DbWorker.js',
+        entries: src + '/app/workers/BrokerSettingsDbWorker.js',
         dest: dest,
-        outputName: 'DbWorker.js'
+        outputName: './js/BrokerSettingsDbWorker.js'
     },{
         entries: src + '/app/workers/ConnectionWorker.js',
         dest: dest,
-        outputName: './js/connectionWorker.js'
+        outputName: './js/ConnectionWorker.js'
+    },{
+        entries: src + '/app/workers/MqttLoadSettingsDbWorker.js',
+        dest: dest,
+        outputName: './js/MqttLoadSettingsDbWorker.js'
+    },{
+        entries: src + '/app/workers/MqttLoadResultsDbWorker.js',
+        dest: dest,
+        outputName: './js/MqttLoadResultsDbWorker.js'
+    },{
+        entries: src + '/app/workers/MqttLoadTestWorker.js',
+        dest: dest,
+        outputName: './js/MqttLoadTestWorker.js'
     }],
     extensions: ['.js'],
   }

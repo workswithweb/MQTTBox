@@ -79,6 +79,28 @@ class AppActions {  
             data:data
         }); 
     }
+
+    static saveMqttLoadSettings(data) { 
+        AppDispatcher.dispatch({ 
+            actionType: AppConstants.ACTION_MQTT_LOAD_SAVE, 
+            data: data  
+        }); 
+    }
+
+    static deleteMqttLoadSettings(data) { 
+        AppDispatcher.dispatch({ 
+            actionType: AppConstants.ACTION_MQTT_LOAD_DELETE, 
+            data: data  
+        }); 
+    }
+
+    static startLoadTesting(data) { 
+        AppDispatcher.dispatch({ 
+            actionType: AppConstants.ACTION_MQTT_LOAD_START, 
+            data: data  
+        }); 
+    }
+
 }
 
 export default AppActions;

@@ -11,7 +11,7 @@ class WorkerAdapter {
         if(AppConstants.isChromeApp()) {
             chrome.runtime.onMessage.addListener(this.receiveFromWorker);
         } else {
-            this.connWorker = new Worker('./js/connectionWorker.js');
+            this.connWorker = new Worker('./js/ConnectionWorker.js');
             this.connWorker.addEventListener('message',function(event){
                 this.receiveFromWorker(event.data);
             }.bind(this));

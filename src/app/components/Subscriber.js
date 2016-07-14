@@ -3,6 +3,7 @@ import React from 'react';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
 import Clear from 'material-ui/svg-icons/content/clear';
+import RemoveCircleIcon from 'material-ui/svg-icons/content/remove-circle';
 import * as Colors from 'material-ui/styles/colors.js';
 import RaisedButton from 'material-ui/RaisedButton';
 import {Card, CardHeader, CardText} from 'material-ui/Card';
@@ -160,7 +161,8 @@ class Subscriber extends React.Component {
             component = <div>
                             <div>
                                 <RaisedButton style={style.unSubscribe} onTouchTap={this.unSubscribeTopic} fullWidth={true}
-                                  labelStyle={style.subscribedButton}  label={this.state.topic} primary={true}/>
+                                  labelStyle={style.subscribedButton} labelPosition="after"
+                                  icon={<RemoveCircleIcon/>} label={this.state.topic} primary={true}/>
                             </div>
                             <div>
                                 {messageList}

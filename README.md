@@ -2,8 +2,8 @@
 ####Developers helper program to create and test MQTT connectivity protocol.
 Supercharge your MQTT workflow with MQTTBox for Web and Chrome! Build, test, and document your MQTT connectivity protocol.
 
-######Web app is available [HERE!](http://workswithweb.com/mqttbox/app) 
-######Chrome app is available [HERE!](https://chrome.google.com/webstore/detail/mqttbox/kaajoficamnjijhkeomgfljpicifbkaf?utm_source=chrome-app-launcher-info-dialog)
+######[<img height="75" width="75" src="http://workswithweb.com/mqttbox/app/img/icon-128.png">](http://workswithweb.com/mqttbox/app)Web app is available [HERE!](http://workswithweb.com/mqttbox/app) 
+######[<img src="https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_206x58.png">](https://chrome.google.com/webstore/detail/mqttbox/kaajoficamnjijhkeomgfljpicifbkaf?utm_source=chrome-app-launcher-info-dialog) Chrome app is available [HERE!](https://chrome.google.com/webstore/detail/mqttbox/kaajoficamnjijhkeomgfljpicifbkaf?utm_source=chrome-app-launcher-info-dialog)
 
 ####MQTTBox features include:
 - Connect to multiple mqtt brokers with TCP or Web Sockets protocols

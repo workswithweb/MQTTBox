@@ -51,12 +51,12 @@ class AddEditBrokerForm extends React.Component {
         this.onBrokerSettingsSaved = this.onBrokerSettingsSaved.bind(this);
         this.deleteBrokerSettings = this.deleteBrokerSettings.bind(this);
 
-        this.initBrokerObj();
+        this.initBrokerObj(this.props.params);
     }
 
-    initBrokerObj() {
-        if(this.props.params.bsId!=null && this.props.params.bsId.trim().length>0) {
-            this.state = BrokerSettingsService.getBrokerSettingDataByBsId(this.props.params.bsId);
+    initBrokerObj(params) {
+        if(params!=null && params.bsId!=null && params.bsId.trim().length>0) {
+            this.state = BrokerSettingsService.getBrokerSettingDataByBsId(params.bsId);
         } else {
             this.state = new BrokerSettings();
         }
@@ -149,6 +149,10 @@ class AddEditBrokerForm extends React.Component {
 
     componentWillUnmount() {
         BrokerSettingsService.removeChangeListener(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,this.onBrokerSettingsSaved);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.initBrokerObj(nextProps.params);
     }
 
     render() {

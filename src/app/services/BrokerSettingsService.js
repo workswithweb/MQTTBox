@@ -13,7 +13,7 @@ class BrokerSettingsService extends Events.EventEmitter {
     constructor() {
         super();
 
-        this.dbWorker = new Worker('DbWorker.js');
+        this.dbWorker = new Worker('./js/BrokerSettingsDbWorker.js');
         this.brokerSettingObjs = {};
 
         this.registerToAppDispatcher = this.registerToAppDispatcher.bind(this);
@@ -30,7 +30,7 @@ class BrokerSettingsService extends Events.EventEmitter {
 
         this.registerToAppDispatcher();
         this.dbWorker.addEventListener('message',this.workerMessageListener);
-        this.dbWorker.postMessage({cmd:AppConstants.WORKER_CMD_GET_ALL_BROKER_SETTINGS});
+        this.dbWorker.postMessage({cmd:AppConstants.WORKER_CMD_GET_ALL});
         this.initComplete = false;
     }
 
@@ -129,12 +129,12 @@ class BrokerSettingsService extends Events.EventEmitter {
         dbBrokerObj.updatedOn = +(new Date());
         this.brokerSettingObjs[dbBrokerObj.bsId] = dbBrokerObj;
         this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,dbBrokerObj.bsId);
-        this.dbWorker.postMessage({cmd:AppConstants.WORKER_CMD_SAVE_BROKER_SETTINGS,payload:dbBrokerObj});
+        this.dbWorker.postMessage({cmd:AppConstants.WORKER_CMD_SAVE,payload:dbBrokerObj});
         BrokerConnectionService.connectBroker(dbBrokerObj);
     }
 
     deleteBrokerSettingsById(bsId) {
-        this.dbWorker.postMessage({cmd:AppConstants.WORKER_CMD_DELETE_BROKER_SETTINGS,payload:{bsId:bsId}});
+        this.dbWorker.postMessage({cmd:AppConstants.WORKER_CMD_DELETE,payload:{bsId:bsId}});
         BrokerConnectionService.stopConnectionWorker(bsId);
         delete this.brokerSettingObjs[bsId];
         this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,bsId);
@@ -157,7 +157,7 @@ class BrokerSettingsService extends Events.EventEmitter {
             if(isNew === true) {
                 this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,bsId);
             }
-            this.dbWorker.postMessage({cmd:AppConstants.WORKER_CMD_SAVE_BROKER_SETTINGS,payload:obj});
+            this.dbWorker.postMessage({cmd:AppConstants.WORKER_CMD_SAVE,payload:obj});
         }
     }
 
@@ -168,7 +168,7 @@ class BrokerSettingsService extends Events.EventEmitter {
             if (pubIndex > -1) {
                 obj.publishSettings.splice(pubIndex, 1);
                 this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,bsId);
-                this.dbWorker.postMessage({cmd:AppConstants.WORKER_CMD_SAVE_BROKER_SETTINGS,payload:obj});
+                this.dbWorker.postMessage({cmd:AppConstants.WORKER_CMD_SAVE,payload:obj});
             }
             BrokerConnectionService.clearPublishedMessages(bsId,pubId);
         }
@@ -191,7 +191,7 @@ class BrokerSettingsService extends Events.EventEmitter {
             if(isNew === true) {
                 this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,bsId);
             }
-            this.dbWorker.postMessage({cmd:AppConstants.WORKER_CMD_SAVE_BROKER_SETTINGS,payload:obj});
+            this.dbWorker.postMessage({cmd:AppConstants.WORKER_CMD_SAVE,payload:obj});
         }
     }
 
@@ -202,7 +202,7 @@ class BrokerSettingsService extends Events.EventEmitter {
             if (subIndex > -1) {
                 obj.subscribeSettings.splice(subIndex, 1);
                 this.emitChange(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,bsId);
-                this.dbWorker.postMessage({cmd:AppConstants.WORKER_CMD_SAVE_BROKER_SETTINGS,payload:obj});
+                this.dbWorker.postMessage({cmd:AppConstants.WORKER_CMD_SAVE,payload:obj});
                 BrokerConnectionService.unSubscribeToTopic({bsId:bsId,subId:subId},false);
             }
         }

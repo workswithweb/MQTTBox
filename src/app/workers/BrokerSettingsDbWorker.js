@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 import AppConstants from '../utils/AppConstants';
 
-class DbWorker {  
+class BrokerSettingsDbWorker {  
 
     constructor() {
         this.db = localforage.createInstance({name:"brokerSettings",driver:localforage.INDEXEDDB});
@@ -18,13 +18,13 @@ class DbWorker {  
     workerMessageListener(event) {
         var data = event.data;
         switch(data.cmd) {
-            case AppConstants.WORKER_CMD_SAVE_BROKER_SETTINGS:
+            case AppConstants.WORKER_CMD_SAVE:
                 this.saveBrokerSettings(data.payload);
                 break;
-            case AppConstants.WORKER_CMD_GET_ALL_BROKER_SETTINGS:
+            case AppConstants.WORKER_CMD_GET_ALL:
                 this.getAllBrokerSettings();
                 break;
-            case AppConstants.WORKER_CMD_DELETE_BROKER_SETTINGS:
+            case AppConstants.WORKER_CMD_DELETE:
                 this.deleteBrokerSettingsById(data.payload.bsId);
                 break;
             default:
@@ -55,4 +55,4 @@ class DbWorker {  
     }
 }
 
-export default new DbWorker();
+export default new BrokerSettingsDbWorker();

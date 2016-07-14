@@ -3,6 +3,7 @@ import React from 'react';
 import Drawer from 'material-ui/Drawer';
 import {List, ListItem} from 'material-ui/List';
 import DevicesIcon from 'material-ui/svg-icons/hardware/developer-board';
+import FlashIcon from 'material-ui/svg-icons/image/flash-on';
 import AddIcon from 'material-ui/svg-icons/content/add-circle-outline';
 import IconButton from 'material-ui/IconButton';
 import ActionClear from 'material-ui/svg-icons/content/clear';
@@ -17,6 +18,16 @@ import AppConstants from '../utils/AppConstants';
 import NavLink from './NavLink';
 import BrokerSettingsService from '../services/BrokerSettingsService';
 import BrokerConnectionService from '../services/BrokerConnectionService';
+import MqttLoadSettingsService from '../services/MqttLoadSettingsService';
+
+const style = {
+    leftFloat: {
+        float:'left'
+    },
+    rightFloat: {
+        float:'right'
+    }
+};
 
 class AppDrawer extends React.Component {
 
@@ -27,9 +38,12 @@ class AppDrawer extends React.Component {
         this.navigateToAddEditBrokerPage = this.navigateToAddEditBrokerPage.bind(this);
         this.navigateToBrokerPage = this.navigateToBrokerPage.bind(this);
         this.onBrokerSettingsChanged = this.onBrokerSettingsChanged.bind(this);
+        this.onMqttLoadSettingsChanged = this.onMqttLoadSettingsChanged.bind(this);
 
         var bsList = BrokerSettingsService.getAllBrokerSettingData();
-        this.state = {open:true,bsList:bsList}
+        var mqttLoadList = MqttLoadSettingsService.getAllMqttLoadSettingsData();
+
+        this.state = {open:true,bsList:bsList,mqttLoadList:mqttLoadList}
     }
 
     onShowHideAppDrawer(open) {
@@ -39,6 +53,7 @@ class AppDrawer extends React.Component {
     navigateToAddEditBrokerPage() {
         this.onShowHideAppDrawer(false);
         window.location.hash = AppConstants.PAGE_URL_ADD_EDIT_CLIENT_BROKER_SETTINGS;
+        //window.location.hash = AppConstants.PAGE_URL_MQTT_LOAD;
     }
 
     navigateToBrokerPage(bsId) {
@@ -51,10 +66,23 @@ class AppDrawer extends React.Component {
         this.setState({bsList:bsList});
     }
 
+    onMqttLoadSettingsChanged(isNavigate) {
+        var mqttLoadList = MqttLoadSettingsService.getAllMqttLoadSettingsData();
+        this.setState({mqttLoadList:mqttLoadList});
+        if(isNavigate == true) {
+            if(mqttLoadList!=null && mqttLoadList.length>0) {
+                window.location.hash = AppConstants.PAGE_URL_MQTT_LOAD+'/'+mqttLoadList[0].bsId;
+            } else {
+                window.location.hash = AppConstants.PAGE_URL_MQTT_LOAD;
+            }
+        }
+    }
+
     componentDidMount() {
         CommonAppService.addChangeListener(AppConstants.EVENT_OPEN_CLOSE_APP_DRAWER,this.onShowHideAppDrawer);
         BrokerSettingsService.addChangeListener(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,this.onBrokerSettingsChanged);
         BrokerConnectionService.addChangeListener(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,this.onBrokerSettingsChanged);
+        MqttLoadSettingsService.addChangeListener(AppConstants.EVENT_MQTT_LOAD_SETTINGS_CHANGED,this.onMqttLoadSettingsChanged);
         if(this.state.bsList==null || this.state.bsList.length<=0) {
            this.navigateToAddEditBrokerPage();
         }
@@ -64,6 +92,7 @@ class AppDrawer extends React.Component {
         CommonAppService.removeChangeListener(AppConstants.EVENT_OPEN_CLOSE_APP_DRAWER,this.onShowHideAppDrawer);
         BrokerSettingsService.removeChangeListener(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,this.onBrokerSettingsChanged);
         BrokerConnectionService.removeChangeListener(AppConstants.EVENT_BROKER_SETTINGS_CHANGED,this.onBrokerSettingsChanged);
+        MqttLoadSettingsService.removeChangeListener(AppConstants.EVENT_MQTT_LOAD_SETTINGS_CHANGED,this.onMqttLoadSettingsChanged);
     }
 
     render() {
@@ -79,6 +108,16 @@ class AppDrawer extends React.Component {
         brokerList.push(<ListItem primaryText="Add New Client" onClick={this.onShowHideAppDrawer.bind(this,false)} key="addEditNewBroker" leftIcon={<AddIcon/>}
             containerElement={<NavLink key="addEditNewBroker" to="/addedit"/>}></ListItem>);
 
+        var mqttLoadList = [];
+//        var mqttLoadList = this.state.mqttLoadList.map(function(mqttLoadSettings,index) {
+//            return (<ListItem onClick={this.onShowHideAppDrawer.bind(this,false)} key={mqttLoadSettings.bsId}
+//             primaryText={mqttLoadSettings.brokerName} containerElement={<NavLink key={mqttLoadSettings.bsId} to={"/mqttload/"+mqttLoadSettings.bsId}/>}></ListItem>);
+//        }.bind(this));
+
+        mqttLoadList.push(<ListItem primaryText="Coming Soon !!!" onClick={this.onShowHideAppDrawer.bind(this,false)} key="addEditNewLoad" leftIcon={<AddIcon/>}
+            containerElement={<NavLink key="addEditNewLoad" to="/comingsoon"/>}></ListItem>);
+
+
         return (
             <Drawer
               docked={true}
@@ -86,8 +125,8 @@ class AppDrawer extends React.Component {
               onRequestChange={this.onShowHideAppDrawer}
             >
                 <Toolbar>
-                    <ToolbarGroup float='left'/>
-                    <ToolbarGroup float='right'>
+                    <ToolbarGroup style={style.leftFloat}/>
+                    <ToolbarGroup style={style.rightFloat}>
                         <IconButton onTouchTap={this.onShowHideAppDrawer.bind(this,false)}>
                             <ActionClear/>
                         </IconButton>
@@ -101,6 +140,13 @@ class AppDrawer extends React.Component {
                       initiallyOpen={true}
                       primaryTogglesNestedList={true}
                       nestedItems={brokerList}
+                    />
+                    <ListItem
+                      primaryText="MQTT Load"
+                      leftIcon={<FlashIcon/>}
+                      initiallyOpen={true}
+                      primaryTogglesNestedList={true}
+                      nestedItems={mqttLoadList}
                     />
                     <ListItem
                       primaryText="About"
