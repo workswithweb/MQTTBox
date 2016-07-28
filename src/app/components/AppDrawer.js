@@ -53,7 +53,7 @@ class AppDrawer extends React.Component {
     navigateToAddEditBrokerPage() {
         this.onShowHideAppDrawer(false);
         window.location.hash = AppConstants.PAGE_URL_ADD_EDIT_CLIENT_BROKER_SETTINGS;
-        //window.location.hash = AppConstants.PAGE_URL_MQTT_LOAD;
+        //window.location.hash = AppConstants.PAGE_URL_ADD_EDIT_MQTT_LOAD;
     }
 
     navigateToBrokerPage(bsId) {
@@ -66,16 +66,9 @@ class AppDrawer extends React.Component {
         this.setState({bsList:bsList});
     }
 
-    onMqttLoadSettingsChanged(isNavigate) {
+    onMqttLoadSettingsChanged(bsId) {
         var mqttLoadList = MqttLoadSettingsService.getAllMqttLoadSettingsData();
         this.setState({mqttLoadList:mqttLoadList});
-        if(isNavigate == true) {
-            if(mqttLoadList!=null && mqttLoadList.length>0) {
-                window.location.hash = AppConstants.PAGE_URL_MQTT_LOAD+'/'+mqttLoadList[0].bsId;
-            } else {
-                window.location.hash = AppConstants.PAGE_URL_MQTT_LOAD;
-            }
-        }
     }
 
     componentDidMount() {
@@ -109,13 +102,13 @@ class AppDrawer extends React.Component {
             containerElement={<NavLink key="addEditNewBroker" to="/addedit"/>}></ListItem>);
 
         var mqttLoadList = [];
-//        var mqttLoadList = this.state.mqttLoadList.map(function(mqttLoadSettings,index) {
-//            return (<ListItem onClick={this.onShowHideAppDrawer.bind(this,false)} key={mqttLoadSettings.bsId}
-//             primaryText={mqttLoadSettings.brokerName} containerElement={<NavLink key={mqttLoadSettings.bsId} to={"/mqttload/"+mqttLoadSettings.bsId}/>}></ListItem>);
-//        }.bind(this));
+        var mqttLoadList = this.state.mqttLoadList.map(function(mqttLoadSettings,index) {
+            return (<ListItem onClick={this.onShowHideAppDrawer.bind(this,false)} key={mqttLoadSettings.bsId}
+             primaryText={mqttLoadSettings.brokerName} containerElement={<NavLink key={mqttLoadSettings.bsId} to={"/mqttloadtest/"+mqttLoadSettings.bsId}/>}></ListItem>);
+        }.bind(this));
 
-        mqttLoadList.push(<ListItem primaryText="Coming Soon !!!" onClick={this.onShowHideAppDrawer.bind(this,false)} key="addEditNewLoad" leftIcon={<AddIcon/>}
-            containerElement={<NavLink key="addEditNewLoad" to="/comingsoon"/>}></ListItem>);
+        mqttLoadList.push(<ListItem primaryText="Add New Load" onClick={this.onShowHideAppDrawer.bind(this,false)} key="addeditmqttload" leftIcon={<AddIcon/>}
+            containerElement={<NavLink key="addeditmqttload" to="/addeditmqttload"/>}></ListItem>);
 
 
         return (

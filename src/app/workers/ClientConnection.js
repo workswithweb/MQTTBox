@@ -103,7 +103,7 @@ class ClientConnection extends Events.EventEmitter {  
         var options = {
             keepalive:Number(this.brokerSettings.keepalive),
             reschedulePings:this.brokerSettings.reschedulePings,
-            clientId:this.brokerSettings.clientId,
+            clientId:this.brokerSettings.clientId+(+new Date()),
             protocolId:this.brokerSettings.protocolId,
             protocolVersion:this.brokerSettings.protocolVersion,
             clean:this.brokerSettings.clean,

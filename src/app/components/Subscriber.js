@@ -141,7 +141,6 @@ class Subscriber extends React.Component {
                     <Card key={this.props.subscriberSettings.subId+i}>
                         <CardHeader actAsExpander={true} showExpandableButton={true} title={subData.receivedMessages[i].message}/>
                         <CardText expandable={true}>
-                          {
                             <div>
                                 <div><b>qos</b> : {subData.receivedMessages[i].packet.qos}</div>
                                 <div><b>retain</b> : {subData.receivedMessages[i].packet.retain.toString()}</div>
@@ -152,7 +151,6 @@ class Subscriber extends React.Component {
                                 <div><b>length</b> : {subData.receivedMessages[i].packet.length}</div>
                                 <div style={style.packetMessage}><b>raw payload</b> : {subData.receivedMessages[i].packet.payload.data}</div>
                             </div>
-                          }
                         </CardText>
                     </Card>);
                 }

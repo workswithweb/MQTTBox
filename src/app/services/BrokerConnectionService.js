@@ -1,4 +1,5 @@
 import Events from 'events';
+import _ from 'lodash';
 
 import AppConstants from '../utils/AppConstants';
 import AppDispatcher from '../dispatcher/AppDispatcher';
@@ -168,7 +169,7 @@ class BrokerConnectionService extends Events.EventEmitter {
 
         var unSubData = this.subscribedData[data.bsId+data.subId];
         _.forOwn(this.subscribedData, function(subData, key) {
-            if(subData!=null && subData.topic == unSubData.topic && subData.bsId == unSubData.bsId) {
+            if(subData!=null && unSubData!=null && unSubData.topic!=null && subData.topic!=null && subData.bsId!=null && unSubData.bsId!=null && subData.topic == unSubData.topic && subData.bsId == unSubData.bsId) {
                 delete this.subscribedData[subData.bsId+subData.subId];
                 if(unsubFromBroker) {
                     this.emitChange(AppConstants.EVENT_SUBSCRIBER_DATA,{bsId:subData.bsId,subId:subData.subId});

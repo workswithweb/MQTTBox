@@ -39,14 +39,22 @@ module.exports = {
         dest: dest,
         outputName: './js/MqttLoadSettingsDbWorker.js'
     },{
-        entries: src + '/app/workers/MqttLoadResultsDbWorker.js',
+        entries: src + '/app/workers/MqttLoadWorker.js',
         dest: dest,
-        outputName: './js/MqttLoadResultsDbWorker.js'
+        outputName: './js/MqttLoadWorker.js'
     },{
-        entries: src + '/app/workers/MqttLoadTestWorker.js',
+         entries: src + '/app/workers/MqttLoadDataDbWorker.js',
+         dest: dest,
+         outputName: './js/MqttLoadDataDbWorker.js'
+     },{
+        entries: src + '/app/components/loadtest/LoadDataPage.js',
         dest: dest,
-        outputName: './js/MqttLoadTestWorker.js'
-    }],
+        outputName: './js/loadDataPage.js'
+    },{
+         entries: src + '/app/components/loadtest/LoadDataGraph.js',
+         dest: dest,
+         outputName: './js/loadDataGraph.js'
+     }],
     extensions: ['.js'],
   }
 };

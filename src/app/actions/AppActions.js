@@ -94,9 +94,16 @@ class AppActions {  
         }); 
     }
 
-    static startLoadTesting(data) { 
+    static startMqttLoad(data) { 
         AppDispatcher.dispatch({ 
             actionType: AppConstants.ACTION_MQTT_LOAD_START, 
+            data: data  
+        }); 
+    }
+
+    static stopMqttLoad(data) { 
+        AppDispatcher.dispatch({ 
+            actionType: AppConstants.ACTION_MQTT_LOAD_END, 
             data: data  
         }); 
     }

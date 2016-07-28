@@ -1,0 +1,55 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>MQTT Load Graph</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, maximum-scale=1, minimum-scale=1">
+    <style>
+        .axis path, .axis line {
+              fill: none;
+              stroke: #000;
+              shape-rendering: crispEdges;
+          }
+          path.line {
+              fill: none;
+              stroke-width: 2px;
+          }
+          .zoomOut {
+              fill: #66a;
+              cursor: pointer;
+          }
+          .zoomOutText {
+              pointer-events: none;
+              fill : #ccc;
+          }
+          .zoomOverlay {
+              pointer-events: all;
+              fill:none;
+          }
+          .band {
+              fill : none;
+              stroke-width: 1px;
+              stroke: red;
+          }
+          .samplingArea {
+            margin: 20px 10px 1px 20px;
+          }
+    </style>
+</head>
+
+<body>
+    <div class="samplingArea">
+        <b>Sampling</b> : <input type="number" id="sampling" name="sampling">
+        <button id="samplingButton" type="button">Generate Graph</button>
+        <div><b>Drag a rectangle around an area of interest to zoom in.</b></div>
+        <div id="noDataAvailable" style="display:none">
+            <h3>No data available to generate graph.</h3>
+        </div>
+    </div>
+    <div id="graph"></div>
+</body>
+<script src="./js/loadDataGraph.js"></script>
+</html>

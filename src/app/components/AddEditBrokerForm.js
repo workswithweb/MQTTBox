@@ -248,7 +248,7 @@ class AddEditBrokerForm extends React.Component {
                           actAsExpander={true}
                           showExpandableButton={true}
                         />
-                        <CardActions expandable={true}>
+                        <CardActions>
                           <Table selectable={false}>
                               <TableBody displayRowCheckbox={false}>
                                   <TableRow displayBorder={false}>

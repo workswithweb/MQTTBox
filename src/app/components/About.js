@@ -38,7 +38,7 @@ class About extends React.Component {
                 <Card>
                     <CardHeader
                       title="MQTTBox"
-                      subtitle="Version 0.0.13"
+                      subtitle="Version 0.0.14"
                       avatar="./img/icon-128.png"
                     />
                     <CardText >

@@ -6,8 +6,8 @@ import AddEditBrokerForm from '../components/AddEditBrokerForm';
 import BrokerView from '../components/BrokerView';
 import About from '../components/About';
 import ComingSoon from '../components/ComingSoon';
-import MqttLoadView from '../components/loadtest/MqttLoadView';
-
+import AddEditMqttLoadForm from '../components/loadtest/AddEditMqttLoadForm';
+import MqttLoadTestView from '../components/loadtest/MqttLoadTestView';
 
 const AppRoutes = (
     <Route path="/" component={Main}>
@@ -16,8 +16,9 @@ const AppRoutes = (
         <Route path="/broker/:bsId" component={BrokerView}/>
         <Route path="/aboutapp" component={About}/>
         <Route path="/comingsoon" component={ComingSoon}/>
-        <Route path="/mqttload" component={MqttLoadView}/>
-        <Route path="/mqttload/:bsId" component={MqttLoadView}/>
+        <Route path="/addeditmqttload" component={AddEditMqttLoadForm}/>
+        <Route path="/addeditmqttload/:bsId" component={AddEditMqttLoadForm}/>
+        <Route path="/mqttloadtest/:bsId" component={MqttLoadTestView}/>
     </Route>
 );
 export default AppRoutes;
