@@ -25,7 +25,7 @@ class LoadDataGraph {
     onSamplingButtonClick() {
         var sampRate =parseInt(document.getElementById('sampling').value);
         if(sampRate!=null && sampRate>0) {
-            window.open("./loadgraph.html?iids="+CommonUtils.getUrlQueryParameter(location.search,'iids')+'&sr='+sampRate,"_self");
+            CommonUtils.openWindow("./loadgraph.html?iids="+CommonUtils.getUrlQueryParameter(location.search,'iids')+'&sr='+sampRate,"_self");
         }
     }
 
@@ -58,7 +58,7 @@ class LoadDataGraph {
                 loadDataObjList.push(loadDataList[0]);
             }
 
-            if(allLoadDataMessages.length>0) {
+            if(allLoadDataMessages.length>1) {
                 if(samplingRate==null || samplingRate<=0) {
                     samplingRate = Math.floor(allLoadDataMessages.length/loadDataObjList.length);
                 }
@@ -70,6 +70,10 @@ class LoadDataGraph {
     }
 
     processGraphData(loadDataList,allLoadDataMessages,samplingRate) {
+        if(samplingRate <=2) {
+            samplingRate = 5;
+        }
+
         var minTime = Math.floor(_.minBy(allLoadDataMessages, function(o){ return o.time;}).time);
         var maxTime = Math.floor(_.maxBy(allLoadDataMessages, function(o){ return o.time;}).time);
         var timeSample = Math.floor((maxTime - minTime)/samplingRate);

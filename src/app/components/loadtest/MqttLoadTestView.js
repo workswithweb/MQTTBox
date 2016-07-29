@@ -19,6 +19,7 @@ import AppConstants from '../../utils/AppConstants';
 import MqttLoadConstants from '../../utils/MqttLoadConstants';
 import MqttLoadResult from './MqttLoadResult';
 import MqttLoadSettingsService from '../../services/MqttLoadSettingsService';
+import CommonUtils from '../../utils/CommonUtils';
 
 const styles = {
     paper: {
@@ -80,11 +81,11 @@ class MqttLoadTestView extends React.Component {
     }
 
     openGraph() {
-        window.open("./loadgraph.html?iids="+_.keys(this.state.loadObj.instances).join(), "_blank");
+        CommonUtils.openWindow('./loadgraph.html?iids='+_.keys(this.state.loadObj.instances).join());
     }
 
     openArchiveData() {
-        window.open('./loaddata.html?iids='+_.keys(this.state.loadObj.instances).join(),'_blank');
+        CommonUtils.openWindow('./loaddata.html?iids='+_.keys(this.state.loadObj.instances).join());
     }
 
     componentWillReceiveProps(nextProps) {

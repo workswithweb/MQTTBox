@@ -107,7 +107,7 @@ class AppDrawer extends React.Component {
              primaryText={mqttLoadSettings.brokerName} containerElement={<NavLink key={mqttLoadSettings.bsId} to={"/mqttloadtest/"+mqttLoadSettings.bsId}/>}></ListItem>);
         }.bind(this));
 
-        mqttLoadList.push(<ListItem primaryText="Add New Load" onClick={this.onShowHideAppDrawer.bind(this,false)} key="addeditmqttload" leftIcon={<AddIcon/>}
+        mqttLoadList.push(<ListItem primaryText="Add New Load" onClick={this.onShowHideAppDrawer.bind(this,false)} key="addeditmqttload" leftIcon={<AddIcon color={red500}/>}
             containerElement={<NavLink key="addeditmqttload" to="/addeditmqttload"/>}></ListItem>);
 
 

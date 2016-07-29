@@ -38,8 +38,8 @@ class About extends React.Component {
                 <Card>
                     <CardHeader
                       title="MQTTBox"
-                      subtitle="Version 0.0.14"
-                      avatar="./img/icon-128.png"
+                      subtitle="Version 0.0.15"
+                      avatar="./images/icon-128.png"
                     />
                     <CardText >
                         <div style={styles.marginBottom}>
@@ -60,7 +60,7 @@ class About extends React.Component {
                       <CardTitle title="Road map"/>
                       <CardText>
                         <ul>
-                          <li>MQTT Load - Load testing support</li>
+                          <li>MQTT Load updates and bug</li>
                           <li>Adding help pages</li>
                           <li>Sync - Sync all your MQTT data to cloud and can be reached from any computer.</li>
                           <li>Bug fixes - included in every release</li>

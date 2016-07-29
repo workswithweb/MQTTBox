@@ -10,8 +10,10 @@ import * as Colors from 'material-ui/styles/colors.js';
 import GraphIcon from 'material-ui/svg-icons/device/graphic-eq';
 import ArchiveIcon from 'material-ui/svg-icons/content/archive';
 import IconButton from 'material-ui/IconButton';
+import _ from 'lodash';
 
 import MqttLoadConstants from '../../utils/MqttLoadConstants';
+import CommonUtils from '../../utils/CommonUtils';
 
 const styles = {
     tableHeaderStyle: {
@@ -40,11 +42,11 @@ class MqttLoadResult extends React.Component {
     }
 
     openGraph() {
-        window.open("./loadgraph.html?iids="+this.props.instanceObj.iId, "_blank");
+        CommonUtils.openWindow('./loadgraph.html?iids='+this.props.instanceObj.iId);
     }
 
     openArchiveData() {
-        window.open("./loaddata.html?iids="+this.props.instanceObj.iId, "_blank");
+        CommonUtils.openWindow('./loaddata.html?iids='+this.props.instanceObj.iId);
     }
 
     render() {
