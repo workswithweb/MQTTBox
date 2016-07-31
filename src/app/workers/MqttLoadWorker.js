@@ -177,11 +177,13 @@ class MqttLoadWorker {  
             }
 
             this.messCount++;
-            if(this.loadObj.msgCount == this.messCount) {
-                this.messageEndTime = +(new Date());
-                this.publishLoadResults({status:C.STATE_SUCCESS,message:C.LOAD_BROKER_PUBLISHED},{fs:C.STATE_IN_PROGRESS,ts:C.STATE_SUCCESS});
-                this.publishLoadResults({status:C.STATE_IN_PROGRESS,message:C.LOAD_BROKER_WAITING_FOR_QOS},{fs:C.STATE_IN_PROGRESS,ts:C.STATE_SUCCESS});
-            }
+        }
+
+        if(this.loadObj.msgCount == this.messCount) {
+            clearInterval(this.publishTimeKeeper);
+            this.messageEndTime = +(new Date());
+            this.publishLoadResults({status:C.STATE_SUCCESS,message:C.LOAD_BROKER_PUBLISHED},{fs:C.STATE_IN_PROGRESS,ts:C.STATE_SUCCESS});
+            this.publishLoadResults({status:C.STATE_IN_PROGRESS,message:C.LOAD_BROKER_WAITING_FOR_QOS},{fs:C.STATE_IN_PROGRESS,ts:C.STATE_SUCCESS});
         }
     }
 

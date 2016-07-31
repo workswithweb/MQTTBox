@@ -68,11 +68,11 @@ class MqttLoadResult extends React.Component {
             var qosTime = '';
 
             if(messageStartTime!='' && messageEndTime!='') {
-                publishDuration = moment(this.props.instanceObj.metaData.messageEndTime).diff(moment(this.props.instanceObj.metaData.messageStartTime));
+                publishDuration = ((moment(this.props.instanceObj.metaData.messageEndTime).diff(moment(this.props.instanceObj.metaData.messageStartTime))/1000).toFixed(3))+'sec';
             }
 
             if(messageStartTime!='' && qosEndTime !='') {
-                qosTime = moment(this.props.instanceObj.metaData.qosEndTime).diff(moment(this.props.instanceObj.metaData.messageStartTime));
+                qosTime = ((moment(this.props.instanceObj.metaData.qosEndTime).diff(moment(this.props.instanceObj.metaData.messageStartTime))/1000).toFixed(3))+'sec';
             }
 
             headerComp.push(<TableRow key="headerComp2" displayBorder={false}>
@@ -85,7 +85,7 @@ class MqttLoadResult extends React.Component {
         } else if(this.props.instanceObj.metaData.loadType == MqttLoadConstants.LOAD_TYPE_SUBSCRIBING) {
             var subscribedDuration = '';
             if(messageStartTime!='' && messageEndTime!='') {
-                subscribedDuration = moment(this.props.instanceObj.metaData.messageEndTime).diff(moment(this.props.instanceObj.metaData.messageStartTime));
+                subscribedDuration = ((moment(this.props.instanceObj.metaData.messageEndTime).diff(moment(this.props.instanceObj.metaData.messageStartTime))/1000).toFixed(3))+'sec';
             }
 
             headerComp.push(<TableRow key="headerComp2" displayBorder={false}>
