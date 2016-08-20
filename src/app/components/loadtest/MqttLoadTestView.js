@@ -12,6 +12,7 @@ import StopLoadIcon from 'material-ui/svg-icons/action/highlight-off';
 import StartLoadIcon from 'material-ui/svg-icons/action/trending-up';
 import GraphIcon from 'material-ui/svg-icons/device/graphic-eq';
 import ArchiveIcon from 'material-ui/svg-icons/content/archive';
+import HelpIcon from 'material-ui/svg-icons/action/help';
 import _ from 'lodash';
 
 import AppActions from '../../actions/AppActions';
@@ -142,6 +143,9 @@ class MqttLoadTestView extends React.Component {
                     <ToolbarGroup firstChild={true}>
                         <IconButton onTouchTap={this.onShowHideMenuClick}>
                             <ActionDehaze/>
+                        </IconButton>
+                        <IconButton tooltipPosition="bottom-center" target="_blank" href="http://workswithweb.com/html/mqttbox/mqtt_load_test_metrics.html" tooltip="Help - MQTT Load Metrics.">
+                            Help <HelpIcon color={Colors.red500}/>
                         </IconButton>
                         <div>
                             {isOverStateInProgress==false ?(<IconButton onTouchTap={this.onEditLoadSettingsClick} tooltipPosition="bottom-center" tooltip="Edit load settings"><SettingsIcon color={Colors.brown900}/></IconButton>):null}

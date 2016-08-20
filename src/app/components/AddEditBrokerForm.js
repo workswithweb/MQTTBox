@@ -18,6 +18,8 @@ import CardActions from 'material-ui/Card/CardActions';
 import CardHeader from 'material-ui/Card/CardHeader';
 import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import ActionDehaze from 'material-ui/svg-icons/image/dehaze';
+import HelpIcon from 'material-ui/svg-icons/action/help';
+import {red500} from 'material-ui/styles/colors';
 
 import BrokerSettings from '../models/BrokerSettings';
 import AppConstants from '../utils/AppConstants';
@@ -50,7 +52,6 @@ class AddEditBrokerForm extends React.Component {
         this.saveBrokerSettings = this.saveBrokerSettings.bind(this);
         this.onBrokerSettingsSaved = this.onBrokerSettingsSaved.bind(this);
         this.deleteBrokerSettings = this.deleteBrokerSettings.bind(this);
-
         this.initBrokerObj(this.props.params);
     }
 
@@ -183,6 +184,9 @@ class AddEditBrokerForm extends React.Component {
                     <ToolbarGroup>
                         <IconButton onTouchTap={this.onShowHideMenuClick}>
                             <ActionDehaze/>
+                        </IconButton>
+                        <IconButton tooltipPosition="bottom-center" target="_blank" href="http://workswithweb.com/html/mqttbox/mqtt_client_settings.html" tooltip="Help - MQTT Client Settings">
+                            Help <HelpIcon color={red500}/>
                         </IconButton>
                     </ToolbarGroup>
                 </Toolbar>

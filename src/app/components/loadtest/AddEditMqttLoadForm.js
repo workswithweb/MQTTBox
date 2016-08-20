@@ -16,6 +16,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import * as Colors from 'material-ui/styles/colors.js';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import AddPayloadIcon from 'material-ui/svg-icons/content/add-circle-outline';
+import HelpIcon from 'material-ui/svg-icons/action/help';
 
 import AppActions from '../../actions/AppActions';
 import MqttLoadSettings from '../../models/MqttLoadSettings';
@@ -218,6 +219,9 @@ class AddEditMqttLoadForm extends React.Component {
                     <ToolbarGroup firstChild={true}>
                         <IconButton onTouchTap={this.onShowHideMenuClick}>
                             <ActionDehaze/>
+                        </IconButton>
+                        <IconButton tooltipPosition="bottom-center" target="_blank" href="http://workswithweb.com/html/mqttbox/mqtt_load_test_settings.html" tooltip="Help - MQTT Load Settings">
+                            Help <HelpIcon color={Colors.red500}/>
                         </IconButton>
                     </ToolbarGroup>
                 </Toolbar>

@@ -4,8 +4,9 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import { Router, hashHistory } from 'react-router'
 
 import AppRoutes from './utils/AppRoutes';
-
 injectTapEventPlugin();
+
+hashHistory.replace('/');
 
 render(
   <Router history={hashHistory}>

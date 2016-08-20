@@ -14,6 +14,7 @@ import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'mat
 import FlatButton from 'material-ui/FlatButton';
 import {Responsive, WidthProvider} from 'react-grid-layout';
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
+import HelpIcon from 'material-ui/svg-icons/action/help';
 
 import AppActions from '../actions/AppActions';
 import BrokerSettingsService from '../services/BrokerSettingsService';
@@ -135,6 +136,9 @@ class BrokerView extends React.Component {
                         <ToolbarGroup firstChild={true}>
                             <IconButton onTouchTap={this.onShowHideMenuClick}>
                                 <ActionDehaze/>
+                            </IconButton>
+                            <IconButton tooltipPosition="bottom-center" target="_blank" href="http://workswithweb.com/html/mqttbox/mqtt_client_settings.html" tooltip="Help - MQTT Client Settings">
+                                Help <HelpIcon color={Colors.red500}/>
                             </IconButton>
                             <IconButton onTouchTap={this.onEditBrokerSettingsClick} tooltipPosition="bottom-center" tooltip="Edit broker settings">
                                 <SettingsIcon color={Colors.brown900}/>
