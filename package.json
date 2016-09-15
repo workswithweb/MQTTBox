@@ -1,39 +1,51 @@
 {
-  "name": "mqtt-chrome-app",
-  "version": "0.0.2",
-  "description": "MQTT Chrome App",
+  "name": "MQTTBox",
+  "version": "0.1.1",
+  "description": "MQTTBox - Developers helper program to create and test MQTT connectivity protocol",
   "repository": {
     "type": "git",
-    "url": "https://github.com/workswithweb/mqtt-chrome-app.git"
+    "url": "https://github.com/workswithweb/MQTTBox.git"
   },
   "scripts": {
     "start": "gulp",
-    "lint": "eslint src && echo \"eslint: no lint errors\""
+    "babel-version": "babel --version"
   },
+  "main": "./main.js",
   "private": true,
   "devDependencies": {
-    "babel-core": "^6.3.26",
-    "babel-eslint": "^6.0.0",
-    "babel-preset-es2015": "^6.3.13",
-    "babel-preset-react": "^6.3.13",
-    "babelify": "^7.2.0",
-    "browser-sync": "^2.11.0",
-    "browserify": "^13.0.0",
-    "eslint": "^2.5.1",
+    "babel-cli": "^6.14.0",
+    "babel-core": "^6.14.0",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-react": "^6.11.1",
+    "babelify": "^7.3.0",
+    "browser-sync": "^2.14.2",
+    "browserify": "^13.1.0",
     "gulp": "^3.9.1",
     "gulp-notify": "^2.2.0",
-    "gulp-util": "^3.0.1",
-    "pretty-hrtime": "^1.0.1",
+    "gulp-util": "^3.0.7",
+    "pretty-hrtime": "^1.0.2",
     "require-dir": "^0.3.0",
     "underscore": "^1.8.3",
-    "vinyl-source-stream": "^1.0.0",
-    "watchify": "^3.6.1"
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.7.0",
+    "gulp-babel":"6.1.2"
   },
   "dependencies": {
-    "material-ui": "^0.15.0",
-    "react": "^15.0.1",
-    "react-dom": "^15.0.1",
-    "react-tap-event-plugin": "^1.0.0",
-    "node-uuid":"^1.4.7"
+    "react": "15.3.1",
+    "react-dom": "15.3.1",
+    "react-tap-event-plugin": "1.0.0",
+    "react-router": "2.7.0",
+    "flux": "2.1.1",
+    "material-ui": "0.15.4",
+    "node-uuid": "1.4.7",
+    "q": "1.4.1",
+    "localforage": "1.4.2",
+    "mqtt": "1.14.1",
+    "react-copy-to-clipboard":"4.2.3",
+    "qlobber":"0.7.0",
+    "lodash":"4.15.0",
+    "request":"2.74.0",
+    "compare-versions":"3.0.0",
+    "getmac":"1.2.1"
   }
 }

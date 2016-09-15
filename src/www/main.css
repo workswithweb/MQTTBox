@@ -1,0 +1,19 @@
+body {
+  padding-top: 50px;
+}
+
+.navButton {
+  margin: 15px;
+  color: black;
+  text-decoration: none;
+}
+
+.contentContainer {
+    margin:10px;
+}
+a:active { color: black;text-decoration: none;}
+a:hover { color: black;text-decoration: none;}
+
+messageContainer{
+    border: 1px solid red
+}
