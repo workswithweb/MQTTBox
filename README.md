@@ -2,11 +2,12 @@
 ####Developers helper program to create and test MQTT connectivity protocol.
 Supercharge your MQTT workflow with MQTTBox Apps available on Chrome, Linux, Mac, Web and Windows! Build, test, and document your MQTT connectivity protocol.
 
-######[<img height="75" width="75" src="http://workswithweb.com/images/platforms/chrome.png">](https://chrome.google.com/webstore/detail/mqttbox/kaajoficamnjijhkeomgfljpicifbkaf)Download Chrome app [HERE!](https://chrome.google.com/webstore/detail/mqttbox/kaajoficamnjijhkeomgfljpicifbkaf)
-######[<img src="http://workswithweb.com/images/platforms/linux.png">](http://workswithweb.com/html/mqttbox/install_linux.html)Download MQTTBox for Linux [HERE!](http://workswithweb.com/html/mqttbox/install_linux.html)
-######[<img height="75" width="75" src="http://workswithweb.com/images/platforms/mac.png">](http://workswithweb.com/html/mqttbox/install_mac.html)Download MQTTBox for MAC  [HERE!](http://workswithweb.com/html/mqttbox/install_mac.html) 
-######[<img src="http://workswithweb.com/images/platforms/html.png">](http://workswithweb.com/mqttbox/app) Open Web App [HERE!](http://workswithweb.com/mqttbox/app)
-######[<img src="http://workswithweb.com/images/platforms/windows.png">](http://workswithweb.com/html/mqttbox/install_windows.html)Download MQTTBox for Windows [HERE!](http://workswithweb.com/html/mqttbox/install_windows.html)
+####[MQTTBox Apps are available for following platforms - Download MQTTBox Apps HERE!](http://workswithweb.com/html/mqttbox/downloads.html)
+<img height="75" width="75" src="http://workswithweb.com/images/platforms/chrome.png"/>
+<img src="http://workswithweb.com/images/platforms/linux.png"/>
+<img height="75" width="75" src="http://workswithweb.com/images/platforms/mac.png"/>
+<img src="http://workswithweb.com/images/platforms/html.png"/>
+<img src="http://workswithweb.com/images/platforms/windows.png"/>
 
 ####MQTTBox features include:
 - Connect to multiple mqtt brokers with TCP or Web Sockets protocols
