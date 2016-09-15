@@ -1,9 +1,12 @@
 #MQTTBox
 ####Developers helper program to create and test MQTT connectivity protocol.
-Supercharge your MQTT workflow with MQTTBox for Web and Chrome! Build, test, and document your MQTT connectivity protocol.
+Supercharge your MQTT workflow with MQTTBox Apps available on Chrome, Linux, Mac, Web and Windows! Build, test, and document your MQTT connectivity protocol.
 
-######[<img height="75" width="75" src="http://workswithweb.com/mqttbox/app/images/icon-128.png">](http://workswithweb.com/mqttbox/app)Web app is available [HERE!](http://workswithweb.com/mqttbox/app) 
-######[<img src="https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_206x58.png">](https://chrome.google.com/webstore/detail/mqttbox/kaajoficamnjijhkeomgfljpicifbkaf?utm_source=chrome-app-launcher-info-dialog) Chrome app is available [HERE!](https://chrome.google.com/webstore/detail/mqttbox/kaajoficamnjijhkeomgfljpicifbkaf?utm_source=chrome-app-launcher-info-dialog)
+######[<img height="75" width="75" src="http://workswithweb.com/images/platforms/chrome.png">](https://chrome.google.com/webstore/detail/mqttbox/kaajoficamnjijhkeomgfljpicifbkaf)Download Chrome app [HERE!](https://chrome.google.com/webstore/detail/mqttbox/kaajoficamnjijhkeomgfljpicifbkaf)
+######[<img src="http://workswithweb.com/images/platforms/linux.png">](http://workswithweb.com/html/mqttbox/install_linux.html)Download MQTTBox for Linux [HERE!](http://workswithweb.com/html/mqttbox/install_linux.html)
+######[<img height="75" width="75" src="http://workswithweb.com/images/platforms/mac.png">](http://workswithweb.com/html/mqttbox/install_mac.html)Download MQTTBox for MAC  [HERE!](http://workswithweb.com/html/mqttbox/install_mac.html) 
+######[<img src="http://workswithweb.com/images/platforms/html.png">](http://workswithweb.com/mqttbox/app) Open Web App [HERE!](http://workswithweb.com/mqttbox/app)
+######[<img src="http://workswithweb.com/images/platforms/windows.png">](http://workswithweb.com/html/mqttbox/install_windows.html)Download MQTTBox for Windows [HERE!](http://workswithweb.com/html/mqttbox/install_windows.html)
 
 ####MQTTBox features include:
 - Connect to multiple mqtt brokers with TCP or Web Sockets protocols
@@ -44,4 +47,7 @@ By default, build folder generated is for web app. If you want to generate Chrom
 
 - Copy chrome specific assets from `chrome` folder into `build` folder. This should have all assets in `build` folder to upload to chrome store.
 
-NOTE: Web App supports only Websockets because of browser limitations.
+NOTE: 
+1.Web App supports only Websockets because of browser limitations.
+2.We are working to make all apps to look in sync.
+3.We are working to make all features avaliable to all platforms.
