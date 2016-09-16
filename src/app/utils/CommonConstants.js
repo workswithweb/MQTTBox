@@ -20,4 +20,7 @@ CommonConstants.WORKER_EVENT_DATA = 'WORKER_EVENT_DATA';
 //ALERT TYPE
 CommonConstants.ALERT_SUCCESS = 'ALERT_SUCCESS';
 
+//ALERT TYPE
+CommonConstants.SERVICE_TYPE_MQTT_CLIENTS = 'SERVICE_TYPE_MQTT_CLIENTS';
+
 export default CommonConstants;

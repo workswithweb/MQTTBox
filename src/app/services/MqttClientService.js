@@ -18,26 +18,6 @@ class MqttClientService extends Events.EventEmitter {
         this.mqttClientPublishedMessages = {};
         this.mqttClientSubscribedData = {};
 
-//        this.registerToAppDispatcher = this.registerToAppDispatcher.bind(this);
-//        this.syncMqttClientSettingsCache = this.syncMqttClientSettingsCache.bind(this);
-//        this.emitChange = this.emitChange.bind(this);
-//        this.addChangeListener = this.addChangeListener.bind(this);
-//        this.removeChangeListener = this.removeChangeListener.bind(this);
-//        this.getAllMqttClientSettings = this.getAllMqttClientSettings.bind(this);
-//        this.getMqttClientSettingsByMcsId = this.getMqttClientSettingsByMcsId.bind(this);
-//        this.saveMqttClientSettings = this.saveMqttClientSettings.bind(this);
-//        this.deleteMqttClientSettings = this.deleteMqttClientSettings.bind(this);
-//        this.savePublisherSettings = this.savePublisherSettings.bind(this);
-//        this.deletePublisherSettings = this.deletePublisherSettings.bind(this);
-//        this.saveSubscriberSettings = this.saveSubscriberSettings.bind(this);
-//        this.deleteSubscriberSettings = this.deleteSubscriberSettings.bind(this);
-//        this.publishMessage = this.publishMessage.bind(this);
-//        this.getPublishedMessages = this.getPublishedMessages.bind(this);
-//        this.subscribeToTopic = this.subscribeToTopic.bind(this);
-//        this.getSubscribedData = this.getSubscribedData.bind(this);
-//        this.clearMqttClientPubSubCache = this.clearMqttClientPubSubCache.bind(this);
-//        this.markAsUnSubscribed = this.markAsUnSubscribed.bind(this);
-
         this.registerToAppDispatcher();
         this.syncMqttClientSettingsCache();
     }
@@ -64,10 +44,10 @@ class MqttClientService extends Events.EventEmitter {
                     this.deleteSubscriberSettings(action.data.mcsId,action.data.subId);
                     break;
                 case MqttClientConstants.ACTION_MQTT_CLIENT_CONNECT:
-                    PlatformDispatcherService.dispatcherAction(action);
+                    PlatformDispatcherService.dispatcherAction(action,CommonConstants.SERVICE_TYPE_MQTT_CLIENTS);
                     break;
                 case MqttClientConstants.ACTION_MQTT_CLIENT_DISCONNECT:
-                    PlatformDispatcherService.dispatcherAction(action);
+                    PlatformDispatcherService.dispatcherAction(action,CommonConstants.SERVICE_TYPE_MQTT_CLIENTS);
                     this.markAsUnSubscribed(action.data);
                     break;
                 case MqttClientConstants.ACTION_PUBLISH_MESSAGE:
@@ -84,6 +64,10 @@ class MqttClientService extends Events.EventEmitter {
         }.bind(this));
     }
 
+    processEvents(events) { 
+
+    }
+
     syncMqttClientSettingsCache() { 
         MqttClientDbService.getAllMqttClientSettings()
         .then(function(mqttClientList) {
@@ -93,7 +77,7 @@ class MqttClientService extends Events.EventEmitter {
                     if(mqttClientObj!=null && mqttClientObj.mcsId!=null) {
                         this.mqttClientSettings[mqttClientObj.mcsId] = mqttClientObj;
                         if(mqttClientObj.autoConnectOnAppLaunch == true) {
-                            PlatformDispatcherService.dispatcherAction({actionType: MqttClientConstants.ACTION_MQTT_CLIENT_CONNECT,data:mqttClientObj});
+                            PlatformDispatcherService.dispatcherAction({actionType: MqttClientConstants.ACTION_MQTT_CLIENT_CONNECT,data:mqttClientObj},CommonConstants.SERVICE_TYPE_MQTT_CLIENTS);
                         }
                     }
                 }
@@ -188,7 +172,7 @@ class MqttClientService extends Events.EventEmitter {
 
         this.mqttClientSettings[data.mcsId] = dbClientSettingsObj;
         MqttClientDbService.saveMqttClientSettings(dbClientSettingsObj);
-        PlatformDispatcherService.dispatcherAction({actionType: MqttClientConstants.ACTION_MQTT_CLIENT_CONNECT,data:dbClientSettingsObj});
+        PlatformDispatcherService.dispatcherAction({actionType: MqttClientConstants.ACTION_MQTT_CLIENT_CONNECT,data:dbClientSettingsObj},CommonConstants.SERVICE_TYPE_MQTT_CLIENTS);
         this.markAsUnSubscribed(dbClientSettingsObj.mcsId);
         this.emitChange(MqttClientConstants.EVENT_MQTT_CLIENT_DATA_CHANGED,dbClientSettingsObj.mcsId);
     }
@@ -220,7 +204,7 @@ class MqttClientService extends Events.EventEmitter {
 
     deleteMqttClientSettings(mcsId) { 
         MqttClientDbService.deleteMqttClientSettingsById(mcsId);
-        PlatformDispatcherService.dispatcherAction({actionType: MqttClientConstants.ACTION_MQTT_CLIENT_DISCONNECT,data:mcsId});
+        PlatformDispatcherService.dispatcherAction({actionType: MqttClientConstants.ACTION_MQTT_CLIENT_DISCONNECT,data:mcsId},CommonConstants.SERVICE_TYPE_MQTT_CLIENTS);
         this.clearMqttClientPubSubCache(mcsId);
         delete this.mqttClientSettings[mcsId];
         delete this.mqttClientsStatus[mcsId];
@@ -271,7 +255,7 @@ class MqttClientService extends Events.EventEmitter {
             pubMess.shift();
         }
         this.mqttClientPublishedMessages[action.data.mcsId+action.data.pubId] = pubMess;
-        PlatformDispatcherService.dispatcherAction(action);
+        PlatformDispatcherService.dispatcherAction(action,CommonConstants.SERVICE_TYPE_MQTT_CLIENTS);
     }
 
     getPublishedMessages(mcsId,pubId) {
@@ -318,7 +302,7 @@ class MqttClientService extends Events.EventEmitter {
 
     subscribeToTopic(action) {
         this.mqttClientSubscribedData[action.data.mcsId+action.data.subId] = {mcsId:action.data.mcsId,subId:action.data.subId,isSubscribed:true,topic:action.data.topic,receivedMessages:[]};
-        PlatformDispatcherService.dispatcherAction(action);
+        PlatformDispatcherService.dispatcherAction(action,CommonConstants.SERVICE_TYPE_MQTT_CLIENTS);
         this.emitChange(MqttClientConstants.EVENT_MQTT_CLIENT_SUBSCRIBED_DATA_RECIEVED,{mcsId:action.data.mcsId,subId:action.data.subId});
     }
 
@@ -331,7 +315,7 @@ class MqttClientService extends Events.EventEmitter {
                 }
             }
         }.bind(this));
-        PlatformDispatcherService.dispatcherAction(action);
+        PlatformDispatcherService.dispatcherAction(action,CommonConstants.SERVICE_TYPE_MQTT_CLIENTS);
     }
 
     getSubscribedData(mcsId,subId) {
