@@ -34,14 +34,15 @@ export default class MqttClientPublisher extends React.Component {
 
     constructor(props) {
         super(props);
+
         this.onTargetValueChange = this.onTargetValueChange.bind(this);
         this.onCheckBoxValueChange = this.onCheckBoxValueChange.bind(this);
         this.deletePublisher = this.deletePublisher.bind(this);
-        this.savePublisherSettings = this.savePublisherSettings.bind(this);
+        this.publishMessageToBroker = this.publishMessageToBroker.bind(this);
         this.publishMessage = this.publishMessage.bind(this);
         this.rePublishMessage = this.rePublishMessage.bind(this);
-        this.publishMessageToBroker = this.publishMessageToBroker.bind(this);
         this.onPayloadCopy = this.onPayloadCopy.bind(this);
+        this.savePublisherSettings = this.savePublisherSettings.bind(this);
 
         this.state = {
             qos:this.props.publisherSettings.qos,

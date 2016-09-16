@@ -15,8 +15,10 @@ class UserMessageSnackbar extends React.Component {
 
     constructor(props) {
         super(props);
-        this.closeMessage = this.closeMessage.bind(this);
+
         this.showMessage = this.showMessage.bind(this);
+        this.closeMessage = this.closeMessage.bind(this);
+
         this.state = {open: false,message:''};
     }
 

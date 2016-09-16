@@ -27,12 +27,13 @@ export default class MqttClientSubscriber extends React.Component {
 
     constructor(props) {
         super(props);
+
         this.onTargetValueChange = this.onTargetValueChange.bind(this);
         this.saveSubscriberSettings = this.saveSubscriberSettings.bind(this);
         this.deleteSubscriber = this.deleteSubscriber.bind(this);
         this.subscribeToTopic = this.subscribeToTopic.bind(this);
-        this.updatePageData = this.updatePageData.bind(this);
         this.unSubscribeToTopic = this.unSubscribeToTopic.bind(this);
+        this.updatePageData = this.updatePageData.bind(this);
 
         this.state = {
             qos:this.props.subscriberSettings.qos,

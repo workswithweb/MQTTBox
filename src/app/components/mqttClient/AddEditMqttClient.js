@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import UUID from 'node-uuid';
+
 import LeftMenuButton from '../common/LeftMenuButton';
 import MqttClientSettings from '../../models/MqttClientSettings';
 import CommonActions from '../../actions/CommonActions';
@@ -16,13 +17,14 @@ const styles = {
 class AddEditMqttClient extends Component {
     constructor(props) {
         super(props);
+
         this.initBrokerObj = this.initBrokerObj.bind(this);
         this.onTargetValueChange = this.onTargetValueChange.bind(this);
         this.generateMqttClientId = this.generateMqttClientId.bind(this);
         this.onMqtt311CompliantChange = this.onMqtt311CompliantChange.bind(this);
         this.onCheckBoxValueChange = this.onCheckBoxValueChange.bind(this);
-        this.deleteMqttClientSettings = this.deleteMqttClientSettings.bind(this);
         this.saveMqttClientSettings = this.saveMqttClientSettings.bind(this);
+        this.deleteMqttClientSettings = this.deleteMqttClientSettings.bind(this);
 
         this.initBrokerObj(this.props.params);
     }

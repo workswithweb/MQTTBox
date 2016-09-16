@@ -26,11 +26,13 @@ class MqttClientDashboard extends Component {
 
     constructor(props) {
         super(props);
+
         this.savePublisherSettings = this.savePublisherSettings.bind(this);
         this.saveSubscriberSettings = this.saveSubscriberSettings.bind(this);
+        this.changeConnectionState = this.changeConnectionState.bind(this);
         this.updatePageData = this.updatePageData.bind(this);
         this.updateConnectionStatus = this.updateConnectionStatus.bind(this);
-        this.changeConnectionState = this.changeConnectionState.bind(this);
+
         this.state = {conState:MqttClientService.getMqttClientStateByMcsId(this.props.params.mcsId),
                         mqttClientSettings:MqttClientService.getMqttClientSettingsByMcsId(this.props.params.mcsId)};
     }

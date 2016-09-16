@@ -1,5 +1,4 @@
 import React from 'react'
-import CommonActions from '../../actions/CommonActions';
 
 const styles = {
     button: {
@@ -21,10 +20,8 @@ export default React.createClass({
                     <span className="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span><b> Menu</b>
                 </button>
                 <ul className="dropdown-menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li><a href="#">Separated link</a></li>
+                    <li><a href="#/mqttclientslist"><span className="glyphicon glyphicon-modal-window" aria-hidden="true"></span><b> MQTT CLIENTS</b></a></li>
+                    <li><a href="#/aboutapp"><span className="glyphicon glyphicon-info-sign" aria-hidden="true"></span><b> ABOUT</b></a></li>
                 </ul>
             </span>);
     }

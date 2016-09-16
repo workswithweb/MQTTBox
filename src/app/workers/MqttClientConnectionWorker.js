@@ -5,6 +5,7 @@ import mqtt from 'mqtt';
 import MqttClientConstants from '../utils/MqttClientConstants';
 
 class MqttClientConnectionWorker {  
+
     constructor() {
         this.mqttClientObj = null;
         this.client = null;

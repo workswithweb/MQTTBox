@@ -1,4 +1,5 @@
 import Events from 'events';
+
 import AppDispatcher from './AppDispatcher';
 import CommonConstants from '../utils/CommonConstants';
 
@@ -6,11 +7,12 @@ class CommonEventEmitter extends Events.EventEmitter {
 
     constructor() {
         super();
-        this.registerToAppDispatcher = this.registerToAppDispatcher.bind(this);
-        this.emitChange = this.emitChange.bind(this);
-        this.addChangeListener = this.addChangeListener.bind(this);
-        this.removeChangeListener = this.removeChangeListener.bind(this);
-        this.showHideAppDrawer = this.showHideAppDrawer.bind(this);
+//
+//        this.registerToAppDispatcher = this.registerToAppDispatcher.bind(this);
+//        this.emitChange = this.emitChange.bind(this);
+//        this.addChangeListener = this.addChangeListener.bind(this);
+//        this.removeChangeListener = this.removeChangeListener.bind(this);
+//        this.showHideAppDrawer = this.showHideAppDrawer.bind(this);
 
         this.registerToAppDispatcher();
     }

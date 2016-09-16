@@ -32,7 +32,9 @@ class MqttClientList extends Component {
 
     constructor(props) {
         super(props);
+
         this.getAllMqttClientSettings = this.getAllMqttClientSettings.bind(this);
+
         this.state = {mqttClientSettings:MqttClientService.getAllMqttClientSettings()};
     }
 

@@ -16,7 +16,7 @@ export default class AboutApp extends React.Component {
         super(props);
     }
 
-    openExternalLink(url) {
+    openExternalLink() {
 
     }
 
