@@ -128,7 +128,7 @@ export default class MqttClientSubscriber extends React.Component {
         if(subData!=null && subData.isSubscribed==true) {
             component = <div>
                             <div style={{marginBottom:10}}>
-                                <button onTouchTap={this.unSubscribeToTopic} title="Unsubscribe" type="button" className="btn btn-warning btn-sm btn-block">
+                                <button onClick={this.unSubscribeToTopic} title="Unsubscribe" type="button" className="btn btn-warning btn-sm btn-block">
                                   <span style={{marginRight:10}} className="glyphicon glyphicon-remove" aria-hidden="true"></span>{this.state.topic}
                                 </button>
                             </div>
@@ -152,7 +152,7 @@ export default class MqttClientSubscriber extends React.Component {
                                 </select>
                             </div>
                             <div className="form-group">
-                                <button type="button" onTouchTap={this.subscribeToTopic}  className="btn btn-warning">Subscribe</button>
+                                <button type="button" onClick={this.subscribeToTopic}  className="btn btn-warning">Subscribe</button>
                             </div>
                             <div>
                                 {messageList}
@@ -167,7 +167,7 @@ export default class MqttClientSubscriber extends React.Component {
                 </div>
                 { (subData==null || subData.isSubscribed !=true) ?
                     <div>
-                        <span onTouchTap={this.deleteSubscriber} className="remove" style={style.removeStyle}>
+                        <span onClick={this.deleteSubscriber} className="remove" style={style.removeStyle}>
                             <span className="glyphicon glyphicon-remove" aria-hidden="true"></span>
                         </span>
                     </div>: null

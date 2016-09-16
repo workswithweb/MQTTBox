@@ -23,21 +23,9 @@ module.exports = {
     // A separate bundle will be generated for each
     // bundle config in the list below
     bundleConfigs: [{
-        entries: src + '/app/app.js',
-        dest: dest,
-        outputName: 'app.js'
-    },{
-        entries: src + '/app/workers/MqttClientDbWorker.js',
-        dest: dest,
-        outputName: 'workers/MqttClientDbWorker.js'
-    },{
-        entries: src + '/app/electron/ElectronMain.js',
-        dest: dest,
-        outputName: 'ElectronMain.js'
-    },{
-        entries: src + '/app/workers/MqttClientConnectionWorker.js',
-        dest: dest,
-        outputName: 'workers/MqttClientConnectionWorker.js'
+      entries: src + '/app/app.js',
+      dest: dest,
+      outputName: 'app.js'
     }],
     extensions: ['.js'],
   }

@@ -101,11 +101,11 @@ class AddEditMqttClient extends Component {
         var cancelButton = '';
 
         if(this.props.params.mcsId!=null) {
-            deleteButton = <button style={styles.actionButton} onTouchTap={this.deleteMqttClientSettings} type="button" className="btn btn-default">Delete</button>;
+            deleteButton = <button style={styles.actionButton} onClick={this.deleteMqttClientSettings} type="button" className="btn btn-default">Delete</button>;
 
-            cancelButton = <button style={styles.actionButton} onTouchTap={NavUtils.goToMqttClientDashboard.bind(this,this.props.params.mcsId)} type="button" className="btn btn-default">Cancel</button>;
+            cancelButton = <button style={styles.actionButton} onClick={NavUtils.goToMqttClientDashboard.bind(this,this.props.params.mcsId)} type="button" className="btn btn-default">Cancel</button>;
         } else {
-            cancelButton = <button style={styles.actionButton} onTouchTap={NavUtils.goToMqttClientList} type="button" className="btn btn-default">Cancel</button>;
+            cancelButton = <button style={styles.actionButton} onClick={NavUtils.goToMqttClientList} type="button" className="btn btn-default">Cancel</button>;
         }
 
         return (
@@ -135,7 +135,7 @@ class AddEditMqttClient extends Component {
                                         placeholder="MQTT Client Id" onChange={this.onTargetValueChange}
                                         value={this.state.mqttClientId}/>
                                     <div data-toggle="tooltip" data-placement="bottom" title="Generate new MQTT client id"
-                                    style={{cursor:'pointer'}} onTouchTap={this.generateMqttClientId} className="input-group-addon"><span className="glyphicon glyphicon-refresh" aria-hidden="true"></span></div>
+                                    style={{cursor:'pointer'}} onClick={this.generateMqttClientId} className="input-group-addon"><span className="glyphicon glyphicon-refresh" aria-hidden="true"></span></div>
                                 </div>
                             </div>
                         </div>
@@ -294,7 +294,7 @@ class AddEditMqttClient extends Component {
                     </div>
                     <div className="row">
                         <div className="col-md-offset-3 col-xs-12 col-sm-6 col-md-3">
-                            <button style={styles.actionButton} onTouchTap={this.saveMqttClientSettings} type="button" className="btn btn-success">Save</button>
+                            <button style={styles.actionButton} onClick={this.saveMqttClientSettings} type="button" className="btn btn-success">Save</button>
                         </div>
                         <div className="col-xs-12 col-sm-6 col-md-3">
                             {cancelButton}

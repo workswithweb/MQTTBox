@@ -116,22 +116,22 @@ class MqttClientDashboard extends Component {
                         <div id="navbar" className="navbar-collapse collapse">
                             <ul className="nav navbar-nav">
                                 <li>
-                                    <button onTouchTap={this.changeConnectionState} style={styles.button} type="button" className={conStateColor} aria-label="Left Align">
+                                    <button onClick={this.changeConnectionState} style={styles.button} type="button" className={conStateColor} aria-label="Left Align">
                                         <span className="glyphicon glyphicon-signal" aria-hidden="true"></span> {conStateText}
                                     </button>
                                 </li>
                                 <li>
-                                    <button onTouchTap={this.savePublisherSettings} title="Add new publisher" style={styles.button} type="button" className="btn btn-default" aria-label="Left Align">
+                                    <button onClick={this.savePublisherSettings} title="Add new publisher" style={styles.button} type="button" className="btn btn-default" aria-label="Left Align">
                                         <span style={{color:"#337ab7"}} className="glyphicon glyphicon-upload" aria-hidden="true"></span> Add publisher
                                     </button>
                                 </li>
                                 <li>
-                                    <button onTouchTap={this.saveSubscriberSettings} title="Add new subscriber" style={styles.button} type="button" className="btn btn-default" aria-label="Left Align">
+                                    <button onClick={this.saveSubscriberSettings} title="Add new subscriber" style={styles.button} type="button" className="btn btn-default" aria-label="Left Align">
                                         <span style={{color:"#eea236"}} className="glyphicon glyphicon-download" aria-hidden="true"></span> Add subscriber
                                     </button>
                                 </li>
                                 <li>
-                                    <button onTouchTap={NavUtils.gotToAddMqttClient.bind(this,this.props.params.mcsId)} title="Edit MQTT Client Settings"
+                                    <button onClick={NavUtils.gotToAddMqttClient.bind(this,this.props.params.mcsId)} title="Edit MQTT Client Settings"
                                     style={styles.button} type="button" className="btn btn-default" aria-label="Left Align">
                                         <span className="glyphicon glyphicon-cog" aria-hidden="true"></span> Settings
                                     </button>

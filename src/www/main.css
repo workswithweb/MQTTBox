@@ -11,9 +11,6 @@ body {
 .contentContainer {
     margin:10px;
 }
+
 a:active { color: black;text-decoration: none;}
 a:hover { color: black;text-decoration: none;}
-
-messageContainer{
-    border: 1px solid red
-}

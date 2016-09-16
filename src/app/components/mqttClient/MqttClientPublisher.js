@@ -130,7 +130,7 @@ export default class MqttClientPublisher extends React.Component {
                                         <CopyToClipboard onCopy={this.onPayloadCopy} text={pubMess.payload}>
                                             <span title="Copy" style={style.messageIcons} className="glyphicon glyphicon-copy" aria-hidden="true"></span>
                                         </CopyToClipboard>
-                                        <span onTouchTap={this.rePublishMessage.bind(this,pubMess.topic,pubMess.payload,pubMess.qos,pubMess.retain)} title="Publish again" style={style.messageIcons} className="glyphicon glyphicon-share-alt" aria-hidden="true"></span>
+                                        <span onClick={this.rePublishMessage.bind(this,pubMess.topic,pubMess.payload,pubMess.qos,pubMess.retain)} title="Publish again" style={style.messageIcons} className="glyphicon glyphicon-share-alt" aria-hidden="true"></span>
                                     </div>
                                 </div>);
         }
@@ -167,12 +167,12 @@ export default class MqttClientPublisher extends React.Component {
                         <textarea name="payload" onBlur={this.savePublisherSettings} onChange={this.onTargetValueChange} value={this.state.payload} className="form-control" rows="5"></textarea>
                     </div>
                     <div className="form-group">
-                        <button type="button" onTouchTap={this.publishMessage} className="btn btn-primary">Publish</button>
+                        <button type="button" onClick={this.publishMessage} className="btn btn-primary">Publish</button>
                     </div>
                     {messageList}
                 </div>
                 <div>
-                    <span onTouchTap={this.deletePublisher} className="remove" style={style.removeStyle}>
+                    <span onClick={this.deletePublisher} className="remove" style={style.removeStyle}>
                         <span className="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     </span>
                 </div>

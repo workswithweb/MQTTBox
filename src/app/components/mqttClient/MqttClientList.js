@@ -70,7 +70,7 @@ class MqttClientList extends Component {
                 }
 
                 mqttClients.push(
-                    <div key={this,mqttClient.mcsId} className="col-xs-12 col-sm-6 col-md-3" onTouchTap={NavUtils.goToMqttClientDashboard.bind(this,mqttClient.mcsId)}>
+                    <div key={this,mqttClient.mcsId} className="col-xs-12 col-sm-6 col-md-3" onClick={NavUtils.goToMqttClientDashboard.bind(this,mqttClient.mcsId)}>
                         <div style={connClass} className="thumbnail">
                             <div>
                                 <h4>{mqttClient.mqttClientName}</h4>
@@ -85,7 +85,7 @@ class MqttClientList extends Component {
 
         if(mqttClients.length ==0) {
             message = <div className="alert alert-success" role="alert">
-                <b>No MQTT clients added. Click <button onTouchTap={NavUtils.gotToAddMqttClient} type="button" style={{margin:10}} className="btn btn-primary"><b>Add New MQTT Client</b></button> to add new MQTT client</b></div>;
+                <b>No MQTT clients added. Click <button onClick={NavUtils.gotToAddMqttClient} type="button" style={{margin:10}} className="btn btn-primary"><b>Add New MQTT Client</b></button> to add new MQTT client</b></div>;
         }
 
         return (
@@ -98,7 +98,7 @@ class MqttClientList extends Component {
                         </div>
                         <div id="navbar" className="navbar-collapse collapse">
                             <ul className="nav navbar-nav">
-                                <li><button onTouchTap={NavUtils.gotToAddMqttClient} type="button" style={{margin:10}}
+                                <li><button onClick={NavUtils.gotToAddMqttClient} type="button" style={{margin:10}}
                                         className="btn btn-primary"><b>Add New MQTT Client</b></button></li>
                             </ul>
                         </div>

@@ -23,22 +23,13 @@ gulp.task('browserify', function(callback) {
 
     var bundler = browserify({
       // Required watchify args
-        cache: {}, packageCache: {}, fullPaths: false,
-        node:true,
-        ignoreMissing: true,
-        builtins : false,
-        insertGlobalVars : {
-            process: undefined,
-            global: undefined,
-            'Buffer.isBuffer': undefined,
-            Buffer: undefined
-        },
-        // Specify the entry point of your app
-        entries: bundleConfig.entries,
-        // Add file extensions to make optional in your requires
-        extensions: config.extensions,
-        // Enable source maps!
-        debug: config.debug
+      cache: {}, packageCache: {}, fullPaths: false,
+      // Specify the entry point of your app
+      entries: bundleConfig.entries,
+      // Add file extensions to make optional in your requires
+      extensions: config.extensions,
+      // Enable source maps!
+      debug: config.debug
     });
 
     var bundle = function() {

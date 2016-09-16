@@ -1,8 +1,6 @@
 import Events from 'events';
 import AppDispatcher from './AppDispatcher';
 import CommonConstants from '../utils/CommonConstants';
-//depending on platform include this
-import ElectronIpcRendererService from '../electron/ElectronIpcRendererService';
 
 class CommonEventEmitter extends Events.EventEmitter {
 

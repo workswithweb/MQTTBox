@@ -2,6 +2,7 @@ class CommonConstants {}
 
 //APP
 CommonConstants.APP_VERSION = '0.1.2';
+
 //ACTIONS
 CommonConstants.ACTION_OPEN_CLOSE_APP_LEFT_DRAWER = 'ACTION_OPEN_CLOSE_APP_LEFT_DRAWER';
 CommonConstants.ACTION_SHOW_MESSAGE_TO_USER = 'ACTION_SHOW_MESSAGE_TO_USER';
@@ -15,5 +16,8 @@ CommonConstants.WORKER_CMD_GET_ALL = 'WORKER_CMD_GET_ALL';
 CommonConstants.WORKER_CMD_SAVE = 'WORKER_CMD_SAVE';
 CommonConstants.WORKER_CMD_DELETE = 'WORKER_CMD_DELETE';
 CommonConstants.WORKER_EVENT_DATA = 'WORKER_EVENT_DATA';
+
+//ALERT TYPE
+CommonConstants.ALERT_SUCCESS = 'ALERT_SUCCESS';
 
 export default CommonConstants;
