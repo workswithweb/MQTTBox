@@ -1,6 +1,7 @@
 //using web workers
 import PlatformDispatcherService from './PlatformDispatcherService';
 import CommonConstants from '../utils/CommonConstants';
+import MqttClientConstants from '../utils/MqttClientConstants';
 
 class PlatformMqttClientActionService {  
 
@@ -38,7 +39,7 @@ class PlatformMqttClientActionService {  
         if(mqttClientConnectionWorker!=null) {
             mqttClientConnectionWorker.postMessage(action);
         } else {
-            mqttClientConnectionWorker = new Worker('./js/PlatformMqttClientEventService.js');
+            mqttClientConnectionWorker = new Worker('./platform/PlatformMqttClientEventService.js');
             mqttClientConnectionWorker.addEventListener('message',function(event){
                 this.processEvents(event.data);
             }.bind(this));

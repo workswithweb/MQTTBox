@@ -25,6 +25,10 @@ module.exports = {
       entries: src + '/app/app.js',
       dest: dest,
       outputName: 'app.js'
+    },{
+        entries: src + '/app/platform/PlatformMqttClientEventService.js',
+        dest: dest,
+        outputName: 'platform/PlatformMqttClientEventService.js'
     }],
     extensions: ['.js'],
   }

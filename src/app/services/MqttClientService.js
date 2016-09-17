@@ -47,8 +47,7 @@ class MqttClientService extends Events.EventEmitter {
                     PlatformDispatcherService.dispatcherAction(action,CommonConstants.SERVICE_TYPE_MQTT_CLIENTS);
                     break;
                 case MqttClientConstants.ACTION_MQTT_CLIENT_DISCONNECT:
-                    PlatformDispatcherService.dispatcherAction(action,CommonConstants.SERVICE_TYPE_MQTT_CLIENTS);
-                    this.markAsUnSubscribed(action.data);
+                    this.disconnectMqttClient(action);
                     break;
                 case MqttClientConstants.ACTION_PUBLISH_MESSAGE:
                     this.publishMessage(action);
@@ -64,8 +63,16 @@ class MqttClientService extends Events.EventEmitter {
         }.bind(this));
     }
 
-    processEvents(events) { 
-
+    processEvents(eventObj) { 
+        switch(eventObj.event) {
+            case MqttClientConstants.EVENT_MQTT_CLIENT_CONN_STATE_CHANGED:
+                this.syncMqttClientStateCache(eventObj.data);
+                break;
+            case MqttClientConstants.EVENT_MQTT_CLIENT_SUBSCRIBED_DATA_RECIEVED:
+                this.syncMqttClientSubscribedData(eventObj.data);
+                break;
+            default:
+        }
     }
 
     syncMqttClientSettingsCache() { 
@@ -209,6 +216,13 @@ class MqttClientService extends Events.EventEmitter {
         delete this.mqttClientSettings[mcsId];
         delete this.mqttClientsStatus[mcsId];
         this.emitChange(MqttClientConstants.EVENT_MQTT_CLIENT_DATA_CHANGED,mcsId);
+    }
+
+    disconnectMqttClient(action) { 
+        PlatformDispatcherService.dispatcherAction(action,CommonConstants.SERVICE_TYPE_MQTT_CLIENTS);
+        this.markAsUnSubscribed(action.data);
+        delete this.mqttClientsStatus[action.data];
+        this.emitChange(MqttClientConstants.EVENT_MQTT_CLIENT_DATA_CHANGED,action.data);
     }
 
     savePublisherSettings(mcsId,publisher) { 
