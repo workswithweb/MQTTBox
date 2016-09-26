@@ -1,6 +1,5 @@
 var dest = './build',
-  src = './src',
-  mui = './node_modules/material-ui/src';
+  src = './src';
 
 module.exports = {
   browserSync: {
@@ -19,7 +18,7 @@ module.exports = {
   },
   browserify: {
     // Enable source maps
-    debug: false,
+    debug: true,
     // A separate bundle will be generated for each
     // bundle config in the list below
     bundleConfigs: [{
@@ -27,34 +26,14 @@ module.exports = {
       dest: dest,
       outputName: 'app.js'
     },{
-        entries: src + '/app/workers/BrokerSettingsDbWorker.js',
+        entries: src + '/app/platform/PlatformMqttClientEventService.js',
         dest: dest,
-        outputName: './js/BrokerSettingsDbWorker.js'
+        outputName: 'platform/PlatformMqttClientEventService.js'
     },{
-        entries: src + '/app/workers/ConnectionWorker.js',
+        entries: src + '/app/platform/PlatformMqttLoadEventService.js',
         dest: dest,
-        outputName: './js/ConnectionWorker.js'
-    },{
-        entries: src + '/app/workers/MqttLoadSettingsDbWorker.js',
-        dest: dest,
-        outputName: './js/MqttLoadSettingsDbWorker.js'
-    },{
-        entries: src + '/app/workers/MqttLoadWorker.js',
-        dest: dest,
-        outputName: './js/MqttLoadWorker.js'
-    },{
-         entries: src + '/app/workers/MqttLoadDataDbWorker.js',
-         dest: dest,
-         outputName: './js/MqttLoadDataDbWorker.js'
-     },{
-        entries: src + '/app/components/loadtest/LoadDataPage.js',
-        dest: dest,
-        outputName: './js/loadDataPage.js'
-    },{
-         entries: src + '/app/components/loadtest/LoadDataGraph.js',
-         dest: dest,
-         outputName: './js/loadDataGraph.js'
-     }],
+        outputName: 'platform/PlatformMqttLoadEventService.js'
+    }],
     extensions: ['.js'],
   }
 };

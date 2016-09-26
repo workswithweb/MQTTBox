@@ -1,9 +1,9 @@
-import BrokerSettings from './BrokerSettings';
+import MqttClientSettings from './MqttClientSettings';
 
-class MqttLoadSettings extends BrokerSettings {
+class MqttLoadSettings extends MqttClientSettings {
     constructor() {
         super();
-        this.loadType = "publishing";
+        this.loadTestType = "publishing";
         this.msgCount = 20;
         this.runTime = 5;
         this.timeOut = 30;
@@ -16,4 +16,3 @@ class MqttLoadSettings extends BrokerSettings {
 }
 
 export default MqttLoadSettings;
-

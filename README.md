@@ -9,7 +9,7 @@ Supercharge your MQTT workflow with MQTTBox Apps available on Chrome, Linux, Mac
 <img src="http://workswithweb.com/images/platforms/html.png"/>
 <img src="http://workswithweb.com/images/platforms/windows.png"/>
 
-####MQTTBox features include:
+####MQTTBox Client features include:
 - Connect to multiple mqtt brokers with TCP or Web Sockets protocols
 - Connect with wide range of mqtt client connection settings
 - Publish/Subscribe to multiple topics at same time
@@ -17,6 +17,12 @@ Supercharge your MQTT workflow with MQTTBox Apps available on Chrome, Linux, Mac
 - Copy/Republish payloads
 - History of published/subscribed messages for each topic
 - Reconnect client to broker
+
+####MQTTBox Load test features include:
+- Load test MQTT publisher/Subscriber.
+- Run load test with wide range load test settings
+- View load test data 
+- View load test results in graphs
 
 Please report Feature Requests, Enhancements or Bugs to workswithweb@gmail.com or on [Github](https://github.com/issues)
 
@@ -29,6 +35,12 @@ Make sure you have [Node.js](https://nodejs.org/en/) installed and follow below 
 
 - `npm install`
 
+- `Open /node_modules/mqtt/lib/connect/ws.js file and goto line 45 or where ever you find below code.`
+    else {
+        throw new Error('Could not determine host. Specify host manually.')
+    }
+ `Remove this else block completely. We need this step to make mqtt.js works with webworkers`.
+
 Thats it !!! Your project is setup. Execute below commands in your current folder (MQTTBox) as per your app requirements.
 
 ######Web App Builds
@@ -36,18 +48,8 @@ Thats it !!! Your project is setup. Execute below commands in your current folde
 
 - `gulp` - Live development mode. Use while development to see live reload of your web app when changes done in code.
 
-######Chrome App Builds
-
-By default, build folder generated is for web app. If you want to generate Chrome app build, follow below steps.
-
-- Change variable `AppConstants.CLIENT_TYPE` in `src/app/utils/AppConstants.js` to `AppConstants.CHROME_APP` (by default it is `AppConstants.WEB_APP` to generate web app.)
-
-- Need to generate custom build of mqtt.js to support TCP with `chrome-net` (detail documentation in progress for this step)
-
-- Execute `gulp build` or `gulp` as mentioned above. This should generate `build` folder.
-
-- Copy chrome specific assets from `chrome` folder into `build` folder. This should have all assets in `build` folder to upload to chrome store.
-
+By default `master` branch has MQTTBox web app. Please check other MQTTBox branches for other platform apps.
+ 
 NOTE: 
 1.Web App supports only Websockets because of browser limitations.
 2.We are working to make all apps to look in sync.
