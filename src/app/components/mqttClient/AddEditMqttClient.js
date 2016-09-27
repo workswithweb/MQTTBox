@@ -168,6 +168,8 @@ class AddEditMqttClient extends Component {
                                 className="form-control">
                                 <option value="ws">ws</option>
                                 <option value="wss">wss</option>
+                                <option value="tcp">tcp</option>
+                                <option value="mqtt">mqtt</option>
                             </select>
                         </div>
                         <div className="col-xs-12 col-sm-6 col-md-3">

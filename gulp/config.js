@@ -26,13 +26,17 @@ module.exports = {
       dest: dest,
       outputName: 'app.js'
     },{
-        entries: src + '/app/platform/PlatformMqttClientEventService.js',
+        entries: src + '/app/platform/background_chrome.js',
         dest: dest,
-        outputName: 'platform/PlatformMqttClientEventService.js'
+        outputName: 'platform/background_chrome.js'
     },{
-        entries: src + '/app/platform/PlatformMqttLoadEventService.js',
+        entries: src + '/app/platform/PlatformMqttClientService.js',
         dest: dest,
-        outputName: 'platform/PlatformMqttLoadEventService.js'
+        outputName: 'platform/PlatformMqttClientService.js'
+    },{
+        entries: src + '/app/platform/PlatformMqttLoadService.js',
+        dest: dest,
+        outputName: 'platform/PlatformMqttLoadService.js'
     }],
     extensions: ['.js'],
   }

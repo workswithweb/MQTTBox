@@ -54,7 +54,7 @@ export default class AboutApp extends React.Component {
                     </div>
                     <div className="media-body">
                         <h3 className="media-heading">MQTTBox</h3>
-                        <h4 className="media-heading">Version 0.1.2</h4>
+                        <h4 className="media-heading">Version 0.1.3</h4>
                     </div>
                 </div>
                 <div>

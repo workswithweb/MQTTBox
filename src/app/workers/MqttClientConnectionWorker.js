@@ -2,16 +2,29 @@ import Q from 'q';
 import {Qlobber} from 'qlobber';
 import _ from 'lodash';
 import mqtt from 'mqtt';
+import Events from 'events';
 
 import MqttClientConstants from '../utils/MqttClientConstants';
-import PlatformMqttClientEventService from '../platform/PlatformMqttClientEventService';
 
-class MqttClientConnectionWorker {  
+class MqttClientConnectionWorker extends Events.EventEmitter {  
 
     constructor() {
+        super();
         this.mqttClientObj = null;
         this.client = null;
         this._matcher = new Qlobber({separator:'/',wildcard_one:'+',wildcard_some:'#'});
+    }
+
+    emitChange(data) { 
+        this.emit(MqttClientConstants.EVENT_WORKER_MQTT_CLIENT,data);
+    }
+
+    addChangeListener(callback) { 
+        this.on(MqttClientConstants.EVENT_WORKER_MQTT_CLIENT,callback);
+    }
+
+    removeChangeListener(callback) { 
+        this.removeListener(MqttClientConstants.EVENT_WORKER_MQTT_CLIENT,callback);
     }
 
     processAction(action) {
@@ -60,7 +73,7 @@ class MqttClientConnectionWorker {  
                 var topics = _.uniq(this._matcher.match(topic));
                 if(message!=null && topics!=null && topics.length>0) {
                     for(var i=0;i<topics.length;i++) {
-                        PlatformMqttClientEventService.processEvent({event:MqttClientConstants.EVENT_MQTT_CLIENT_SUBSCRIBED_DATA_RECIEVED,
+                        this.emitChange({event:MqttClientConstants.EVENT_MQTT_CLIENT_SUBSCRIBED_DATA_RECIEVED,
                             data:{mcsId:this.mqttClientObj.mcsId,topic:topics[i],
                             message:message.toString(),packet:packet}});
                     }
@@ -70,7 +83,7 @@ class MqttClientConnectionWorker {  
     }
 
     publishClientConnectionStatus(connState) {
-        PlatformMqttClientEventService.processEvent({event:MqttClientConstants.EVENT_MQTT_CLIENT_CONN_STATE_CHANGED, data:{mcsId:this.mqttClientObj.mcsId,connState:connState}});
+        this.emitChange({event:MqttClientConstants.EVENT_MQTT_CLIENT_CONN_STATE_CHANGED, data:{mcsId:this.mqttClientObj.mcsId,connState:connState}});
     }
 
     getConnectOptions() {
@@ -125,10 +138,10 @@ class MqttClientConnectionWorker {  
         if(this.client!=null) {
             Q.invoke(this.client,'end',true)
             .then(function() {
-                PlatformMqttClientEventService.processEvent({event:MqttClientConstants.EVENT_MQTT_CLIENT_CONNECTION_CLOSED, data:{mcsId:this.mqttClientObj.mcsId}});
+                this.emitChange({event:MqttClientConstants.EVENT_MQTT_CLIENT_CONNECTION_CLOSED, data:{mcsId:this.mqttClientObj.mcsId}});
             }.bind(this));
         } else {
-            PlatformMqttClientEventService.processEvent({event:MqttClientConstants.EVENT_MQTT_CLIENT_CONNECTION_CLOSED, data:{mcsId:this.mqttClientObj.mcsId}});
+            this.emitChange({event:MqttClientConstants.EVENT_MQTT_CLIENT_CONNECTION_CLOSED, data:{mcsId:this.mqttClientObj.mcsId}});
         }
     }
 
@@ -153,4 +166,4 @@ class MqttClientConnectionWorker {  
     }
 }
 
-export default new MqttClientConnectionWorker();
+export default MqttClientConnectionWorker;

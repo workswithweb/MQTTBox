@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+  "name": "MQTTBox",
+  "short_name": "MQTTBox",
+  "description": "Developers helper program to create and test MQTT connectivity protocol.",
+  "version": "0.1.3",
+  "minimum_chrome_version": "38",
+
+  "icons": {
+    "16": "images/icon-16.png",
+    "128": "images/icon-128.png"
+  },
+  "app": {
+    "background": {
+      "scripts": ["./platform/background_chrome.js","./platform/PlatformMqttClientService.js","./platform/PlatformMqttLoadService.js"]
+    }
+  },
+  "sockets": {
+    "tcp" : {
+      "connect": ["*"]
+    }
+  },
+  "permissions": [
+    "storage",
+    "unlimitedStorage"
+  ]
+}
