@@ -43,4 +43,7 @@ MqttLoadConstants.LOAD_BROKER_CONNECTION_OFFLINE = 'Broker is offline';
 MqttLoadConstants.LOAD_BROKER_CONNECTION_ERROR = 'Broker connection error';
 MqttLoadConstants.LOAD_TIME_OUT = 'Load test timed out.';
 
+//WORKERS
+MqttLoadConstants.EVENT_WORKER_MQTT_LOAD = 'EVENT_WORKER_MQTT_LOAD';
+
 module.exports = MqttLoadConstants;

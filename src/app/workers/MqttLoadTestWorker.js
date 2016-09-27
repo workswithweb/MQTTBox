@@ -2,13 +2,14 @@ import localforage from 'localforage';
 import Q from 'q';
 import _ from 'lodash';
 import mqtt from 'mqtt';
+import Events from 'events';
 
 import MqttLoadConstants from '../utils/MqttLoadConstants';
-import PlatformMqttLoadEventService from '../platform/PlatformMqttLoadEventService';
 
-class MqttLoadTestWorker {  
+class MqttLoadTestWorker extends Events.EventEmitter {  
 
     constructor() {
+        super();
         this.loadInstanceDb = localforage.createInstance({name:"MQTT_LOAD_INSTANCE_DATA",driver:localforage.INDEXEDDB});
         this.loadObj = null;
         this.iId = null;
@@ -29,6 +30,18 @@ class MqttLoadTestWorker {  
 
         this.runTimeKeeper = null;
 
+    }
+
+    emitChange(data) { 
+        this.emit(MqttLoadConstants.EVENT_WORKER_MQTT_LOAD,data);
+    }
+
+    addChangeListener(callback) { 
+        this.on(MqttLoadConstants.EVENT_WORKER_MQTT_LOAD,callback);
+    }
+
+    removeChangeListener(callback) { 
+        this.removeListener(MqttLoadConstants.EVENT_WORKER_MQTT_LOAD,callback);
     }
 
     processAction(action) {
@@ -96,13 +109,13 @@ class MqttLoadTestWorker {  
     }
 
     publishStatusWithSuccess(statusObj) {
-        PlatformMqttLoadEventService.processEvent({event:MqttLoadConstants.EVENT_MQTT_LOAD_STATUS_MESSAGE,
+        this.emitChange({event:MqttLoadConstants.EVENT_MQTT_LOAD_STATUS_MESSAGE,
                         data:{mcsId:this.loadObj.mcsId,iId:this.iId,statusObj:statusObj,
                         fromState:MqttLoadConstants.STATE_IN_PROGRESS,toState:MqttLoadConstants.STATE_SUCCESS}});
     }
 
     publishStatus(statusObj,fromState,toState) {
-        PlatformMqttLoadEventService.processEvent({event:MqttLoadConstants.EVENT_MQTT_LOAD_STATUS_MESSAGE,
+        this.emitChange({event:MqttLoadConstants.EVENT_MQTT_LOAD_STATUS_MESSAGE,
                         data:{mcsId:this.loadObj.mcsId,iId:this.iId,statusObj:statusObj,
                         fromState:fromState,toState:toState}});
     }
@@ -258,10 +271,10 @@ class MqttLoadTestWorker {  
     }
 
     publishLoadTestEndMessage() {
-        PlatformMqttLoadEventService.processEvent({event:MqttLoadConstants.EVENT_MQTT_LOAD_TEST_ENDED,
+        this.emitChange({event:MqttLoadConstants.EVENT_MQTT_LOAD_TEST_ENDED,
                         data:{mcsId:this.loadObj.mcsId,iId:this.iId,messageStartTime:this.messageStartTime,messageEndTime:this.messageEndTime,
                         messCount:this.messCount,qosStartTime:this.qosStartTime,qosEndTime:this.qosEndTime,qosReceivedMessCount:this.qosReceivedMessCount}});
     }
 }
 
-export default new MqttLoadTestWorker();
+export default MqttLoadTestWorker;

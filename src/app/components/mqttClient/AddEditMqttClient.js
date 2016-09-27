@@ -8,6 +8,8 @@ import MqttClientActions from '../../actions/MqttClientActions';
 import MqttClientService from '../../services/MqttClientService';
 import MqttClientConstants from '../../utils/MqttClientConstants';
 import NavUtils from '../../utils/NavUtils';
+import PlatformConstants from '../../platform/common/PlatformConstants';
+import CommonConstants from '../../utils/CommonConstants';
 
 const styles = {
     actionButton: {
@@ -109,6 +111,19 @@ class AddEditMqttClient extends Component {
             backButton = <a href="#/mqttclientslist" className="navButton"><b><span className="glyphicon glyphicon-arrow-left" aria-hidden="true"> </span> BACK</b></a>;
         }
 
+        var supportedProtocols = [];
+        supportedProtocols.push(<option key="ws" value="ws">ws</option>);
+        supportedProtocols.push(<option key="wss" value="wss">wss</option>);
+        if(PlatformConstants.PLATFORM_TYPE == CommonConstants.PLATFORM_CHROME_APP) {
+            supportedProtocols.push(<option key="tcp" value="tcp">tcp</option>);
+            supportedProtocols.push(<option key="mqtt" value="mqtt">mqtt</option>);
+        } else if(PlatformConstants.PLATFORM_TYPE == CommonConstants.PLATFORM_ELECTRON_APP) {
+            supportedProtocols.push(<option key="tcp" value="tcp">tcp</option>);
+            supportedProtocols.push(<option key="tls" value="tls">tls</option>);
+            supportedProtocols.push(<option key="mqtt" value="mqtt">mqtt</option>);
+            supportedProtocols.push(<option key="mqtts" value="mqtts">mqtt</option>);
+        }
+
         return (
             <div>
                 <nav className="navbar navbar-default navbar-fixed-top">
@@ -166,8 +181,7 @@ class AddEditMqttClient extends Component {
                             <label htmlFor="protocol">Protocol</label>
                             <select name="protocol" onChange={this.onTargetValueChange} value={this.state.protocol}
                                 className="form-control">
-                                <option value="ws">ws</option>
-                                <option value="wss">wss</option>
+                                {supportedProtocols}
                             </select>
                         </div>
                         <div className="col-xs-12 col-sm-6 col-md-3">
