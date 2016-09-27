@@ -1,14 +1,17 @@
 import MqttClientConnectionWorker from '../workers/MqttClientConnectionWorker';
 import MqttClientConstants from '../utils/MqttClientConstants';
 
-class PlatformMqttClientEventService {  
+class PlatformMqttClientWorkerService {  
     constructor() {
+        this.mqttClientConnectionWorker = new MqttClientConnectionWorker();
+        this.mqttClientConnectionWorker.addChangeListener(this.processEvents.bind(this));
+
         self.addEventListener('message',function(event) {
-            MqttClientConnectionWorker.processAction(event.data);
+            this.mqttClientConnectionWorker.processAction(event.data);
         }.bind(this),false);
     }
 
-    processEvent(eventObj) {
+    processEvents(eventObj) {
         if(eventObj.event == MqttClientConstants.EVENT_MQTT_CLIENT_CONNECTION_CLOSED) {
             close();
         } else {
@@ -17,4 +20,4 @@ class PlatformMqttClientEventService {  
     }
 }
 
-export default new PlatformMqttClientEventService();
+export default new PlatformMqttClientWorkerService();

@@ -1,4 +1,4 @@
-import CommonConstants from '../utils/CommonConstants';
+import CommonConstants from '../../utils/CommonConstants';
 
 class PlatformConstants {}
 

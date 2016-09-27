@@ -3,7 +3,7 @@ import PlatformDispatcherService from './PlatformDispatcherService';
 import MqttLoadConstants from '../utils/MqttLoadConstants';
 import CommonConstants from '../utils/CommonConstants';
 
-class PlatformMqttLoadActionService {  
+class PlatformMqttLoadService {  
 
     constructor() {
         this.mqttLoadWorkers = {};
@@ -28,7 +28,7 @@ class PlatformMqttLoadActionService {  
             delete this.mqttLoadWorkers[action.data.iId];
         }
 
-        mqttLoadWorkerObj = new Worker('./platform/PlatformMqttLoadEventService.js');
+        mqttLoadWorkerObj = new Worker('./platform/PlatformMqttLoadWorkerService.js');
         mqttLoadWorkerObj.addEventListener('message',function(event) {
             this.processEvents(event.data);
         }.bind(this));
@@ -48,4 +48,4 @@ class PlatformMqttLoadActionService {  
     }
 }
 
-export default new PlatformMqttLoadActionService();
+export default new PlatformMqttLoadService();

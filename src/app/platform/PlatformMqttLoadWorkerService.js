@@ -1,14 +1,17 @@
 import MqttLoadTestWorker from '../workers/MqttLoadTestWorker';
 import MqttLoadConstants from '../utils/MqttLoadConstants';
 
-class PlatformMqttLoadEventService {  
+class PlatformMqttLoadWorkerService {  
     constructor() {
+        this.mqttLoadTestWorker = new MqttLoadTestWorker();
+        this.mqttLoadTestWorker.addChangeListener(this.processEvents.bind(this));
+
         self.addEventListener('message',function(event) {
-            MqttLoadTestWorker.processAction(event.data);
+            this.mqttLoadTestWorker.processAction(event.data);
         }.bind(this),false);
     }
 
-    processEvent(eventObj) {
+    processEvents(eventObj) {
         postMessage(eventObj);
         if(eventObj.event == MqttLoadConstants.EVENT_MQTT_LOAD_TEST_ENDED) {
             close();
@@ -16,4 +19,4 @@ class PlatformMqttLoadEventService {  
     }
 }
 
-export default new PlatformMqttLoadEventService();
+export default new PlatformMqttLoadWorkerService();

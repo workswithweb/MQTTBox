@@ -3,7 +3,7 @@ import PlatformDispatcherService from './PlatformDispatcherService';
 import CommonConstants from '../utils/CommonConstants';
 import MqttClientConstants from '../utils/MqttClientConstants';
 
-class PlatformMqttClientActionService {  
+class PlatformMqttClientService {  
 
     constructor() {
         this.mqttClientConnectionWorkers = {};
@@ -39,7 +39,7 @@ class PlatformMqttClientActionService {  
         if(mqttClientConnectionWorker!=null) {
             mqttClientConnectionWorker.postMessage(action);
         } else {
-            mqttClientConnectionWorker = new Worker('./platform/PlatformMqttClientEventService.js');
+            mqttClientConnectionWorker = new Worker('./platform/PlatformMqttClientWorkerService.js');
             mqttClientConnectionWorker.addEventListener('message',function(event){
                 this.processEvents(event.data);
             }.bind(this));
@@ -64,4 +64,4 @@ class PlatformMqttClientActionService {  
     }
 }
 
-export default new PlatformMqttClientActionService();
+export default new PlatformMqttClientService();
