@@ -26,11 +26,13 @@ class MqttClientDashboard extends Component {
 
     constructor(props) {
         super(props);
+
         this.savePublisherSettings = this.savePublisherSettings.bind(this);
         this.saveSubscriberSettings = this.saveSubscriberSettings.bind(this);
+        this.changeConnectionState = this.changeConnectionState.bind(this);
         this.updatePageData = this.updatePageData.bind(this);
         this.updateConnectionStatus = this.updateConnectionStatus.bind(this);
-        this.changeConnectionState = this.changeConnectionState.bind(this);
+
         this.state = {conState:MqttClientService.getMqttClientStateByMcsId(this.props.params.mcsId),
                         mqttClientSettings:MqttClientService.getMqttClientSettingsByMcsId(this.props.params.mcsId)};
     }
@@ -53,7 +55,8 @@ class MqttClientDashboard extends Component {
 
     updatePageData(mcsId) {
         if(mcsId == this.props.params.mcsId) {
-            this.setState({mqttClientObj:MqttClientService.getMqttClientSettingsByMcsId(this.props.params.mcsId)});
+            this.setState({mqttClientObj:MqttClientService.getMqttClientSettingsByMcsId(this.props.params.mcsId),
+            conState:MqttClientService.getMqttClientStateByMcsId(this.props.params.mcsId)});
         }
     }
 
@@ -111,39 +114,40 @@ class MqttClientDashboard extends Component {
                     <div>
                         <div className="navbar-header">
                             <LeftMenuButton/>
-                            <a href="#/mqttclientslist" className="navButton"><b>MQTT CLIENTS</b></a>
+                            <a href="#/mqttclientslist" className="navButton"><b><span className="glyphicon glyphicon-arrow-left" aria-hidden="true"> </span> MQTT CLIENTS</b></a>
                         </div>
                         <div id="navbar" className="navbar-collapse collapse">
                             <ul className="nav navbar-nav">
                                 <li>
-                                    <button onTouchTap={this.changeConnectionState} style={styles.button} type="button" className={conStateColor} aria-label="Left Align">
+                                    <button onClick={this.changeConnectionState} style={styles.button} type="button" className={conStateColor} aria-label="Left Align">
                                         <span className="glyphicon glyphicon-signal" aria-hidden="true"></span> {conStateText}
                                     </button>
                                 </li>
                                 <li>
-                                    <button onTouchTap={this.savePublisherSettings} title="Add new publisher" style={styles.button} type="button" className="btn btn-default" aria-label="Left Align">
+                                    <button onClick={this.savePublisherSettings} title="Add new publisher" style={styles.button} type="button" className="btn btn-default" aria-label="Left Align">
                                         <span style={{color:"#337ab7"}} className="glyphicon glyphicon-upload" aria-hidden="true"></span> Add publisher
                                     </button>
                                 </li>
                                 <li>
-                                    <button onTouchTap={this.saveSubscriberSettings} title="Add new subscriber" style={styles.button} type="button" className="btn btn-default" aria-label="Left Align">
+                                    <button onClick={this.saveSubscriberSettings} title="Add new subscriber" style={styles.button} type="button" className="btn btn-default" aria-label="Left Align">
                                         <span style={{color:"#eea236"}} className="glyphicon glyphicon-download" aria-hidden="true"></span> Add subscriber
                                     </button>
                                 </li>
                                 <li>
-                                    <button onTouchTap={NavUtils.gotToAddMqttClient.bind(this,this.props.params.mcsId)} title="Edit MQTT Client Settings"
+                                    <button onClick={NavUtils.gotToAddMqttClient.bind(this,this.props.params.mcsId)} title="Edit MQTT Client Settings"
                                     style={styles.button} type="button" className="btn btn-default" aria-label="Left Align">
-                                        <span className="glyphicon glyphicon-cog" aria-hidden="true"></span> Settings
+                                        <span className="glyphicon glyphicon-cog" aria-hidden="true"></span>
                                     </button>
                                 </li>
                                 <li>
-                                    <div style={styles.menuText}><b>{this.state.mqttClientSettings.mqttClientName+' - '+this.state.mqttClientSettings.protocol+' '+this.state.mqttClientSettings.host}</b></div>
+
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </nav>
-                <div className="container-fluid" style={styles.container}>
+                <div style={{marginLeft:15}}><small><code style={{color:'#337ab7'}}>{this.state.mqttClientSettings.mqttClientName+' - '+this.state.mqttClientSettings.protocol+'://'+this.state.mqttClientSettings.host}</code></small></div>
+                <div className="container-fluid">
                     <div className="row">
                         {gridList}
                     </div>

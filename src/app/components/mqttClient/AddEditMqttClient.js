@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import UUID from 'node-uuid';
+
 import LeftMenuButton from '../common/LeftMenuButton';
 import MqttClientSettings from '../../models/MqttClientSettings';
 import CommonActions from '../../actions/CommonActions';
@@ -7,6 +8,8 @@ import MqttClientActions from '../../actions/MqttClientActions';
 import MqttClientService from '../../services/MqttClientService';
 import MqttClientConstants from '../../utils/MqttClientConstants';
 import NavUtils from '../../utils/NavUtils';
+import PlatformConstants from '../../platform/common/PlatformConstants';
+import CommonConstants from '../../utils/CommonConstants';
 
 const styles = {
     actionButton: {
@@ -16,18 +19,19 @@ const styles = {
 class AddEditMqttClient extends Component {
     constructor(props) {
         super(props);
-        this.initBrokerObj = this.initBrokerObj.bind(this);
+
+        this.initMqttClientObj = this.initMqttClientObj.bind(this);
         this.onTargetValueChange = this.onTargetValueChange.bind(this);
         this.generateMqttClientId = this.generateMqttClientId.bind(this);
         this.onMqtt311CompliantChange = this.onMqtt311CompliantChange.bind(this);
         this.onCheckBoxValueChange = this.onCheckBoxValueChange.bind(this);
-        this.deleteMqttClientSettings = this.deleteMqttClientSettings.bind(this);
         this.saveMqttClientSettings = this.saveMqttClientSettings.bind(this);
+        this.deleteMqttClientSettings = this.deleteMqttClientSettings.bind(this);
 
-        this.initBrokerObj(this.props.params);
+        this.initMqttClientObj(this.props.params);
     }
 
-    initBrokerObj(params) {
+    initMqttClientObj(params) {
         if(params!=null && params.mcsId!=null && params.mcsId.trim().length>0) {
             this.state = MqttClientService.getMqttClientSettingsByMcsId(params.mcsId);
         } else {
@@ -98,14 +102,26 @@ class AddEditMqttClient extends Component {
 
     render() {
         var deleteButton = '';
-        var cancelButton = '';
+        var backButton = '';
 
         if(this.props.params.mcsId!=null) {
-            deleteButton = <button style={styles.actionButton} onTouchTap={this.deleteMqttClientSettings} type="button" className="btn btn-default">Delete</button>;
-
-            cancelButton = <button style={styles.actionButton} onTouchTap={NavUtils.goToMqttClientDashboard.bind(this,this.props.params.mcsId)} type="button" className="btn btn-default">Cancel</button>;
+            deleteButton = <button style={styles.actionButton} onClick={this.deleteMqttClientSettings} type="button" className="btn btn-default">Delete</button>;
+            backButton = <a href={"#/mqttclientdashboard/"+this.props.params.mcsId} className="navButton"><b><span className="glyphicon glyphicon-arrow-left" aria-hidden="true"> </span> BACK</b></a>;
         } else {
-            cancelButton = <button style={styles.actionButton} onTouchTap={NavUtils.goToMqttClientList} type="button" className="btn btn-default">Cancel</button>;
+            backButton = <a href="#/mqttclientslist" className="navButton"><b><span className="glyphicon glyphicon-arrow-left" aria-hidden="true"> </span> BACK</b></a>;
+        }
+
+        var supportedProtocols = [];
+        supportedProtocols.push(<option key="ws" value="ws">ws</option>);
+        supportedProtocols.push(<option key="wss" value="wss">wss</option>);
+        if(PlatformConstants.PLATFORM_TYPE == CommonConstants.PLATFORM_CHROME_APP) {
+            supportedProtocols.push(<option key="tcp" value="tcp">tcp</option>);
+            supportedProtocols.push(<option key="mqtt" value="mqtt">mqtt</option>);
+        } else if(PlatformConstants.PLATFORM_TYPE == CommonConstants.PLATFORM_ELECTRON_APP) {
+            supportedProtocols.push(<option key="tcp" value="tcp">tcp</option>);
+            supportedProtocols.push(<option key="tls" value="tls">tls</option>);
+            supportedProtocols.push(<option key="mqtt" value="mqtt">mqtt</option>);
+            supportedProtocols.push(<option key="mqtts" value="mqtts">mqtt</option>);
         }
 
         return (
@@ -114,11 +130,11 @@ class AddEditMqttClient extends Component {
                     <div>
                         <div className="navbar-header">
                             <LeftMenuButton/>
-                            <a href="#/mqttclientslist" className="navButton"><b>MQTT CLIENTS</b></a>
+                            {backButton}
                         </div>
                     </div>
                 </nav>
-                <div className="container-fluid" style={{margin:10,border:'1px solid #25250e',borderRadius:5,padding:20}}>
+                <div className="container-fluid" style={{margin:10,border:'1px solid #e7e7e7',borderRadius:5,padding:20}}>
                     <div className="row">
                         <div className="col-xs-12 col-sm-6 col-md-3">
                             <div className="form-group">
@@ -135,7 +151,7 @@ class AddEditMqttClient extends Component {
                                         placeholder="MQTT Client Id" onChange={this.onTargetValueChange}
                                         value={this.state.mqttClientId}/>
                                     <div data-toggle="tooltip" data-placement="bottom" title="Generate new MQTT client id"
-                                    style={{cursor:'pointer'}} onTouchTap={this.generateMqttClientId} className="input-group-addon"><span className="glyphicon glyphicon-refresh" aria-hidden="true"></span></div>
+                                    style={{cursor:'pointer'}} onClick={this.generateMqttClientId} className="input-group-addon"><span className="glyphicon glyphicon-refresh" aria-hidden="true"></span></div>
                                 </div>
                             </div>
                         </div>
@@ -165,12 +181,7 @@ class AddEditMqttClient extends Component {
                             <label htmlFor="protocol">Protocol</label>
                             <select name="protocol" onChange={this.onTargetValueChange} value={this.state.protocol}
                                 className="form-control">
-                                <option value="mqtt">mqtt</option>
-                                <option value="mqtts">mqtts</option>
-                                <option value="tcp">tcp</option>
-                                <option value="tls">tls</option>
-                                <option value="ws">ws</option>
-                                <option value="wss">wss</option>
+                                {supportedProtocols}
                             </select>
                         </div>
                         <div className="col-xs-12 col-sm-6 col-md-3">
@@ -294,10 +305,7 @@ class AddEditMqttClient extends Component {
                     </div>
                     <div className="row">
                         <div className="col-md-offset-3 col-xs-12 col-sm-6 col-md-3">
-                            <button style={styles.actionButton} onTouchTap={this.saveMqttClientSettings} type="button" className="btn btn-success">Save</button>
-                        </div>
-                        <div className="col-xs-12 col-sm-6 col-md-3">
-                            {cancelButton}
+                            <button style={styles.actionButton} onClick={this.saveMqttClientSettings} type="button" className="btn btn-primary">Save</button>
                         </div>
                         <div className="col-xs-12 col-sm-6 col-md-3">
                             {deleteButton}

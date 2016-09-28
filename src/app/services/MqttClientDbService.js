@@ -2,15 +2,10 @@ import localforage from 'localforage';
 import Q from 'q';
 import _ from 'lodash';
 
-import CommonConstants from '../utils/CommonConstants';
-
 class MqttClientDbWorker {  
 
     constructor() {
         this.db = localforage.createInstance({name:"MQTT_CLIENT_SETTINGS",driver:localforage.INDEXEDDB});
-        this.saveMqttClientSettings = this.saveMqttClientSettings.bind(this);
-        this.getAllMqttClientSettings = this.getAllMqttClientSettings.bind(this);
-        this.deleteMqttClientSettingsById = this.deleteMqttClientSettingsById.bind(this);
     }
 
     saveMqttClientSettings(obj) { 

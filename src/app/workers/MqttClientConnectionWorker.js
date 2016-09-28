@@ -2,14 +2,42 @@ import Q from 'q';
 import {Qlobber} from 'qlobber';
 import _ from 'lodash';
 import mqtt from 'mqtt';
+import Events from 'events';
+
 import MqttClientConstants from '../utils/MqttClientConstants';
 
-class MqttClientConnectionWorker {  
+class MqttClientConnectionWorker extends Events.EventEmitter {  
+
     constructor() {
+        super();
         this.mqttClientObj = null;
         this.client = null;
         this._matcher = new Qlobber({separator:'/',wildcard_one:'+',wildcard_some:'#'});
-        process.on('message',this.processAction.bind(this));
+        this.isDisconnecting =false;
+    }
+
+    emitChange(data) { 
+        this.emit(MqttClientConstants.EVENT_WORKER_MQTT_CLIENT,data);
+    }
+
+    addChangeListener(callback) { 
+        this.on(MqttClientConstants.EVENT_WORKER_MQTT_CLIENT,callback);
+    }
+
+    removeChangeListener(callback) { 
+        this.removeListener(MqttClientConstants.EVENT_WORKER_MQTT_CLIENT,callback);
+    }
+
+    emitChange(data) { 
+        this.emit(MqttClientConstants.EVENT_WORKER_MQTT_CLIENT,data);
+    }
+
+    addChangeListener(callback) { 
+        this.on(MqttClientConstants.EVENT_WORKER_MQTT_CLIENT,callback);
+    }
+
+    removeChangeListener(callback) { 
+        this.removeListener(MqttClientConstants.EVENT_WORKER_MQTT_CLIENT,callback);
     }
 
     processAction(action) {
@@ -39,11 +67,14 @@ class MqttClientConnectionWorker {  
             this.client = mqtt.connect(this.mqttClientObj.protocol+'://'+this.mqttClientObj.host,this.getConnectOptions());
 
             this.client.on('connect', function () {
+                console.log('connect');
                 this.publishClientConnectionStatus(MqttClientConstants.CONNECTION_STATE_CONNECTED);
             }.bind(this));
 
             this.client.on('close', function () {
-                this.publishClientConnectionStatus(MqttClientConstants.CONNECTION_STATE_ERROR);
+                if(this.isDisconnecting==false) {
+                    this.publishClientConnectionStatus(MqttClientConstants.CONNECTION_STATE_ERROR);
+                }
             }.bind(this));
 
             this.client.on('offline', function () {
@@ -58,18 +89,17 @@ class MqttClientConnectionWorker {  
                 var topics = _.uniq(this._matcher.match(topic));
                 if(message!=null && topics!=null && topics.length>0) {
                     for(var i=0;i<topics.length;i++) {
-                        process.send({event:MqttClientConstants.EVENT_MQTT_CLIENT_SUBSCRIBED_DATA_RECIEVED,
+                        this.emitChange({event:MqttClientConstants.EVENT_MQTT_CLIENT_SUBSCRIBED_DATA_RECIEVED,
                             data:{mcsId:this.mqttClientObj.mcsId,topic:topics[i],
                             message:message.toString(),packet:packet}});
                     }
                 }
             }.bind(this));
-            process.on('exit',this.publishClientConnectionStatus.bind(this,MqttClientConstants.ACTION_MQTT_CLIENT_DISCONNECT));
         }
     }
 
     publishClientConnectionStatus(connState) {
-        process.send({event:MqttClientConstants.EVENT_MQTT_CLIENT_CONN_STATE_CHANGED, data:{mcsId:this.mqttClientObj.mcsId,connState:connState}});
+        this.emitChange({event:MqttClientConstants.EVENT_MQTT_CLIENT_CONN_STATE_CHANGED, data:{mcsId:this.mqttClientObj.mcsId,connState:connState}});
     }
 
     getConnectOptions() {
@@ -121,13 +151,14 @@ class MqttClientConnectionWorker {  
     }
 
     disConnect() {
+        this.isDisconnecting =true;
         if(this.client!=null) {
             Q.invoke(this.client,'end',true)
             .then(function() {
-                process.exit();
+                this.emitChange({event:MqttClientConstants.EVENT_MQTT_CLIENT_CONNECTION_CLOSED, data:{mcsId:this.mqttClientObj.mcsId}});
             }.bind(this));
         } else {
-            process.exit();
+            this.emitChange({event:MqttClientConstants.EVENT_MQTT_CLIENT_CONNECTION_CLOSED, data:{mcsId:this.mqttClientObj.mcsId}});
         }
     }
 
@@ -152,4 +183,4 @@ class MqttClientConnectionWorker {  
     }
 }
 
-export default new MqttClientConnectionWorker();
+export default MqttClientConnectionWorker;

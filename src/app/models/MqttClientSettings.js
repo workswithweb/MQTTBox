@@ -4,7 +4,7 @@ class MqttClientSettings {
     constructor() {
 
         this.protocol = 'ws';
-        this.host = 'test.mosquitto.org:8080';
+        this.host = 'iot.eclipse.org:80/ws';
 
         this.mqtt311Compliant = true;
         this.keepalive = 10;

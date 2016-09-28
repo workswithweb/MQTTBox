@@ -6,6 +6,7 @@ import MqttClientActions from '../../actions/MqttClientActions';
 import MqttClientService from '../../services/MqttClientService';
 import CommonActions from '../../actions/CommonActions';
 import MqttClientConstants from '../../utils/MqttClientConstants';
+import CommonConstants from '../../utils/CommonConstants';
 
 const style = {
     publisherPaper: {
@@ -34,14 +35,15 @@ export default class MqttClientPublisher extends React.Component {
 
     constructor(props) {
         super(props);
+
         this.onTargetValueChange = this.onTargetValueChange.bind(this);
         this.onCheckBoxValueChange = this.onCheckBoxValueChange.bind(this);
         this.deletePublisher = this.deletePublisher.bind(this);
-        this.savePublisherSettings = this.savePublisherSettings.bind(this);
+        this.publishMessageToBroker = this.publishMessageToBroker.bind(this);
         this.publishMessage = this.publishMessage.bind(this);
         this.rePublishMessage = this.rePublishMessage.bind(this);
-        this.publishMessageToBroker = this.publishMessageToBroker.bind(this);
         this.onPayloadCopy = this.onPayloadCopy.bind(this);
+        this.savePublisherSettings = this.savePublisherSettings.bind(this);
 
         this.state = {
             qos:this.props.publisherSettings.qos,
@@ -84,6 +86,7 @@ export default class MqttClientPublisher extends React.Component {
                         pubMess.shift();
                     }
                     this.setState({publishedMessages:pubMess});
+                    return true;
                 }
             } else {
                 CommonActions.showMessageToUser({message:'Please enter valid topic to subscribe'});
@@ -91,6 +94,7 @@ export default class MqttClientPublisher extends React.Component {
         } else {
             CommonActions.showMessageToUser({message:'MQTT Client is not connected to broker. Please check client settings'});
         }
+        return false;
     }
 
     publishMessage() {
@@ -99,11 +103,10 @@ export default class MqttClientPublisher extends React.Component {
 
     rePublishMessage(topic,payload,qos,retain) {
         this.publishMessageToBroker(topic,payload,qos,retain);
-        CommonActions.showMessageToUser({message:'Message republished successfully',autoHideDuration:1000});
     }
 
     onPayloadCopy() {
-        CommonActions.showMessageToUser({message:'Copied',autoHideDuration:2000});
+        CommonActions.showMessageToUser({message:'Copied',type:CommonConstants.ALERT_SUCCESS});
     }
 
     savePublisherSettings() {
@@ -130,7 +133,7 @@ export default class MqttClientPublisher extends React.Component {
                                         <CopyToClipboard onCopy={this.onPayloadCopy} text={pubMess.payload}>
                                             <span title="Copy" style={style.messageIcons} className="glyphicon glyphicon-copy" aria-hidden="true"></span>
                                         </CopyToClipboard>
-                                        <span onTouchTap={this.rePublishMessage.bind(this,pubMess.topic,pubMess.payload,pubMess.qos,pubMess.retain)} title="Publish again" style={style.messageIcons} className="glyphicon glyphicon-share-alt" aria-hidden="true"></span>
+                                        <span onClick={this.rePublishMessage.bind(this,pubMess.topic,pubMess.payload,pubMess.qos,pubMess.retain)} title="Publish again" style={style.messageIcons} className="glyphicon glyphicon-share-alt" aria-hidden="true"></span>
                                     </div>
                                 </div>);
         }
@@ -167,12 +170,12 @@ export default class MqttClientPublisher extends React.Component {
                         <textarea name="payload" onBlur={this.savePublisherSettings} onChange={this.onTargetValueChange} value={this.state.payload} className="form-control" rows="5"></textarea>
                     </div>
                     <div className="form-group">
-                        <button type="button" onTouchTap={this.publishMessage} className="btn btn-primary">Publish</button>
+                        <button type="button" onClick={this.publishMessage} className="btn btn-primary">Publish</button>
                     </div>
                     {messageList}
                 </div>
                 <div>
-                    <span onTouchTap={this.deletePublisher} className="remove" style={style.removeStyle}>
+                    <span onClick={this.deletePublisher} className="remove" style={style.removeStyle}>
                         <span className="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     </span>
                 </div>

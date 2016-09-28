@@ -6,8 +6,8 @@ import CommonConstants from '../utils/CommonConstants';
 import MqttClientSettings from '../models/MqttClientSettings';
 import PublisherSettings from '../models/PublisherSettings';
 import SubscriberSettings from '../models/SubscriberSettings';
-import MqttClientDbWorker from '../workers/MqttClientDbWorker';
-import workerDispatcherService from '../electron/ElectronIpcRendererService';
+import MqttClientDbService from './MqttClientDbService';
+import PlatformDispatcherService from '../platform/PlatformDispatcherService';
 
 class MqttClientService extends Events.EventEmitter {
 
@@ -17,26 +17,6 @@ class MqttClientService extends Events.EventEmitter {
         this.mqttClientsStatus = {};
         this.mqttClientPublishedMessages = {};
         this.mqttClientSubscribedData = {};
-
-        this.registerToAppDispatcher = this.registerToAppDispatcher.bind(this);
-        this.syncMqttClientSettingsCache = this.syncMqttClientSettingsCache.bind(this);
-        this.emitChange = this.emitChange.bind(this);
-        this.addChangeListener = this.addChangeListener.bind(this);
-        this.removeChangeListener = this.removeChangeListener.bind(this);
-        this.getAllMqttClientSettings = this.getAllMqttClientSettings.bind(this);
-        this.getMqttClientSettingsByMcsId = this.getMqttClientSettingsByMcsId.bind(this);
-        this.saveMqttClientSettings = this.saveMqttClientSettings.bind(this);
-        this.deleteMqttClientSettings = this.deleteMqttClientSettings.bind(this);
-        this.savePublisherSettings = this.savePublisherSettings.bind(this);
-        this.deletePublisherSettings = this.deletePublisherSettings.bind(this);
-        this.saveSubscriberSettings = this.saveSubscriberSettings.bind(this);
-        this.deleteSubscriberSettings = this.deleteSubscriberSettings.bind(this);
-        this.publishMessage = this.publishMessage.bind(this);
-        this.getPublishedMessages = this.getPublishedMessages.bind(this);
-        this.subscribeToTopic = this.subscribeToTopic.bind(this);
-        this.getSubscribedData = this.getSubscribedData.bind(this);
-        this.clearMqttClientPubSubCache = this.clearMqttClientPubSubCache.bind(this);
-        this.markAsUnSubscribed = this.markAsUnSubscribed.bind(this);
 
         this.registerToAppDispatcher();
         this.syncMqttClientSettingsCache();
@@ -64,11 +44,10 @@ class MqttClientService extends Events.EventEmitter {
                     this.deleteSubscriberSettings(action.data.mcsId,action.data.subId);
                     break;
                 case MqttClientConstants.ACTION_MQTT_CLIENT_CONNECT:
-                    workerDispatcherService.dispatcherAction(action);
+                    PlatformDispatcherService.dispatcherAction(action,CommonConstants.SERVICE_TYPE_MQTT_CLIENTS);
                     break;
                 case MqttClientConstants.ACTION_MQTT_CLIENT_DISCONNECT:
-                    workerDispatcherService.dispatcherAction(action);
-                    this.markAsUnSubscribed(action.data);
+                    this.disconnectMqttClient(action);
                     break;
                 case MqttClientConstants.ACTION_PUBLISH_MESSAGE:
                     this.publishMessage(action);
@@ -84,8 +63,20 @@ class MqttClientService extends Events.EventEmitter {
         }.bind(this));
     }
 
+    processEvents(eventObj) { 
+        switch(eventObj.event) {
+            case MqttClientConstants.EVENT_MQTT_CLIENT_CONN_STATE_CHANGED:
+                this.syncMqttClientStateCache(eventObj.data);
+                break;
+            case MqttClientConstants.EVENT_MQTT_CLIENT_SUBSCRIBED_DATA_RECIEVED:
+                this.syncMqttClientSubscribedData(eventObj.data);
+                break;
+            default:
+        }
+    }
+
     syncMqttClientSettingsCache() { 
-        MqttClientDbWorker.getAllMqttClientSettings()
+        MqttClientDbService.getAllMqttClientSettings()
         .then(function(mqttClientList) {
             if(mqttClientList!=null && mqttClientList.length>0) {
                 for(var i=0;i<mqttClientList.length;i++) {
@@ -93,7 +84,7 @@ class MqttClientService extends Events.EventEmitter {
                     if(mqttClientObj!=null && mqttClientObj.mcsId!=null) {
                         this.mqttClientSettings[mqttClientObj.mcsId] = mqttClientObj;
                         if(mqttClientObj.autoConnectOnAppLaunch == true) {
-                            workerDispatcherService.dispatcherAction({actionType: MqttClientConstants.ACTION_MQTT_CLIENT_CONNECT,data:mqttClientObj});
+                            PlatformDispatcherService.dispatcherAction({actionType: MqttClientConstants.ACTION_MQTT_CLIENT_CONNECT,data:mqttClientObj},CommonConstants.SERVICE_TYPE_MQTT_CLIENTS);
                         }
                     }
                 }
@@ -187,8 +178,8 @@ class MqttClientService extends Events.EventEmitter {
         dbClientSettingsObj.updatedOn = +(new Date());
 
         this.mqttClientSettings[data.mcsId] = dbClientSettingsObj;
-        MqttClientDbWorker.saveMqttClientSettings(dbClientSettingsObj);
-        workerDispatcherService.dispatcherAction({actionType: MqttClientConstants.ACTION_MQTT_CLIENT_CONNECT,data:dbClientSettingsObj});
+        MqttClientDbService.saveMqttClientSettings(dbClientSettingsObj);
+        PlatformDispatcherService.dispatcherAction({actionType: MqttClientConstants.ACTION_MQTT_CLIENT_CONNECT,data:dbClientSettingsObj},CommonConstants.SERVICE_TYPE_MQTT_CLIENTS);
         this.markAsUnSubscribed(dbClientSettingsObj.mcsId);
         this.emitChange(MqttClientConstants.EVENT_MQTT_CLIENT_DATA_CHANGED,dbClientSettingsObj.mcsId);
     }
@@ -219,12 +210,19 @@ class MqttClientService extends Events.EventEmitter {
     }
 
     deleteMqttClientSettings(mcsId) { 
-        MqttClientDbWorker.deleteMqttClientSettingsById(mcsId);
-        workerDispatcherService.dispatcherAction({actionType: MqttClientConstants.ACTION_MQTT_CLIENT_DISCONNECT,data:mcsId});
+        MqttClientDbService.deleteMqttClientSettingsById(mcsId);
+        PlatformDispatcherService.dispatcherAction({actionType: MqttClientConstants.ACTION_MQTT_CLIENT_DISCONNECT,data:mcsId},CommonConstants.SERVICE_TYPE_MQTT_CLIENTS);
         this.clearMqttClientPubSubCache(mcsId);
         delete this.mqttClientSettings[mcsId];
         delete this.mqttClientsStatus[mcsId];
         this.emitChange(MqttClientConstants.EVENT_MQTT_CLIENT_DATA_CHANGED,mcsId);
+    }
+
+    disconnectMqttClient(action) { 
+        PlatformDispatcherService.dispatcherAction(action,CommonConstants.SERVICE_TYPE_MQTT_CLIENTS);
+        this.markAsUnSubscribed(action.data);
+        delete this.mqttClientsStatus[action.data];
+        this.emitChange(MqttClientConstants.EVENT_MQTT_CLIENT_DATA_CHANGED,action.data);
     }
 
     savePublisherSettings(mcsId,publisher) { 
@@ -244,7 +242,7 @@ class MqttClientService extends Events.EventEmitter {
             if(isNew === true) {
                 this.emitChange(MqttClientConstants.EVENT_MQTT_CLIENT_DATA_CHANGED,mcsId);
             }
-            MqttClientDbWorker.saveMqttClientSettings(obj);
+            MqttClientDbService.saveMqttClientSettings(obj);
         }
     }
 
@@ -254,7 +252,7 @@ class MqttClientService extends Events.EventEmitter {
             var pubIndex = _.findIndex(obj.publishSettings,{'pubId':pubId});
             if (pubIndex > -1) {
                 obj.publishSettings.splice(pubIndex, 1);
-                 MqttClientDbWorker.saveMqttClientSettings(obj);
+                 MqttClientDbService.saveMqttClientSettings(obj);
                  delete this.mqttClientPublishedMessages[mcsId+pubId];
                  this.emitChange(MqttClientConstants.EVENT_MQTT_CLIENT_DATA_CHANGED,mcsId);
             }
@@ -271,7 +269,7 @@ class MqttClientService extends Events.EventEmitter {
             pubMess.shift();
         }
         this.mqttClientPublishedMessages[action.data.mcsId+action.data.pubId] = pubMess;
-        workerDispatcherService.dispatcherAction(action);
+        PlatformDispatcherService.dispatcherAction(action,CommonConstants.SERVICE_TYPE_MQTT_CLIENTS);
     }
 
     getPublishedMessages(mcsId,pubId) {
@@ -299,7 +297,7 @@ class MqttClientService extends Events.EventEmitter {
             if(isNew === true) {
                 this.emitChange(MqttClientConstants.EVENT_MQTT_CLIENT_DATA_CHANGED,mcsId);
             }
-             MqttClientDbWorker.saveMqttClientSettings(obj);
+             MqttClientDbService.saveMqttClientSettings(obj);
         }
     }
 
@@ -309,7 +307,7 @@ class MqttClientService extends Events.EventEmitter {
             var subIndex = _.findIndex(obj.subscribeSettings,{'subId':subId});
             if (subIndex > -1) {
                 obj.subscribeSettings.splice(subIndex, 1);
-                MqttClientDbWorker.saveMqttClientSettings(obj);
+                MqttClientDbService.saveMqttClientSettings(obj);
                 delete this.mqttClientSubscribedData[mcsId+subId];
                 this.emitChange(MqttClientConstants.EVENT_MQTT_CLIENT_DATA_CHANGED,mcsId);
             }
@@ -318,7 +316,7 @@ class MqttClientService extends Events.EventEmitter {
 
     subscribeToTopic(action) {
         this.mqttClientSubscribedData[action.data.mcsId+action.data.subId] = {mcsId:action.data.mcsId,subId:action.data.subId,isSubscribed:true,topic:action.data.topic,receivedMessages:[]};
-        workerDispatcherService.dispatcherAction(action);
+        PlatformDispatcherService.dispatcherAction(action,CommonConstants.SERVICE_TYPE_MQTT_CLIENTS);
         this.emitChange(MqttClientConstants.EVENT_MQTT_CLIENT_SUBSCRIBED_DATA_RECIEVED,{mcsId:action.data.mcsId,subId:action.data.subId});
     }
 
@@ -331,7 +329,7 @@ class MqttClientService extends Events.EventEmitter {
                 }
             }
         }.bind(this));
-        workerDispatcherService.dispatcherAction(action);
+        PlatformDispatcherService.dispatcherAction(action,CommonConstants.SERVICE_TYPE_MQTT_CLIENTS);
     }
 
     getSubscribedData(mcsId,subId) {

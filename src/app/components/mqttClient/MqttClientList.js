@@ -9,22 +9,23 @@ const styles = {
     container: {
         marginTop:10
     },
+    buttonContainer: {
+        marginTop:10,
+        marginRight:5
+    },
     clientConnected: {
         textAlign:'center',
-        border:'2px solid green',
-        backgroundColor:'#e8f5e9',
+        border:'2px solid #398439',
         cursor:'pointer'
     },
     clientDisConnected: {
         textAlign:'center',
-        border:'2px solid #2962ff',
-        backgroundColor:'#e3f2fd',
+        border:'2px solid #204d74',
         cursor:'pointer'
     },
     clientConnError: {
         textAlign:'center',
-        border:'2px solid red',
-        backgroundColor:'#ffebee',
+        border:'2px solid #b92c28',
         cursor:'pointer'
     }
 }
@@ -32,7 +33,9 @@ class MqttClientList extends Component {
 
     constructor(props) {
         super(props);
+
         this.getAllMqttClientSettings = this.getAllMqttClientSettings.bind(this);
+
         this.state = {mqttClientSettings:MqttClientService.getAllMqttClientSettings()};
     }
 
@@ -70,7 +73,7 @@ class MqttClientList extends Component {
                 }
 
                 mqttClients.push(
-                    <div key={this,mqttClient.mcsId} className="col-xs-12 col-sm-6 col-md-3" onTouchTap={NavUtils.goToMqttClientDashboard.bind(this,mqttClient.mcsId)}>
+                    <div key={this,mqttClient.mcsId} className="col-xs-12 col-sm-6 col-md-3" onClick={NavUtils.goToMqttClientDashboard.bind(this,mqttClient.mcsId)}>
                         <div style={connClass} className="thumbnail">
                             <div>
                                 <h4>{mqttClient.mqttClientName}</h4>
@@ -84,8 +87,8 @@ class MqttClientList extends Component {
         }
 
         if(mqttClients.length ==0) {
-            message = <div className="alert alert-success" role="alert">
-                <b>No MQTT clients added. Click <button onTouchTap={NavUtils.gotToAddMqttClient} type="button" style={{margin:10}} className="btn btn-primary"><b>Add New MQTT Client</b></button> to add new MQTT client</b></div>;
+            message = <div className="alert" role="alert">
+                <b>No MQTT clients added. Click <button onClick={NavUtils.gotToAddMqttClient} type="button" style={{margin:10}} className="btn btn-primary"><b>Add New MQTT Client</b></button> to add new MQTT client</b></div>;
         }
 
         return (
@@ -98,8 +101,21 @@ class MqttClientList extends Component {
                         </div>
                         <div id="navbar" className="navbar-collapse collapse">
                             <ul className="nav navbar-nav">
-                                <li><button onTouchTap={NavUtils.gotToAddMqttClient} type="button" style={{margin:10}}
-                                        className="btn btn-primary"><b>Add New MQTT Client</b></button></li>
+                                <li style={styles.buttonContainer}>
+                                    <button onClick={NavUtils.gotToAddMqttClient} type="button" className="btn btn-primary">
+                                        <b>Add New MQTT Client</b>
+                                    </button>
+                                </li>
+                                <li style={styles.buttonContainer}>
+                                    <button onClick={NavUtils.goToMqttLoadList} title="MQTT LOAD" type="button" className="btn btn-default">
+                                      <span className="glyphicon glyphicon-flash" aria-hidden="true"></span>
+                                    </button>
+                                </li>
+                                <li style={styles.buttonContainer}>
+                                    <button onClick={NavUtils.goToAboutMqttBox} title="ABOUT" type="button" className="btn btn-default">
+                                      <span className="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                                    </button>
+                                </li>
                             </ul>
                         </div>
                     </div>

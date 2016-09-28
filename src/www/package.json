@@ -7,23 +7,21 @@
   "copyright": "© 2016, Workswithweb inc.",
   "homepage": "http://workswithweb.com/mqttbox.html",
   "license": "MIT",
-  "main": "./electron/ElectronMain.js",
+  "main": "./platform/ElectronMain.js",
   "dependencies": {
-    "react": "15.3.1",
-    "react-dom": "15.3.1",
-    "react-tap-event-plugin": "1.0.0",
-    "react-router": "2.7.0",
+    "react": "15.3.2",
+    "react-dom": "15.3.2",
+    "react-router": "2.8.1",
     "flux": "2.1.1",
-    "material-ui": "0.15.4",
     "node-uuid": "1.4.7",
     "q": "1.4.1",
     "localforage": "1.4.2",
-    "mqtt": "1.14.1",
+    "mqtt": "2.0.1",
     "react-copy-to-clipboard":"4.2.3",
     "qlobber":"0.7.0",
-    "lodash":"4.15.0",
-    "request":"2.74.0",
-    "compare-versions":"3.0.0",
-    "getmac":"1.2.1"
+    "lodash": "4.16.2",
+    "moment": "2.15.1",
+    "fixed-data-table":"0.6.3",
+    "recharts": "0.15.1"
   }
 }
