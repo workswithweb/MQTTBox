@@ -1,8 +1,9 @@
 import React from 'react';
 
 import LeftMenuButton from '../common/LeftMenuButton';
-import PlatformUtils from '../../platform/PlatformUtils';
+import PlatformUtils from '../../platform/common/PlatformUtils';
 import NavUtils from '../../utils/NavUtils';
+import CommonConstants from '../../utils/CommonConstants';
 
 const styles = {
     clickDiv: {
@@ -54,7 +55,7 @@ export default class AboutApp extends React.Component {
                     </div>
                     <div className="media-body">
                         <h3 className="media-heading">MQTTBox</h3>
-                        <h4 className="media-heading">Version 0.1.3</h4>
+                        <h4 className="media-heading">Version {CommonConstants.APP_VERSION}</h4>
                     </div>
                 </div>
                 <div>

@@ -7,6 +7,8 @@ import NavUtils from '../../utils/NavUtils';
 import MqttLoadActions from '../../actions/MqttLoadActions';
 import MqttLoadService from '../../services/MqttLoadService';
 import MqttLoadConstants from '../../utils/MqttLoadConstants';
+import PlatformConstants from '../../platform/common/PlatformConstants';
+import CommonConstants from '../../utils/CommonConstants';
 
 const styles = {
     payload: {
@@ -194,6 +196,19 @@ class AddEditMqttLoad extends Component {
                         </div>
         }
 
+        var supportedProtocols = [];
+        supportedProtocols.push(<option key="ws" value="ws">ws</option>);
+        supportedProtocols.push(<option key="wss" value="wss">wss</option>);
+        if(PlatformConstants.PLATFORM_TYPE == CommonConstants.PLATFORM_CHROME_APP) {
+            supportedProtocols.push(<option key="tcp" value="tcp">tcp</option>);
+            supportedProtocols.push(<option key="mqtt" value="mqtt">mqtt</option>);
+        } else if(PlatformConstants.PLATFORM_TYPE == CommonConstants.PLATFORM_ELECTRON_APP) {
+            supportedProtocols.push(<option key="tcp" value="tcp">tcp</option>);
+            supportedProtocols.push(<option key="tls" value="tls">tls</option>);
+            supportedProtocols.push(<option key="mqtt" value="mqtt">mqtt</option>);
+            supportedProtocols.push(<option key="mqtts" value="mqtts">mqtt</option>);
+        }
+
         return (
             <div>
                 <nav className="navbar navbar-default navbar-fixed-top">
@@ -217,10 +232,7 @@ class AddEditMqttLoad extends Component {
                             <label htmlFor="protocol">Protocol</label>
                             <select name="protocol" onChange={this.onTargetValueChange} value={this.state.protocol}
                                 className="form-control">
-                                <option value="ws">ws</option>
-                                <option value="wss">wss</option>
-                                <option value="tcp">tcp</option>
-                                <option value="mqtt">mqtt</option>
+                                {supportedProtocols}
                             </select>
                         </div>
                         <div className="col-xs-12 col-sm-6 col-md-3">

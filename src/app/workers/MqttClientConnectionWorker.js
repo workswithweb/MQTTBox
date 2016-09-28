@@ -13,6 +13,7 @@ class MqttClientConnectionWorker extends Events.EventEmitter {  
         this.mqttClientObj = null;
         this.client = null;
         this._matcher = new Qlobber({separator:'/',wildcard_one:'+',wildcard_some:'#'});
+        this.isDisconnecting =false;
     }
 
     emitChange(data) { 
@@ -58,7 +59,9 @@ class MqttClientConnectionWorker extends Events.EventEmitter {  
             }.bind(this));
 
             this.client.on('close', function () {
-                this.publishClientConnectionStatus(MqttClientConstants.CONNECTION_STATE_ERROR);
+                if(this.isDisconnecting==false) {
+                    this.publishClientConnectionStatus(MqttClientConstants.CONNECTION_STATE_ERROR);
+                }
             }.bind(this));
 
             this.client.on('offline', function () {
@@ -135,6 +138,7 @@ class MqttClientConnectionWorker extends Events.EventEmitter {  
     }
 
     disConnect() {
+        this.isDisconnecting =true;
         if(this.client!=null) {
             Q.invoke(this.client,'end',true)
             .then(function() {
