@@ -6,15 +6,15 @@ class PlatformMqttLoadWorkerService {  
         this.mqttLoadTestWorker = new MqttLoadTestWorker();
         this.mqttLoadTestWorker.addChangeListener(this.processEvents.bind(this));
 
-        self.addEventListener('message',function(event) {
-            this.mqttLoadTestWorker.processAction(event.data);
+        process.on('message',function(action) {
+            this.mqttLoadTestWorker.processAction(action);
         }.bind(this),false);
     }
 
     processEvents(eventObj) {
-        postMessage(eventObj);
+        process.send(eventObj);
         if(eventObj.event == MqttLoadConstants.EVENT_MQTT_LOAD_TEST_ENDED) {
-            close();
+            process.exit();
         }
     }
 }

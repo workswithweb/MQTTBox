@@ -67,7 +67,6 @@ class MqttClientConnectionWorker extends Events.EventEmitter {  
             this.client = mqtt.connect(this.mqttClientObj.protocol+'://'+this.mqttClientObj.host,this.getConnectOptions());
 
             this.client.on('connect', function () {
-                console.log('connect');
                 this.publishClientConnectionStatus(MqttClientConstants.CONNECTION_STATE_CONNECTED);
             }.bind(this));
 

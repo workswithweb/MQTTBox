@@ -1,6 +1,7 @@
 const ipcMain = require('electron').ipcMain;
 var childProcess = require('child_process');
 const {webContents,app} = require('electron');
+import _ from 'lodash';
 
 import CommonConstants from '../utils/CommonConstants';
 import MqttClientConstants from '../utils/MqttClientConstants';
@@ -9,7 +10,15 @@ class PlatformMqttClientService {  
 
     constructor() {
         this.mqttClientConnectionWorkers = {};
+        this.killChildProcess = this.killChildProcess.bind(this);
         ipcMain.on(CommonConstants.SERVICE_TYPE_MQTT_CLIENTS, this.processAction.bind(this));
+    }
+
+    killChildProcess() {
+        var workers = _.values(this.mqttClientConnectionWorkers);
+        for(var i=0;i<workers.length;i++) {
+            workers[i].kill();
+        }
     }
 
     processAction(event, action) {

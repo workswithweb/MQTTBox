@@ -1,7 +1,7 @@
 const electron = require('electron');
 const {app, BrowserWindow,Menu} = electron;
 const PlatformMqttClientService = require('./PlatformMqttClientService');
-
+const PlatformMqttLoadService = require('./PlatformMqttLoadService');
 let win;
 const template = [
     {
@@ -23,7 +23,7 @@ function createWindow () {
     const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize;
     win = new BrowserWindow({width, height})
     win.loadURL(`file://${app.getAppPath()}/index.html`);
-    win.webContents.openDevTools();
+    //win.webContents.openDevTools();
     win.on('closed', () => {
         win = null
     });
@@ -34,7 +34,8 @@ function createWindow () {
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
-    //ElectronIpcMainService.killChildProcess();
+    PlatformMqttClientService.default.killChildProcess();
+    PlatformMqttLoadService.default.killChildProcess();
     app.quit();
 });
 
