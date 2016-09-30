@@ -1,6 +1,7 @@
 import getmac from 'getmac';
 import request from 'request';
 import compareVersions from 'compare-versions';
+const {shell} = require('electron');
 
 import CommonConstants from '../../utils/CommonConstants';
 import CommonActions from '../../actions/CommonActions';
@@ -36,7 +37,7 @@ class PlatformUtils {
     }
 
     static openExternalLink(url) {
-        window.open(url, '_blank');
+        shell.openExternal(url);
     }
 }
 
