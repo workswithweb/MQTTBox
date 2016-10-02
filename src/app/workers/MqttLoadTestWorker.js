@@ -1,4 +1,3 @@
-import localforage from 'localforage';
 import Q from 'q';
 import _ from 'lodash';
 import mqtt from 'mqtt';
@@ -10,7 +9,6 @@ class MqttLoadTestWorker extends Events.EventEmitter {  
 
     constructor() {
         super();
-        this.loadInstanceDb = localforage.createInstance({name:"MQTT_LOAD_INSTANCE_DATA",driver:localforage.INDEXEDDB});
         this.loadObj = null;
         this.iId = null;
         this.inum = null;
@@ -254,26 +252,20 @@ class MqttLoadTestWorker extends Events.EventEmitter {  
         this.client.end(true);
 
         if(this.receivedMessages!=null && this.receivedMessages.length>0) {
-            this.publishStatusWithSuccess({status:MqttLoadConstants.STATE_IN_PROGRESS,message:MqttLoadConstants.LOAD_MQTT_CLIENT_SAVING_DATA,time:+(new Date())});
             var archiveData = {metaData:{iId:this.iId,inum:this.inum},receivedMessages:this.receivedMessages}
-            Q.invoke(this.loadInstanceDb,'setItem',this.iId,archiveData)
-            .catch(function (error) {
-                this.publishStatusWithSuccess({status:MqttLoadConstants.STATE_ERROR,message:MqttLoadConstants.LOAD_MQTT_CLIENT_ERROR_SAVING_DATA,time:+(new Date())});
-            })
-            .done(function() {
-                this.publishStatusWithSuccess({status:finalStatus,message:finalMessage,time:+(new Date())});
-                this.publishLoadTestEndMessage();
-            }.bind(this));
+            this.publishStatusWithSuccess({status:finalStatus,message:finalMessage,time:+(new Date())});
+            this.publishLoadTestEndMessage(archiveData);
         } else {
             this.publishStatusWithSuccess({status:finalStatus,message:finalMessage,time:+(new Date())});
             this.publishLoadTestEndMessage();
         }
     }
 
-    publishLoadTestEndMessage() {
+    publishLoadTestEndMessage(archiveData) {
         this.emitChange({event:MqttLoadConstants.EVENT_MQTT_LOAD_TEST_ENDED,
                         data:{mcsId:this.loadObj.mcsId,iId:this.iId,messageStartTime:this.messageStartTime,messageEndTime:this.messageEndTime,
-                        messCount:this.messCount,qosStartTime:this.qosStartTime,qosEndTime:this.qosEndTime,qosReceivedMessCount:this.qosReceivedMessCount}});
+                        messCount:this.messCount,qosStartTime:this.qosStartTime,qosEndTime:this.qosEndTime,
+                        qosReceivedMessCount:this.qosReceivedMessCount,archiveData:archiveData}});
     }
 }
 

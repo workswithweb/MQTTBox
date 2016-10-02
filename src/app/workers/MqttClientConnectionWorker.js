@@ -28,6 +28,18 @@ class MqttClientConnectionWorker extends Events.EventEmitter {  
         this.removeListener(MqttClientConstants.EVENT_WORKER_MQTT_CLIENT,callback);
     }
 
+    emitChange(data) { 
+        this.emit(MqttClientConstants.EVENT_WORKER_MQTT_CLIENT,data);
+    }
+
+    addChangeListener(callback) { 
+        this.on(MqttClientConstants.EVENT_WORKER_MQTT_CLIENT,callback);
+    }
+
+    removeChangeListener(callback) { 
+        this.removeListener(MqttClientConstants.EVENT_WORKER_MQTT_CLIENT,callback);
+    }
+
     processAction(action) {
         switch(action.actionType) {
             case MqttClientConstants.ACTION_MQTT_CLIENT_CONNECT:
