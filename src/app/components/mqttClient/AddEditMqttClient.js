@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import UUID from 'node-uuid';
 
 import LeftMenuButton from '../common/LeftMenuButton';
+import ExternalLink from '../common/ExternalLink';
 import MqttClientSettings from '../../models/MqttClientSettings';
 import CommonActions from '../../actions/CommonActions';
 import MqttClientActions from '../../actions/MqttClientActions';
@@ -131,6 +132,11 @@ class AddEditMqttClient extends Component {
                         <div className="navbar-header">
                             <LeftMenuButton/>
                             {backButton}
+                        </div>
+                        <div id="navbar" className="navbar-collapse collapse">
+                            <ul style={{marginRight:10}} className="nav navbar-nav navbar-right">
+                                <ExternalLink href="http://workswithweb.com/html/mqttbox/mqtt_client_settings.html" displayText="Client Settings Help"></ExternalLink>
+                            </ul>
                         </div>
                     </div>
                 </nav>

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
 import LeftMenuButton from '../common/LeftMenuButton';
+import ExternalLink from '../common/ExternalLink';
 import MqttLoadSettings from '../../models/MqttLoadSettings';
 import CommonActions from '../../actions/CommonActions';
 import NavUtils from '../../utils/NavUtils';
@@ -216,6 +217,11 @@ class AddEditMqttLoad extends Component {
                         <div className="navbar-header">
                             <LeftMenuButton/>
                             {backButton}
+                        </div>
+                        <div id="navbar" className="navbar-collapse collapse">
+                            <ul style={{marginRight:10}} className="nav navbar-nav navbar-right">
+                                <ExternalLink href="http://workswithweb.com/html/mqttbox/mqtt_load_test_settings.html" displayText="Load Settings Help"></ExternalLink>
+                            </ul>
                         </div>
                     </div>
                 </nav>
