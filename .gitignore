@@ -2,3 +2,4 @@ node_modules
 build
 .idea
 .DS_Store
+*.iml

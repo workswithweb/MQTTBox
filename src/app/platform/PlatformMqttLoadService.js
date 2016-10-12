@@ -48,7 +48,7 @@ class PlatformMqttLoadService {  
     stopMqttLoadTest(action) {
         var mqttLoadWorkerObj = this.mqttLoadWorkers[action.data.iId];
         if(mqttLoadWorkerObj!=null) {
-            mqttLoadWorkerObj.postMessage(action);
+            mqttLoadWorkerObj.send(action);
         }
     }
 

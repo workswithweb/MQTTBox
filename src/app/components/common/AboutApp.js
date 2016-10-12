@@ -64,7 +64,7 @@ export default class AboutApp extends React.Component {
                     <div onClick={PlatformUtils.openExternalLink.bind(this,"http://workswithweb.com/mqttbox/app")} style={styles.clickDiv}>Web app - <span className="label label-primary">Click Here</span></div>
                     <div style={{margin:10}}>
                         <b>If you have issues or request new features, please
-                        contact us via email - <b><span className="label label-success">workswithweb@gmail.com</span></b> or request on Github
+                        contact us via email - <b><span className="label label-success">workswithweb@outlook.com</span></b> or request on Github
                         <span onClick={PlatformUtils.openExternalLink.bind(this,"https://github.com/workswithweb/MQTTBox")} style={styles.clickDiv} className="label label-primary">
                             Here
                         </span>
