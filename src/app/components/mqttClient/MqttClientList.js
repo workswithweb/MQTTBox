@@ -111,11 +111,6 @@ class MqttClientList extends Component {
                                       <span className="glyphicon glyphicon-flash" aria-hidden="true"></span>
                                     </button>
                                 </li>
-                                <li style={styles.buttonContainer}>
-                                    <button onClick={NavUtils.goToAboutMqttBox} title="ABOUT" type="button" className="btn btn-default">
-                                      <span className="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-                                    </button>
-                                </li>
                             </ul>
                         </div>
                     </div>
