@@ -97,26 +97,25 @@ export default class MqttClientSubscriber extends React.Component {
             var len = subData.receivedMessages.length;
             for (var i=len-1; i>=0;i--) {
                 messageList.push(
-                    <div key={this.props.subscriberSettings.subId+i} className="panel-group" id={"accordion_"+this.props.subscriberSettings.subId+i}  role="tablist" aria-multiselectable="true">
-                        <div className="panel" style={{border:'1px solid #e1e1e8'}}>
-                            <div className="panel-heading" role="tab" id={"heading_"+this.props.subscriberSettings.subId+i}>
-                                <div className="panel-title">
-                                    <a className="panel-title" role="button" data-toggle="collapse" data-parent={"#accordion_"+this.props.subscriberSettings.subId+i} href={"#collapse"+this.props.subscriberSettings.subId+i}
-                                        aria-expanded="false" aria-controls={"collapse"+this.props.subscriberSettings.subId+i}>
-                                        {subData.receivedMessages[i].message}
-                                    </a>
-                                </div>
+                    <div key={this.props.subscriberSettings.subId+i}  className="panel" style={{border:'1px solid #e1e1e8'}}>
+                        <div style={{cursor:'pointer'}} data-toggle="collapse" data-target={"#collapse"+this.props.subscriberSettings.subId+i} className="panel-heading">
+                            <div className="panel-title">
+                                <a className="accordion-toggle">
+                                    {subData.receivedMessages[i].message}
+                                </a>
                             </div>
-                            <div id={"collapse"+this.props.subscriberSettings.subId+i} className="panel-collapse collapse" role="tabpanel" aria-labelledby={"heading_"+this.props.subscriberSettings.subId+i}>
-                                <div className="panel-body">
+                        </div>
+                        <div id={"collapse"+this.props.subscriberSettings.subId+i} className="panel-collapse collapse in">
+                            <div className="panel-body">
+                                <div>
                                     <div>
-                                        <div><b>qos</b> : {subData.receivedMessages[i].packet.qos}</div>
-                                        <div><b> retain</b> : {subData.receivedMessages[i].packet.retain.toString()}</div>
-                                        <div><b> cmd</b> : {subData.receivedMessages[i].packet.cmd}</div>
-                                        <div><b> dup</b> : {subData.receivedMessages[i].packet.dup.toString()}</div>
-                                        <div><b> topic</b> : {subData.receivedMessages[i].packet.topic}</div>
-                                        <div><b> messageId</b> : {subData.receivedMessages[i].packet.messageId}</div>
-                                        <div><b> length</b> : {subData.receivedMessages[i].packet.length}</div>
+                                        <b>qos</b> : {subData.receivedMessages[i].packet.qos},
+                                        <b> retain</b> : {subData.receivedMessages[i].packet.retain.toString()},
+                                        <b> cmd</b> : {subData.receivedMessages[i].packet.cmd},
+                                        <b> dup</b> : {subData.receivedMessages[i].packet.dup.toString()},
+                                        <b> topic</b> : {subData.receivedMessages[i].packet.topic},
+                                        <b> messageId</b> : {subData.receivedMessages[i].packet.messageId},
+                                        <b> length</b> : {subData.receivedMessages[i].packet.length}
                                     </div>
                                 </div>
                             </div>
@@ -156,7 +155,9 @@ export default class MqttClientSubscriber extends React.Component {
                                 <button type="button" onClick={this.subscribeToTopic}  className="btn btn-warning">Subscribe</button>
                             </div>
                             <div>
-                                {messageList}
+                                <div className="panel-group">
+                                    {messageList}
+                                </div>
                             </div>
                         </div>;
         }
