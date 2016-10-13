@@ -57,6 +57,18 @@ class NavUtils {
     static goToMqttLoadTestGraph(mcsId) {
         hashHistory.replace('/mqttloadtestgraph/'+mcsId);
     }
+
+    static goToMqttVirtualDevicesProfileList() {
+        hashHistory.replace('/mqttvirtualdevicesprofilelist');
+    }
+
+    static gotToAddMqttVirtualDeviceProfile(vdId) { 
+        if(vdId!=null && vdId.length>1) {
+            hashHistory.replace('/addeditmqttvirtualdeviceprofile/'+vdId);
+        } else {
+            hashHistory.replace('/addeditmqttvirtualdeviceprofile');
+        }
+    }
 }
 
 export default NavUtils;
