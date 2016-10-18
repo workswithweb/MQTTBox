@@ -1,6 +1,6 @@
 {
   "name": "MQTTBox",
-  "version": "0.1.0",
+  "version": "0.1.6",
   "description": "MQTTBox - Developers helper program to create and test MQTT connectivity protocol.",
   "repository": {
     "type": "git",
@@ -42,7 +42,7 @@
     "lodash": "4.16.4",
     "moment": "2.15.1",
     "fixed-data-table": "0.6.3",
-    "recharts": "0.15.1",
+    "recharts": "0.15.2",
 
     "getmac":"1.2.1",
     "request":"2.75.0",

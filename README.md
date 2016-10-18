@@ -4,6 +4,8 @@ npm install
 ./node_modules/.bin/babel --presets es2015,react src/app --out-dir build/
 copy "www" directory content to "build" directory
 nodemon --watch * --exec "electron ./build"
+OR
+./node_modules/.bin/electron ./build
 
 # Building electron apps
 
