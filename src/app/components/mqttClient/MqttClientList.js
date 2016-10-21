@@ -97,7 +97,7 @@ class MqttClientList extends Component {
                     <div>
                         <div className="navbar-header">
                             <LeftMenuButton/>
-                            <span style={{margin:15}}>MQTT CLIENTS</span>
+                            <span style={{margin:15}}><b>MQTT CLIENTS</b></span>
                         </div>
                         <div id="navbar" className="navbar-collapse collapse">
                             <ul className="nav navbar-nav">
@@ -107,7 +107,7 @@ class MqttClientList extends Component {
                                     </button>
                                 </li>
                                 <li style={styles.buttonContainer}>
-                                    <button onClick={NavUtils.goToMqttVirtualDevicesProfileList} title="MQTT VIRTUAL DEVICES" type="button" className="btn btn-default">
+                                    <button onClick={NavUtils.goToVirtualDeviceProfileList} title="MQTT VIRTUAL DEVICES" type="button" className="btn btn-default">
                                       <span className="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
                                     </button>
                                 </li>

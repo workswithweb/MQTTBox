@@ -141,10 +141,10 @@ class MqttLoadTestData extends Component {
                     <div>
                         <div className="navbar-header">
                             <LeftMenuButton/>
-                            <a href={"#/mqttloaddashboard/"+this.props.params.mcsId} className="navButton"><b><span className="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> BACK</b></a>
+                            <a href={"#/mqttloaddashboard/"+this.props.params.mcsId} className="btn btn-default"><span className="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></a>
                         </div>
                         <div id="navbar" className="navbar-collapse collapse">
-                            <ul className="nav navbar-nav">
+                            <ul style={{marginLeft:5}} className="nav navbar-nav">
                                 <li style={styles.navBar}>
                                     <select value={this.state==null ? 'all':this.state.instanceFilter} onChange={this.onTargetValueChange} className="form-control">
                                       {options}

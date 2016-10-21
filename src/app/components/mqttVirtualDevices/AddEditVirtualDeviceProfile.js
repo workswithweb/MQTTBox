@@ -2,8 +2,11 @@ import React, {Component} from 'react';
 
 import LeftMenuButton from '../common/LeftMenuButton';
 import ExternalLink from '../common/ExternalLink';
+import VirtualDeviceConnectionSettings from './VirtualDeviceConnectionSettings';
+import VirtualDevicePublishMessageSettings from './VirtualDevicePublishMessageSettings';
+import VirtualDeviceSubscribeMessageSettings from './VirtualDeviceSubscribeMessageSettings';
 
-class AddEditMqttVirtualDeviceProfile extends Component {
+class AddEditVirtualDeviceProfile extends Component {
 
     constructor(props) {
         super(props);
@@ -13,9 +16,9 @@ class AddEditMqttVirtualDeviceProfile extends Component {
         var backButton = '';
         if(this.props.params.mcsId!=null) {
             deleteButton = <button style={styles.actionButton} onClick={this.deleteMqttClientSettings} type="button" className="btn btn-default">Delete</button>;
-            backButton = <a href={"#/mqttclientdashboard/"+this.props.params.mcsId} className="navButton"><b><span className="glyphicon glyphicon-arrow-left" aria-hidden="true"> </span> BACK</b></a>;
+            backButton = <a className="btn btn-default" href={"#/mqttclientdashboard/"+this.props.params.mcsId}><span className="glyphicon glyphicon-arrow-left" aria-hidden="true"> </span></a>;
         } else {
-            backButton = <a href="#/mqttvirtualdevicesprofilelist" className="navButton"><b><span className="glyphicon glyphicon-arrow-left" aria-hidden="true"> </span> BACK</b></a>;
+            backButton = <a className="btn btn-default" href="#/virtualdeviceprofilelist"><span className="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></a>;
         }
 
         return (
@@ -25,6 +28,7 @@ class AddEditMqttVirtualDeviceProfile extends Component {
                         <div className="navbar-header">
                             <LeftMenuButton/>
                             {backButton}
+                            <span><b> MQTT VIRTUAL DEVICE SETTINGS</b></span>
                         </div>
                         <div id="navbar" className="navbar-collapse collapse">
                             <ul style={{marginRight:10}} className="nav navbar-nav navbar-right">
@@ -33,12 +37,16 @@ class AddEditMqttVirtualDeviceProfile extends Component {
                         </div>
                     </div>
                 </nav>
-                <div className="container-fluid" style={{margin:10,border:'1px solid #e7e7e7',borderRadius:5,padding:20}}>
-                    add virtual device form
+                <div className="container-fluid" style={{marginTop:10}}>
+                    <div className="panel-group" id="vd" role="tablist" aria-multiselectable="true">
+                        <VirtualDeviceConnectionSettings/>
+                        <VirtualDevicePublishMessageSettings/>
+                        <VirtualDeviceSubscribeMessageSettings/>
+                    </div>
                 </div>
             </div>
         );
     }
 }
 
-export default AddEditMqttVirtualDeviceProfile;
+export default AddEditVirtualDeviceProfile;

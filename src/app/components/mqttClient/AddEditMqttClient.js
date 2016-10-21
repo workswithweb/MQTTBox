@@ -107,9 +107,9 @@ class AddEditMqttClient extends Component {
 
         if(this.props.params.mcsId!=null) {
             deleteButton = <button style={styles.actionButton} onClick={this.deleteMqttClientSettings} type="button" className="btn btn-default">Delete</button>;
-            backButton = <a href={"#/mqttclientdashboard/"+this.props.params.mcsId} className="navButton"><b><span className="glyphicon glyphicon-arrow-left" aria-hidden="true"> </span> BACK</b></a>;
+            backButton = <a className="btn btn-default" href={"#/mqttclientdashboard/"+this.props.params.mcsId}><span className="glyphicon glyphicon-arrow-left" aria-hidden="true"> </span></a>;
         } else {
-            backButton = <a href="#/mqttclientslist" className="navButton"><b><span className="glyphicon glyphicon-arrow-left" aria-hidden="true"> </span> BACK</b></a>;
+            backButton = <a className="btn btn-default" href="#/mqttclientslist"><span className="glyphicon glyphicon-arrow-left" aria-hidden="true"> </span></a>;
         }
 
         var supportedProtocols = [];
@@ -132,6 +132,7 @@ class AddEditMqttClient extends Component {
                         <div className="navbar-header">
                             <LeftMenuButton/>
                             {backButton}
+                            <span><b> MQTT CLIENT SETTINGS</b></span>
                         </div>
                         <div id="navbar" className="navbar-collapse collapse">
                             <ul style={{marginRight:10}} className="nav navbar-nav navbar-right">

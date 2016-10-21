@@ -6,7 +6,7 @@ import AppRoutes from './utils/AppRoutes';
 import PlatformUtils from './platform/common/PlatformUtils';
 
 PlatformUtils.init();
-hashHistory.replace('/mqttclientslist');
+hashHistory.replace('/addeditvirtualdeviceprofile');
 
 render(
   <Router history={hashHistory}>

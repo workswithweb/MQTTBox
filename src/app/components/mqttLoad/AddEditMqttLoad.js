@@ -134,9 +134,9 @@ class AddEditMqttLoad extends Component {
 
         if(this.props.params.mcsId!=null) {
             deleteButton = <button style={styles.actionButton} onClick={this.deleteMqttLoadSettings} type="button" className="btn btn-default">Delete</button>;
-            backButton = <a href={"#/mqttloaddashboard/"+this.props.params.mcsId} className="navButton"><b><span className="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> BACK</b></a>
+            backButton = <a href={"#/mqttloaddashboard/"+this.props.params.mcsId} className="btn btn-default"><span className="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></a>
         } else {
-            backButton = <a href={"#/mqttloadlist"} className="navButton"><b><span className="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> BACK</b></a>
+            backButton = <a href={"#/mqttloadlist"} className="btn btn-default"><span className="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></a>
         }
 
         if(this.state.loadTestType == 'publishing') {
@@ -217,6 +217,7 @@ class AddEditMqttLoad extends Component {
                         <div className="navbar-header">
                             <LeftMenuButton/>
                             {backButton}
+                            <span><b> MQTT LOAD TEST SETTINGS</b></span>
                         </div>
                         <div id="navbar" className="navbar-collapse collapse">
                             <ul style={{marginRight:10}} className="nav navbar-nav navbar-right">

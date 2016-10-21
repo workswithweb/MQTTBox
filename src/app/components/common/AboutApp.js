@@ -37,7 +37,7 @@ export default class AboutApp extends React.Component {
                                     </button>
                                 </li>
                                 <li style={styles.buttonContainer}>
-                                    <button onClick={NavUtils.goToMqttVirtualDevicesProfileList} title="MQTT VIRTUAL DEVICES" type="button" className="btn btn-default">
+                                    <button onClick={NavUtils.goToVirtualDeviceProfileList} title="MQTT VIRTUAL DEVICES" type="button" className="btn btn-default">
                                       <span className="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
                                     </button>
                                 </li>

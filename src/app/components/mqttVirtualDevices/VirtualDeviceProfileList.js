@@ -13,7 +13,7 @@ const styles = {
     }
 }
 
-class MqttVirtualDeviceProfileList extends Component {
+class VirtualDeviceProfileList extends Component {
 
     constructor(props) {
         super(props);
@@ -26,13 +26,13 @@ class MqttVirtualDeviceProfileList extends Component {
                     <div>
                         <div className="navbar-header">
                             <LeftMenuButton/>
-                            <span style={{margin:15}}>MQTT VIRTUAL DEVICES</span>
+                            <span style={{margin:15}}><b>MQTT VIRTUAL DEVICES</b></span>
                         </div>
                         <div id="navbar" className="navbar-collapse collapse">
                             <ul className="nav navbar-nav">
                                 <li style={styles.buttonContainer}>
                                     <button onClick={NavUtils.gotToAddMqttVirtualDeviceProfile} type="button" className="btn btn-success">
-                                        <b>Create MQTT Virtual Device Profile</b>
+                                        <b>Create MQTT Virtual Device</b>
                                     </button>
                                 </li>
                                 <li style={styles.buttonContainer}>
@@ -59,4 +59,4 @@ class MqttVirtualDeviceProfileList extends Component {
     }
 }
 
-export default MqttVirtualDeviceProfileList;
+export default VirtualDeviceProfileList;
