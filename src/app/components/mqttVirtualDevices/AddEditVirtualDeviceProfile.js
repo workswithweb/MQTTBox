@@ -5,6 +5,7 @@ import ExternalLink from '../common/ExternalLink';
 import VirtualDeviceConnectionSettings from './VirtualDeviceConnectionSettings';
 import VirtualDevicePublishMessageSettings from './VirtualDevicePublishMessageSettings';
 import VirtualDeviceSubscribeMessageSettings from './VirtualDeviceSubscribeMessageSettings';
+import VirtualDeviceAutoResponseSettings from './VirtualDeviceAutoResponseSettings';
 
 class AddEditVirtualDeviceProfile extends Component {
 
@@ -42,6 +43,7 @@ class AddEditVirtualDeviceProfile extends Component {
                         <VirtualDeviceConnectionSettings/>
                         <VirtualDevicePublishMessageSettings/>
                         <VirtualDeviceSubscribeMessageSettings/>
+                        <VirtualDeviceAutoResponseSettings/>
                     </div>
                 </div>
             </div>

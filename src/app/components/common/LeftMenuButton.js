@@ -21,7 +21,6 @@ export default React.createClass({
                 </button>
                 <ul className="dropdown-menu">
                     <li><a href="#/mqttclientslist"><span className="glyphicon glyphicon-modal-window" aria-hidden="true"></span><b> MQTT CLIENTS</b></a></li>
-                    <li><a href="#/virtualdeviceprofilelist"><span className="glyphicon glyphicon-dashboard" aria-hidden="true"></span><b> MQTT VIRTUAL DEVICES</b></a></li>
                     <li><a href="#/mqttloadlist"><span className="glyphicon glyphicon-flash" aria-hidden="true"></span><b> MQTT LOAD</b></a></li>
                     <li><a href="#/aboutapp"><span className="glyphicon glyphicon-info-sign" aria-hidden="true"></span><b> ABOUT</b></a></li>
                 </ul>

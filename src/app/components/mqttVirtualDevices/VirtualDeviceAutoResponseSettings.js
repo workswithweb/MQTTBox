@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-class VirtualDeviceConnectionSettings extends Component {
+class VirtualDeviceAutoResponseSettings extends Component {
 
     constructor(props) {
         super(props);
@@ -10,16 +10,16 @@ class VirtualDeviceConnectionSettings extends Component {
         return (
             <div className="panel-group" role="tablist" aria-multiselectable="true">
                 <div className="panel panel-default">
-                    <div data-toggle="collapse" data-target="#collapseVdcs" className="panel-heading" role="tab" style={{cursor:'pointer'}}>
+                    <div data-toggle="collapse" data-target="#collapseVdars" className="panel-heading" role="tab" style={{cursor:'pointer'}}>
                         <h4 className="panel-title">
                             <a role="button" aria-expanded="true" aria-controls="collapseVdcs">
-                                CONNECTION SETTINGS
+                                AUTO RESPONSE
                             </a>
                         </h4>
                     </div>
-                    <div id="collapseVdcs" className="panel-collapse collapse in" role="tabpanel">
+                    <div id="collapseVdpms" className="panel-collapse collapse in" role="tabpanel">
                         <div className="panel-body">
-                            Virtual Device Connection Settings
+                            Publish Messages From Device Settings
                         </div>
                     </div>
                 </div>
@@ -28,4 +28,4 @@ class VirtualDeviceConnectionSettings extends Component {
     }
 }
 
-export default VirtualDeviceConnectionSettings;
+export default VirtualDeviceAutoResponseSettings;

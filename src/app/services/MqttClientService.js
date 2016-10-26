@@ -71,8 +71,20 @@ class MqttClientService extends Events.EventEmitter {
             case MqttClientConstants.EVENT_MQTT_CLIENT_SUBSCRIBED_DATA_RECIEVED:
                 this.syncMqttClientSubscribedData(eventObj.data);
                 break;
+            case MqttClientConstants.EVENT_MQTT_CLIENT_PUBLISHED_MESSAGE:
+                this.syncMqttPublishedData(eventObj.data);
+                break;
             default:
         }
+    }
+
+    syncMqttPublishedData(data) { 
+        var pubMess = this.mqttClientPublishedMessages[data.mcsId+data.pubId];
+        if(pubMess==null) {
+            pubMess = [];
+        }
+        pubMess.push({topic:data.topic,payload:data.payload,qos:data.qos,retain:data.retain,publishedTime:data.publishedTime,qosResponseReceivedTime:data.qosResponseReceivedTime});
+        this.mqttClientPublishedMessages[data.mcsId+data.pubId] = pubMess;
     }
 
     syncMqttClientSettingsCache() { 
@@ -260,24 +272,26 @@ class MqttClientService extends Events.EventEmitter {
     }
 
     publishMessage(action) {
-        var pubMess = this.mqttClientPublishedMessages[action.data.mcsId+action.data.pubId];
-        if(pubMess==null) {
-            pubMess = [];
-        }
-        pubMess.push({topic:action.data.topic,payload:action.data.payload,qos:action.data.qos,retain:action.data.retain});
-        if(pubMess.length>20) {
-            pubMess.shift();
-        }
-        this.mqttClientPublishedMessages[action.data.mcsId+action.data.pubId] = pubMess;
         PlatformDispatcherService.dispatcherAction(action,CommonConstants.SERVICE_TYPE_MQTT_CLIENTS);
     }
 
     getPublishedMessages(mcsId,pubId) {
         var pubMess = this.mqttClientPublishedMessages[mcsId+pubId];
-        if(pubMess==null) {
-            pubMess = [];
+        if(pubMess==null || pubMess.length<=0) {
+            return [];
+        } else {
+            return pubMess.slice(Math.max(pubMess.length-20, 0));
         }
-        return pubMess;
+
+    }
+
+    getAllPublishedMessages(mcsId,pubId) {
+        var pubMess = this.mqttClientPublishedMessages[mcsId+pubId];
+        if(pubMess==null || pubMess.length<=0) {
+            return [];
+        } else {
+            return pubMess;
+        }
     }
 
     saveSubscriberSettings(mcsId,subscriber) { 

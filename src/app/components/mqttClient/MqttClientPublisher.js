@@ -76,7 +76,7 @@ export default class MqttClientPublisher extends React.Component {
                 if(topic.indexOf('#') > -1 || topic.indexOf('+') > -1) {
                     CommonActions.showMessageToUser({message:'You cannot publish message to topic having + or #'});
                 } else {
-                    MqttClientActions.publishMessage(this.props.mcsId,this.props.publisherSettings.pubId,topic,payload,qos,retain);
+                    MqttClientActions.publishMessage(this.props.mcsId,this.props.publisherSettings.pubId,topic,new Buffer(payload,'utf8'),qos,retain);
                     var pubMess = this.state.publishedMessages;
                     if(pubMess==null) {
                         pubMess = [];

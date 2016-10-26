@@ -107,11 +107,6 @@ class MqttClientList extends Component {
                                     </button>
                                 </li>
                                 <li style={styles.buttonContainer}>
-                                    <button onClick={NavUtils.goToVirtualDeviceProfileList} title="MQTT VIRTUAL DEVICES" type="button" className="btn btn-default">
-                                      <span className="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
-                                    </button>
-                                </li>
-                                <li style={styles.buttonContainer}>
                                     <button onClick={NavUtils.goToMqttLoadList} title="MQTT LOAD" type="button" className="btn btn-default">
                                       <span className="glyphicon glyphicon-flash" aria-hidden="true"></span>
                                     </button>
