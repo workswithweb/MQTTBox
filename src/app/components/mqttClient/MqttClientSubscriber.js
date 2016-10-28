@@ -7,12 +7,13 @@ import MqttClientService from '../../services/MqttClientService';
 
 const style = {
     subscriberPaper: {
-        height: '500px',
+        height: '600px',
         width: '100%',
         display: 'inline-block',
         border: '1px solid #eea236',
         padding:10,
-        overflow: 'auto'
+        overflow: 'auto',
+        wordBreak:'break-all'
     },
     removeStyle:{
         position: 'absolute',
@@ -96,7 +97,6 @@ export default class MqttClientSubscriber extends React.Component {
         if(subData!=null && subData.receivedMessages!=null && subData.receivedMessages.length>0) {
             var len = subData.receivedMessages.length;
             for (var i=len-1; i>=0;i--) {
-                console.log(subData.receivedMessages[i].packet);
                 messageList.push(
                     <div key={this.props.subscriberSettings.subId+i}  className="panel" style={{border:'1px solid #e1e1e8'}}>
                         <div style={{cursor:'pointer'}} data-toggle="collapse" data-target={"#collapse"+this.props.subscriberSettings.subId+i} className="panel-heading">
@@ -117,9 +117,7 @@ export default class MqttClientSubscriber extends React.Component {
                                         <b> topic</b> : {subData.receivedMessages[i].packet.topic},
                                         <b> messageId</b> : {subData.receivedMessages[i].packet.messageId},
                                         <b> length</b> : {subData.receivedMessages[i].packet.length},
-                                        <b> Raw payload(DEC)</b> : {subData.receivedMessages[i].packet.payload},
-
-
+                                        <b> Raw payload</b> : <span>{subData.receivedMessages[i].packet.payload}</span>
                                     </div>
                                 </div>
                             </div>

@@ -1,7 +1,7 @@
 class CommonConstants {}
 
 //APP
-CommonConstants.APP_VERSION = '0.1.4';
+CommonConstants.APP_VERSION = '0.1.7';
 CommonConstants.PLATFORM_WEB_APP = 'WEB_APP';
 CommonConstants.PLATFORM_CHROME_APP = 'CHROME_APP';
 CommonConstants.PLATFORM_ELECTRON_APP = 'ELECTRON_APP';
