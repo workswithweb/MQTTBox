@@ -36,8 +36,9 @@ Make sure you have [Node.js](https://nodejs.org/en/) installed and follow below 
 - `npm install`
 
 - `Open /node_modules/mqtt/lib/connect/ws.js file and goto line 45 or where ever you find below code.`
-    /node_modules/localforage/dist/localforage.js - isLocalStorageValid
-    /node_modules/util-deprecate/browser.js -config
+    else {
+        throw new Error('Could not determine host. Specify host manually.')
+    }
  `Remove this else block completely. We need this step to make mqtt.js works with webworkers`.
 
 Thats it !!! Your project is setup. Execute below commands in your current folder (MQTTBox) as per your app requirements.

@@ -63,7 +63,7 @@ class MqttLoadList extends Component {
 
         if(mqttLoads.length ==0) {
             message = <div className="alert" role="alert">
-                <b>No MQTT load tests added. Click <button onClick={NavUtils.gotToAddEditMqttLoad} type="button" style={{margin:10}} className="btn btn-danger"><b>Add New MQTT Load</b></button> to add new MQTT load test</b></div>;
+                <b>No MQTT load tests added. Click <button onClick={NavUtils.gotToAddEditMqttLoad} type="button" style={{margin:10}} className="btn btn-danger"><b>Create MQTT Load</b></button> to add new MQTT load test</b></div>;
         }
 
         return (
@@ -72,23 +72,18 @@ class MqttLoadList extends Component {
                     <div>
                         <div className="navbar-header">
                             <LeftMenuButton/>
-                            <span style={{margin:15}}>MQTT LOAD</span>
+                            <span style={{margin:15}}><b>MQTT LOAD</b></span>
                         </div>
                         <div id="navbar" className="navbar-collapse collapse">
                             <ul className="nav navbar-nav">
                                 <li style={styles.buttonContainer}>
                                     <button onClick={NavUtils.gotToAddEditMqttLoad} type="button" className="btn btn-danger">
-                                        <b>Add New MQTT Load</b>
+                                        <b>Create MQTT Load</b>
                                     </button>
                                 </li>
                                 <li style={styles.buttonContainer}>
                                     <button onClick={NavUtils.goToMqttClientList} title="MQTT CLIENTS" type="button" className="btn btn-default">
                                       <span className="glyphicon glyphicon-modal-window" aria-hidden="true"></span>
-                                    </button>
-                                </li>
-                                <li style={styles.buttonContainer}>
-                                    <button onClick={NavUtils.goToAboutMqttBox} title="ABOUT" type="button" className="btn btn-default">
-                                      <span className="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
                                     </button>
                                 </li>
                             </ul>

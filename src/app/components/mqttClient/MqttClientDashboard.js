@@ -114,7 +114,7 @@ class MqttClientDashboard extends Component {
                     <div>
                         <div className="navbar-header">
                             <LeftMenuButton/>
-                            <a href="#/mqttclientslist" className="navButton"><b><span className="glyphicon glyphicon-arrow-left" aria-hidden="true"> </span> MQTT CLIENTS</b></a>
+                            <a href="#/mqttclientslist" className="btn btn-default"><span className="glyphicon glyphicon-arrow-left" aria-hidden="true"> </span></a>
                         </div>
                         <div id="navbar" className="navbar-collapse collapse">
                             <ul className="nav navbar-nav">

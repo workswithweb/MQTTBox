@@ -181,6 +181,7 @@ class MqttLoadService extends Events.EventEmitter {
     }
 
     updateLoadTestMetadataAfterComplete(data) { 
+        MqttLoadDbService.saveMqttLoadArchiveDataByIId(data.iId,data.archiveData);
         var mqttLoadSettingObj = this.mqttLoadSettingObjs[data.mcsId];
         if(mqttLoadSettingObj!=null) {
             var instanceObj = mqttLoadSettingObj.instances[data.iId];

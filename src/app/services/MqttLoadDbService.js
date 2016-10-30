@@ -39,6 +39,11 @@ class MqttLoadDbService {  
         return Promise.all(promises);
     }
 
+    saveMqttLoadArchiveDataByIId(iId,archiveData) {
+        if(iId!=null && archiveData!=null) {
+            Q.invoke(this.loadInstanceDataDb,'setItem',iId,archiveData).done();
+        }
+    }
 }
 
 export default new MqttLoadDbService();

@@ -28,6 +28,18 @@ class MqttClientConnectionWorker extends Events.EventEmitter {  
         this.removeListener(MqttClientConstants.EVENT_WORKER_MQTT_CLIENT,callback);
     }
 
+    emitChange(data) { 
+        this.emit(MqttClientConstants.EVENT_WORKER_MQTT_CLIENT,data);
+    }
+
+    addChangeListener(callback) { 
+        this.on(MqttClientConstants.EVENT_WORKER_MQTT_CLIENT,callback);
+    }
+
+    removeChangeListener(callback) { 
+        this.removeListener(MqttClientConstants.EVENT_WORKER_MQTT_CLIENT,callback);
+    }
+
     processAction(action) {
         switch(action.actionType) {
             case MqttClientConstants.ACTION_MQTT_CLIENT_CONNECT:
@@ -37,7 +49,7 @@ class MqttClientConnectionWorker extends Events.EventEmitter {  
                 this.disConnect();
                 break;
             case MqttClientConstants.ACTION_PUBLISH_MESSAGE:
-                this.publishMessage(action.data.topic,action.data.payload,action.data.qos,action.data.retain);
+                this.publishMessage(action.data.topic,action.data.payload,action.data.qos,action.data.retain,action.data.pubId);
                 break;
             case MqttClientConstants.ACTION_SUBSCRIBE_TO_TOPIC:
                 this.subscribeToTopic(action.data.topic,action.data.qos);
@@ -149,9 +161,15 @@ class MqttClientConnectionWorker extends Events.EventEmitter {  
         }
     }
 
-    publishMessage(topic,payload,qos,retain) {
+    publishMessage(topic,payload,qos,retain,pubId) {
         if(topic!=null && topic.trim().length>0) {
-            this.client.publish(topic,payload,{qos:parseInt(qos),retain:retain});
+            var publishedTime = +(new Date());
+            this.client.publish(topic,payload,{qos:parseInt(qos),retain:retain},function(err) {
+                if(err==null) {
+                    this.emitChange({event:MqttClientConstants.EVENT_MQTT_CLIENT_PUBLISHED_MESSAGE,
+                        data:{publishedTime:publishedTime,qosResponseReceivedTime:+(new Date()),mcsId:this.mqttClientObj.mcsId,pubId:pubId,topic:topic,payload:payload,qos:qos,retain:retain}});
+                }
+            }.bind(this));
         }
     }
 
