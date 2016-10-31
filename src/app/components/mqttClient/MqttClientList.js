@@ -88,7 +88,7 @@ class MqttClientList extends Component {
 
         if(mqttClients.length ==0) {
             message = <div className="alert" role="alert">
-                <b>No MQTT clients added. Click <button onClick={NavUtils.gotToAddMqttClient} type="button" style={{margin:10}} className="btn btn-primary"><b>Add New MQTT Client</b></button> to add new MQTT client</b></div>;
+                <b>No MQTT clients added. Click <button onClick={NavUtils.gotToAddMqttClient} type="button" style={{margin:10}} className="btn btn-primary"><b>Create MQTT Client</b></button> to add new MQTT client</b></div>;
         }
 
         return (
@@ -97,13 +97,13 @@ class MqttClientList extends Component {
                     <div>
                         <div className="navbar-header">
                             <LeftMenuButton/>
-                            <span style={{margin:15}}>MQTT CLIENTS</span>
+                            <span style={{margin:15}}><b>MQTT CLIENTS</b></span>
                         </div>
                         <div id="navbar" className="navbar-collapse collapse">
                             <ul className="nav navbar-nav">
                                 <li style={styles.buttonContainer}>
                                     <button onClick={NavUtils.gotToAddMqttClient} type="button" className="btn btn-primary">
-                                        <b>Add New MQTT Client</b>
+                                        <b>Create MQTT Client</b>
                                     </button>
                                 </li>
                                 <li style={styles.buttonContainer}>

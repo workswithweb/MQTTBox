@@ -11,6 +11,8 @@ import AddEditMqttLoad from '../components/mqttLoad/AddEditMqttLoad';
 import MqttLoadDashboard from '../components/mqttLoad/MqttLoadDashboard';
 import MqttLoadTestData from '../components/mqttLoad/MqttLoadTestData';
 import MqttLoadTestGraph from '../components/mqttLoad/MqttLoadTestGraph';
+import VirtualDeviceProfileList from '../components/mqttVirtualDevices/VirtualDeviceProfileList';
+import AddEditVirtualDeviceProfile from '../components/mqttVirtualDevices/AddEditVirtualDeviceProfile';
 
 const AppRoutes = (
     <Route path="/" component={Main}>
@@ -18,13 +20,18 @@ const AppRoutes = (
         <Route path="/mqttclientdashboard/:mcsId" component={MqttClientDashboard}/>
         <Route path="/addeditmqttclient" component={AddEditMqttClient}/>
         <Route path="/addeditmqttclient/:mcsId" component={AddEditMqttClient}/>
+
         <Route path="/aboutapp" component={AboutApp}/>
+
         <Route path="/mqttloadlist" component={MqttLoadList}/>
         <Route path="/addeditmqttload" component={AddEditMqttLoad}/>
         <Route path="/addeditmqttload/:mcsId" component={AddEditMqttLoad}/>
         <Route path="/mqttloaddashboard/:mcsId" component={MqttLoadDashboard}/>
         <Route path="/mqttloadtestdata/:mcsId" component={MqttLoadTestData}/>
         <Route path="/mqttloadtestgraph/:mcsId" component={MqttLoadTestGraph}/>
+
+        <Route path="/virtualdeviceprofilelist" component={VirtualDeviceProfileList}/>
+        <Route path="/addeditvirtualdeviceprofile" component={AddEditVirtualDeviceProfile}/>
     </Route>
 );
 export default AppRoutes;

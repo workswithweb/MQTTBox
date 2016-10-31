@@ -11,8 +11,8 @@
   "dependencies": {
     "react": "15.3.2",
     "react-dom": "15.3.2",
-    "react-router": "2.8.1",
-    "flux": "3.0.0",
+    "react-router": "3.0.0",
+    "flux": "3.1.0",
     "node-uuid": "1.4.7",
     "q": "1.4.1",
     "localforage": "1.4.3",
@@ -20,12 +20,12 @@
     "react-copy-to-clipboard": "4.2.3",
     "qlobber": "0.7.0",
     "lodash": "4.16.4",
-    "moment": "2.15.1",
+    "moment": "2.15.2",
     "fixed-data-table": "0.6.3",
-    "recharts": "0.15.2",
+    "recharts": "0.15.3",
 
     "getmac":"1.2.1",
-    "request":"2.75.0",
+    "request": "2.76.0",
     "compare-versions":"3.0.0"
   }
 }

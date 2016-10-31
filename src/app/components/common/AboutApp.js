@@ -66,8 +66,8 @@ export default class AboutApp extends React.Component {
                                             <h4>Follow Us</h4>
                                             <p>For latest news and release, follow us on</p>
                                             <span onClick={PlatformUtils.openExternalLink.bind(this,"https://twitter.com/workswithweb")} style={styles.clickDiv} ><i style={{color:'#00aced'}} className="fa fa-twitter fa-2x" aria-hidden="true"></i></span>&nbsp;&nbsp;
-                                            <span onClick={PlatformUtils.openExternalLink.bind(this,"https://www.facebook.com/mqttbox")} style={styles.clickDiv} ><i onClick={PlatformUtils.openExternalLink.bind(this,this.props.href)} style={styles.clickDiv} style={{color:'#3b5998'}} className="fa fa-facebook-official fa-2x" aria-hidden="true"></i></span>&nbsp;&nbsp;
-                                            <span onClick={PlatformUtils.openExternalLink.bind(this,"https://github.com/workswithweb/MQTTBox")} style={styles.clickDiv} ><i onClick={PlatformUtils.openExternalLink.bind(this,this.props.href)} style={styles.clickDiv} className="fa fa-github fa-2x" aria-hidden="true"></i></span>
+                                            <span onClick={PlatformUtils.openExternalLink.bind(this,"https://www.facebook.com/mqttbox")} style={styles.clickDiv} ><i style={styles.clickDiv} style={{color:'#3b5998'}} className="fa fa-facebook-official fa-2x" aria-hidden="true"></i></span>&nbsp;&nbsp;
+                                            <span onClick={PlatformUtils.openExternalLink.bind(this,"https://github.com/workswithweb/MQTTBox")} style={styles.clickDiv} ><i style={styles.clickDiv} className="fa fa-github fa-2x" aria-hidden="true"></i></span>
                                         </div>
                                     </div>
                                 </div>

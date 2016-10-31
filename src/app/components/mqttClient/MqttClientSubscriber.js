@@ -7,12 +7,13 @@ import MqttClientService from '../../services/MqttClientService';
 
 const style = {
     subscriberPaper: {
-        height: '500px',
+        height: '600px',
         width: '100%',
         display: 'inline-block',
         border: '1px solid #eea236',
         padding:10,
-        overflow: 'auto'
+        overflow: 'auto',
+        wordBreak:'break-all'
     },
     removeStyle:{
         position: 'absolute',
@@ -115,7 +116,8 @@ export default class MqttClientSubscriber extends React.Component {
                                         <b> dup</b> : {subData.receivedMessages[i].packet.dup.toString()},
                                         <b> topic</b> : {subData.receivedMessages[i].packet.topic},
                                         <b> messageId</b> : {subData.receivedMessages[i].packet.messageId},
-                                        <b> length</b> : {subData.receivedMessages[i].packet.length}
+                                        <b> length</b> : {subData.receivedMessages[i].packet.length},
+                                        <b> Raw payload</b> : <span>{subData.receivedMessages[i].packet.payload.data}</span>
                                     </div>
                                 </div>
                             </div>

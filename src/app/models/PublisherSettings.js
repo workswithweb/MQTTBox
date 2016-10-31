@@ -6,6 +6,7 @@ class PublisherSettings {
         this.topic = '';
         this.qos = 0;
         this.retain = false;
+        this.payloadType = '0';
         this.payload = '';
         this.addedOn = +(new Date());
         this.updatedOn = +(new Date());
