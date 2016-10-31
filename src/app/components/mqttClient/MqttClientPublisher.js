@@ -85,16 +85,17 @@ export default class MqttClientPublisher extends React.Component {
                 } else {
                     if(payloadType != "0" && (payloadType == "2"||payloadType == "8"||payloadType == "10"||payloadType == "16")) {
                         var inputArray = payload.split(",");
-                        var intArray = [];
+                        var convertedValue = '';
                         for(var i=0;i<inputArray.length;i++) {
-                            var intVal = parseInt(payloadType);
+                            var intVal = parseInt(inputArray[i],parseInt(payloadType));
                             if(Number.isNaN(intVal)) {
                                 CommonActions.showMessageToUser({message:'Invalid payload. Payload data should match Payload Type.'});
                                 return;
+                            } else {
+                                convertedValue+=String.fromCharCode(intVal);
                             }
-                            intArray.push(parseInt(inputArray[i],parseInt(payloadType)));
                         }
-                        MqttClientActions.publishMessage(this.props.mcsId,this.props.publisherSettings.pubId,topic,new Uint8Array(intArray),qos,retain);
+                        MqttClientActions.publishMessage(this.props.mcsId,this.props.publisherSettings.pubId,topic,convertedValue,qos,retain);
                     } else {
                         MqttClientActions.publishMessage(this.props.mcsId,this.props.publisherSettings.pubId,topic,payload,qos,retain);
                     }

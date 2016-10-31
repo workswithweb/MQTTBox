@@ -117,7 +117,7 @@ export default class MqttClientSubscriber extends React.Component {
                                         <b> topic</b> : {subData.receivedMessages[i].packet.topic},
                                         <b> messageId</b> : {subData.receivedMessages[i].packet.messageId},
                                         <b> length</b> : {subData.receivedMessages[i].packet.length},
-                                        <b> Raw payload</b> : <span>{subData.receivedMessages[i].packet.payload}</span>
+                                        <b> Raw payload</b> : <span>{subData.receivedMessages[i].packet.payload.data}</span>
                                     </div>
                                 </div>
                             </div>
