@@ -163,7 +163,10 @@ export default class MqttClientPublisher extends React.Component {
         }
 
         var payloadMsg = '';
-        if(this.state.payloadType == "2") {
+
+        if(this.state.payloadType == "0") {
+            payloadMsg = <span>e.g: {"{'hello':'world'}"}</span>;
+        } else if(this.state.payloadType == "2") {
             payloadMsg = <span>e.g: 01001101,01010001,01010100,1010100,01000010,01101111,01111000</span>;
         } else if(this.state.payloadType == "8") {
             payloadMsg = <span>e.g: 115,121,124,124,102,157,170</span>;
@@ -204,7 +207,7 @@ export default class MqttClientPublisher extends React.Component {
                     <div className="form-group">
                         <label htmlFor="payloadType">Payload Type</label>
                         <select onBlur={this.savePublisherSettings} name="payloadType" onChange={this.onTargetValueChange} value={this.state.payloadType} className="form-control">
-                            <option value="0">String</option>
+                            <option value="0">Strings / JSON / XML / Characters</option>
                             <option value="2">Binary Array</option>
                             <option value="8">Octal Array</option>
                             <option value="10">Decimal Array</option>

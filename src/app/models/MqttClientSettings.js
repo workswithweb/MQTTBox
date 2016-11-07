@@ -19,8 +19,18 @@ class MqttClientSettings {
         this.username = '';
         this.password = '';
         this.queueQoSZero = true;
-        this.securityData = {};
         this.autoConnectOnAppLaunch = true;
+
+        //ssl/tls settings
+        this.sslTlsVersion = 'auto';
+        this.certificateType = 'ssc';
+        this.caFilePath = '';
+        this.caFile = '';
+        this.clientCertificateFilePath = '';
+        this.clientCertificateFile = '';
+        this.clientKeyFilePath = '';
+        this.clientKeyFile = '';
+        this.clientKeyPassphrase = '';
 
         this.willTopic = '';
         this.willPayload = '';
