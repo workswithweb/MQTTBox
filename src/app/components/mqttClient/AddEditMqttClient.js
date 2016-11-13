@@ -141,7 +141,7 @@ class AddEditMqttClient extends Component {
             supportedProtocols.push(<option key="mqtts" value="mqtts">mqtts / tls</option>);
         }
 
-        if(this.state.protocol == 'mqtts') {
+        if(this.state.protocol == 'mqtts' || this.state.protocol == 'wss') {
             tlsOptions= <div className="row">
                             <div className="col-xs-12 col-sm-6 col-md-3">
                                 <div className="form-group">
