@@ -2,7 +2,7 @@
   "name": "MQTTBox",
   "productName": "MQTTBox",
   "description": "Developers helper program to create and test MQTT connectivity protocol.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "Workswithweb <workswithweb@gmail.com>",
   "copyright": "© 2016, Workswithweb inc.",
   "homepage": "http://workswithweb.com/mqttbox.html",
