@@ -19,10 +19,10 @@
     "mqtt": "2.1.1",
     "react-copy-to-clipboard": "4.2.3",
     "qlobber": "0.7.0",
-    "lodash": "4.17.0",
+    "lodash": "4.17.1",
     "moment": "2.16.0",
     "fixed-data-table": "0.6.3",
-    "recharts": "0.17.1",
+    "recharts": "0.18.0",
 
     "getmac":"1.2.1",
     "request": "2.78.0",
