@@ -3,6 +3,8 @@ import {Qlobber} from 'qlobber';
 import _ from 'lodash';
 import mqtt from 'mqtt';
 import Events from 'events';
+import fs from 'fs';
+var path = require('path');
 
 import MqttClientConstants from '../utils/MqttClientConstants';
 
@@ -132,6 +134,25 @@ class MqttClientConnectionWorker extends Events.EventEmitter {  
                 payload:this.mqttClientObj.willPayload,
                 qos:this.mqttClientObj.willQos,
                 retain:this.mqttClientObj.willRetain
+            }
+        }
+
+        if(this.mqttClientObj.protocol == 'mqtts' || this.mqttClientObj.protocol == 'wss') {
+            if(this.mqttClientObj.certificateType == 'ssc') {
+                options['ca']= this.mqttClientObj.caFile;
+                options['cert']= this.mqttClientObj.clientCertificateFile;
+                options['key']= this.mqttClientObj.clientKeyFile;
+                options['passphrase']= this.mqttClientObj.clientKeyPassphrase;
+                options['rejectUnauthorized'] = true;
+            } else if(this.mqttClientObj.certificateType == 'cc') {
+                options['ca']= this.mqttClientObj.caFile;
+                options['rejectUnauthorized'] = true;
+            } else if(this.mqttClientObj.certificateType == 'cssc') {
+                options['rejectUnauthorized'] = false;
+            }
+
+            if(this.mqttClientObj.sslTlsVersion!=null && this.mqttClientObj.sslTlsVersion != 'auto') {
+                options['secureProtocol']= this.mqttClientObj.sslTlsVersion;
             }
         }
         return options;

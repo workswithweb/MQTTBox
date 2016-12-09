@@ -35,7 +35,7 @@ Make sure you have [Node.js](https://nodejs.org/en/) installed and follow below 
 
 - `npm install`
 
-- `Open /node_modules/mqtt/lib/connect/ws.js file and goto line 45 or where ever you find below code.`
+- `Open /node_modules/mqtt/lib/connect/ws.js file and goto line 56 or where ever you find below code.`
     else {
         throw new Error('Could not determine host. Specify host manually.')
     }
