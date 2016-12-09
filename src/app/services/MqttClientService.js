@@ -179,7 +179,6 @@ class MqttClientService extends Events.EventEmitter {
         dbClientSettingsObj.username = data.username;
         dbClientSettingsObj.password = data.password;
         dbClientSettingsObj.queueQoSZero = data.queueQoSZero;
-        dbClientSettingsObj.securityData = data.securityData;
         dbClientSettingsObj.willTopic = data.willTopic;
         dbClientSettingsObj.willPayload = data.willPayload;
         dbClientSettingsObj.willQos = data.willQos;
@@ -188,6 +187,15 @@ class MqttClientService extends Events.EventEmitter {
         dbClientSettingsObj.tag = data.tag;
         dbClientSettingsObj.autoConnectOnAppLaunch = data.autoConnectOnAppLaunch;
         dbClientSettingsObj.updatedOn = +(new Date());
+        dbClientSettingsObj.sslTlsVersion = data.sslTlsVersion;
+        dbClientSettingsObj.certificateType = data.certificateType;
+        dbClientSettingsObj.caFilePath = data.caFilePath;
+        dbClientSettingsObj.caFile = data.caFile;
+        dbClientSettingsObj.clientCertificateFilePath = data.clientCertificateFilePath;
+        dbClientSettingsObj.clientCertificateFile = data.clientCertificateFile;
+        dbClientSettingsObj.clientKeyFilePath = data.clientKeyFilePath;
+        dbClientSettingsObj.clientKeyFile = data.clientKeyFile;
+        dbClientSettingsObj.clientKeyPassphrase = data.clientKeyPassphrase;
 
         this.mqttClientSettings[data.mcsId] = dbClientSettingsObj;
         MqttClientDbService.saveMqttClientSettings(dbClientSettingsObj);

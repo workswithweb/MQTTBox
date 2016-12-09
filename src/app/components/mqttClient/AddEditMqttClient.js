@@ -23,11 +23,13 @@ class AddEditMqttClient extends Component {
 
         this.initMqttClientObj = this.initMqttClientObj.bind(this);
         this.onTargetValueChange = this.onTargetValueChange.bind(this);
+        this.onFileValueChange = this.onFileValueChange.bind(this);
         this.generateMqttClientId = this.generateMqttClientId.bind(this);
         this.onMqtt311CompliantChange = this.onMqtt311CompliantChange.bind(this);
         this.onCheckBoxValueChange = this.onCheckBoxValueChange.bind(this);
         this.saveMqttClientSettings = this.saveMqttClientSettings.bind(this);
         this.deleteMqttClientSettings = this.deleteMqttClientSettings.bind(this);
+        this.onProtocolValueChange = this.onProtocolValueChange.bind(this);
 
         this.initMqttClientObj(this.props.params);
     }
@@ -44,6 +46,34 @@ class AddEditMqttClient extends Component {
         var newState = {};
         newState[event.target.name] = event.target.value;
         this.setState(newState);
+    }
+
+    onProtocolValueChange(event) {
+        if(PlatformConstants.PLATFORM_TYPE == CommonConstants.PLATFORM_WEB_APP && (event.target.value=='mqtt' || event.target.value=='mqtts')) {
+            CommonActions.showMessageToUser({message:'MQTT over TCP and TLS are supported by MQTTBox apps for Linux, MAC and Windows. Download MQTTBox app from http://workswithweb.com/mqttbox.html'});
+        } else if(PlatformConstants.PLATFORM_TYPE == CommonConstants.PLATFORM_CHROME_APP && event.target.value=='mqtts') {
+            CommonActions.showMessageToUser({message:'MQTT over TLS is supported by MQTTBox apps for Linux, MAC and Windows. Download MQTTBox app from http://workswithweb.com/mqttbox.html'});
+        } else {
+            var newState = {};
+            newState[event.target.name] = event.target.value;
+            this.setState(newState);
+        }
+    }
+
+    onFileValueChange(event) {
+        var files = event.target.files;
+        if(files!=null && files.length>0) {
+            var reader = new FileReader();
+            reader.onload = (function(theFile,targetName) {
+                return function(e) {
+                    var newState = {};
+                    newState[targetName+'Path'] = theFile.name;
+                    newState[targetName] = e.target.result;
+                    this.setState(newState);
+                }.bind(this);
+            }.bind(this))(files[0],event.target.name);
+            reader.readAsText(files[0]);
+        }
     }
 
     generateMqttClientId() {
@@ -104,6 +134,8 @@ class AddEditMqttClient extends Component {
     render() {
         var deleteButton = '';
         var backButton = '';
+        var tlsOptions = '';
+        var tlsCertOptions = '';
 
         if(this.props.params.mcsId!=null) {
             deleteButton = <button style={styles.actionButton} onClick={this.deleteMqttClientSettings} type="button" className="btn btn-default">Delete</button>;
@@ -112,17 +144,77 @@ class AddEditMqttClient extends Component {
             backButton = <a className="btn btn-default" href="#/mqttclientslist"><span className="glyphicon glyphicon-arrow-left" aria-hidden="true"> </span></a>;
         }
 
-        var supportedProtocols = [];
-        supportedProtocols.push(<option key="ws" value="ws">ws</option>);
-        supportedProtocols.push(<option key="wss" value="wss">wss</option>);
-        if(PlatformConstants.PLATFORM_TYPE == CommonConstants.PLATFORM_CHROME_APP) {
-            supportedProtocols.push(<option key="tcp" value="tcp">tcp</option>);
-            supportedProtocols.push(<option key="mqtt" value="mqtt">mqtt</option>);
-        } else if(PlatformConstants.PLATFORM_TYPE == CommonConstants.PLATFORM_ELECTRON_APP) {
-            supportedProtocols.push(<option key="tcp" value="tcp">tcp</option>);
-            supportedProtocols.push(<option key="tls" value="tls">tls</option>);
-            supportedProtocols.push(<option key="mqtt" value="mqtt">mqtt</option>);
-            supportedProtocols.push(<option key="mqtts" value="mqtts">mqtt</option>);
+        if(this.state.protocol == 'mqtts' || this.state.protocol == 'wss') {
+            tlsOptions= <div className="row">
+                            <div className="col-xs-12 col-sm-6 col-md-3">
+                                <div className="form-group">
+                                    <label htmlFor="sslTlsVersion">SSL / TLS Version</label>
+                                    <select name="sslTlsVersion" onChange={this.onTargetValueChange} value={this.state.sslTlsVersion}
+                                        className="form-control">
+                                        <option value="auto">Auto</option>
+                                        <option value="TLSv1_2_method">TLSv1.2</option>
+                                        <option value="TLSv1_1_method">TLSv1.1</option>
+                                        <option value="TLSv1_method">TLSv1</option>
+                                        <option value="SSLv3_method">SSLv3</option>
+                                        <option value="SSLv23_method">SSLv2.3</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="col-xs-12 col-sm-6 col-md-3">
+                                <div className="form-group">
+                                    <label htmlFor="certificateType">SSL / TLS Certificate Type</label>
+                                    <select name="certificateType" onChange={this.onTargetValueChange} value={this.state.certificateType}
+                                        className="form-control">
+                                        <option value="cssc">CA signed server certificate</option>
+                                        <option value="cc">CA certificate only</option>
+                                        <option value="ssc">Self signed certificates</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>;
+
+            if(this.state.certificateType =='ssc') {
+                tlsCertOptions =<div className="row">
+                                    <div className="col-xs-12 col-sm-6 col-md-3">
+                                        <div className="form-group">
+                                            <label htmlFor="caFile">CA file</label>
+                                            <input type='file' className="form-control" name="caFile" onChange={this.onFileValueChange}/>
+                                            <p className="help-block">{this.state.caFilePath}</p>
+                                        </div>
+                                    </div>
+                                    <div className="col-xs-12 col-sm-6 col-md-3">
+                                        <div className="form-group">
+                                            <label htmlFor="clientCertificateFile">Client certificate file</label>
+                                            <input type='file' className="form-control" name="clientCertificateFile" onChange={this.onFileValueChange}/>
+                                            <p className="help-block">{this.state.clientCertificateFilePath}</p>
+                                        </div>
+                                    </div>
+                                    <div className="col-xs-12 col-sm-6 col-md-3">
+                                        <div className="form-group">
+                                            <label htmlFor="clientKeyFile">Client key file</label>
+                                            <input type='file' className="form-control" name="clientKeyFile" onChange={this.onFileValueChange}/>
+                                            <p className="help-block">{this.state.clientKeyFilePath}</p>
+                                        </div>
+                                    </div>
+                                    <div className="col-xs-12 col-sm-6 col-md-3">
+                                        <div className="form-group">
+                                            <label htmlFor="clientKeyPassphrase">Client key passphrase</label>
+                                            <input type="password" className="form-control" name="clientKeyPassphrase"
+                                                onChange={this.onTargetValueChange} value={this.state.clientKeyPassphrase}/>
+                                        </div>
+                                    </div>
+                                </div>;
+           } else if(this.state.certificateType =='cc') {
+                tlsCertOptions =<div className="row">
+                                    <div className="col-xs-12 col-sm-6 col-md-3">
+                                        <div className="form-group">
+                                            <label htmlFor="caFile">CA file</label>
+                                            <input type='file' className="form-control" name="caFile" onChange={this.onFileValueChange}/>
+                                            <p className="help-block">{this.state.caFilePath}</p>
+                                        </div>
+                                    </div>
+                                </div>;
+            }
         }
 
         return (
@@ -186,9 +278,12 @@ class AddEditMqttClient extends Component {
                     <div className="row">
                         <div className="col-xs-12 col-sm-6 col-md-3">
                             <label htmlFor="protocol">Protocol</label>
-                            <select name="protocol" onChange={this.onTargetValueChange} value={this.state.protocol}
+                            <select name="protocol" onChange={this.onProtocolValueChange} value={this.state.protocol}
                                 className="form-control">
-                                {supportedProtocols}
+                                <option key="ws" value="ws">ws</option>
+                                <option key="wss" value="wss">wss</option>
+                                <option key="mqtt" value="mqtt">mqtt / tcp</option>
+                                <option key="mqtts" value="mqtts">mqtts / tls</option>
                             </select>
                         </div>
                         <div className="col-xs-12 col-sm-6 col-md-3">
@@ -219,6 +314,8 @@ class AddEditMqttClient extends Component {
                             </div>
                         </div>
                     </div>
+                    {tlsOptions}
+                    {tlsCertOptions}
                     <div className="row">
                         <div className="col-xs-12 col-sm-6 col-md-3">
                             <div className="form-group">
