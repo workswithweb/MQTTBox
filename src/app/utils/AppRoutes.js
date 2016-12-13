@@ -5,6 +5,7 @@ import Main from '../components/Main';
 import MqttClientList from '../components/mqttClient/MqttClientList';
 import AddEditMqttClient from '../components/mqttClient/AddEditMqttClient';
 import MqttClientDashboard from '../components/mqttClient/MqttClientDashboard';
+import MqttPublisherDashboard from '../components/mqttClient/MqttPublisherDashboard';
 import AboutApp from '../components/common/AboutApp';
 import MqttLoadList from '../components/mqttLoad/MqttLoadList';
 import AddEditMqttLoad from '../components/mqttLoad/AddEditMqttLoad';
@@ -20,6 +21,7 @@ const AppRoutes = (
         <Route path="/mqttclientdashboard/:mcsId" component={MqttClientDashboard}/>
         <Route path="/addeditmqttclient" component={AddEditMqttClient}/>
         <Route path="/addeditmqttclient/:mcsId" component={AddEditMqttClient}/>
+        <Route path="/mqttpublisherdashboard/:mcsId/:pubId" component={MqttPublisherDashboard}/>
 
         <Route path="/aboutapp" component={AboutApp}/>
 

@@ -221,6 +221,7 @@ export default class MqttClientPublisher extends React.Component {
                     </div>
                     <div className="form-group">
                         <button type="button" onClick={this.publishMessage} className="btn btn-primary">Publish</button>
+                        <a style={{marginLeft:5}} href={"#/mqttpublisherdashboard/"+this.props.mcsId+"/"+this.props.publisherSettings.pubId} className="btn btn-default"><span className="fa fa-arrows-alt"> </span></a>
                     </div>
                     {messageList}
                 </div>
