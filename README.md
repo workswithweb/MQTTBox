@@ -3,11 +3,8 @@
 Supercharge your MQTT workflow with MQTTBox Apps available on Chrome, Linux, Mac, Web and Windows! Build, test, and document your MQTT connectivity protocol.
 
 #### [MQTTBox Apps are available for following platforms - Download MQTTBox Apps HERE!](http://workswithweb.com/html/mqttbox/downloads.html)
-<img height="75" width="75" src="http://workswithweb.com/images/platforms/chrome.png"/>
-<img src="http://workswithweb.com/images/platforms/linux.png"/>
-<img height="75" width="75" src="http://workswithweb.com/images/platforms/mac.png"/>
-<img src="http://workswithweb.com/images/platforms/html.png"/>
-<img src="http://workswithweb.com/images/platforms/windows.png"/>
+
+![Chrome](http://workswithweb.com/images/platforms/chrome.png "Chrome Store app")![Linux](http://workswithweb.com/images/platforms/linux.png "Linux")![MAC](http://workswithweb.com/images/platforms/mac.png "MAC app")![HTML App](http://workswithweb.com/images/platforms/html.png "HTML App")![Windows](http://workswithweb.com/images/platforms/windows.png "Windows app")
 
 #### MQTTBox Client features include:
 - Connect to multiple mqtt brokers with TCP or Web Sockets protocols
