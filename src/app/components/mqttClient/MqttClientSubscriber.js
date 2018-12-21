@@ -97,6 +97,15 @@ export default class MqttClientSubscriber extends React.Component {
         if(subData!=null && subData.receivedMessages!=null && subData.receivedMessages.length>0) {
             var len = subData.receivedMessages.length;
             for (var i=len-1; i>=0;i--) {
+                var rawPayload = subData.receivedMessages[i].packet.payload.data.map(
+                    function decimalToHex(d) {
+                        var hex = Number(d).toString(16); 
+                        while (hex.length < 2) {
+                            hex = "0" + hex;
+                        }
+                        return hex;
+                    }
+                );
                 messageList.push(
                     <div key={this.props.subscriberSettings.subId+i}  className="panel" style={{border:'1px solid #e1e1e8'}}>
                         <div style={{cursor:'pointer'}} data-toggle="collapse" data-target={"#collapse"+this.props.subscriberSettings.subId+i} className="panel-heading">
@@ -117,7 +126,7 @@ export default class MqttClientSubscriber extends React.Component {
                                         <b> topic</b> : {subData.receivedMessages[i].packet.topic},
                                         <b> messageId</b> : {subData.receivedMessages[i].packet.messageId},
                                         <b> length</b> : {subData.receivedMessages[i].packet.length},
-                                        <b> Raw payload</b> : <span>{subData.receivedMessages[i].packet.payload.data}</span>
+                                        <b> Raw payload</b> : <span>{rawPayload}</span>
                                     </div>
                                 </div>
                             </div>
